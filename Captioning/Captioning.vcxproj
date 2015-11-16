@@ -126,10 +126,12 @@
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SDLUtility.cpp" />
+    <ClCompile Include="TextInput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Image.h" />
     <ClInclude Include="SDLUtility.h" />
+    <ClInclude Include="TextInput.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

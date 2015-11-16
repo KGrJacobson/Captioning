@@ -2,6 +2,7 @@
 #include "SDL.h"
 #include <SDL_ttf.h>
 #include <SDL_image.h>
+#include <iostream>
 
 int SDLUtility::Init()
 {
@@ -17,10 +18,22 @@ int SDLUtility::Init()
 
 	int pngflag = IMG_INIT_PNG;
 	if (!(IMG_Init(pngflag)))
-		return -3;
+	{
+		std::cout << "could not initialize IMG PNG" << '\n';
+		return -1;
+	}
+
+	if (TTF_Init() == -1)
+	{
+		std::cout << "could not initialize TTF" << '\n';
+		return -1;
+	}
 
 	if (window == NULL || renderer == NULL)
-		return -2;
+	{
+		std::cout << "could not create window/renderer" << '\n';
+		return -1;
+	}
 
 	return 0;
 }
@@ -31,6 +44,8 @@ void SDLUtility::Close()
 	SDL_DestroyRenderer(renderer);
 	window = NULL;
 	renderer = NULL;
+	TTF_Quit(); 
+	IMG_Quit();
 	SDL_Quit();
 }
 
@@ -54,6 +69,13 @@ void SDLUtility::PostImage(Image *img, int x, int y)
 	SDL_Rect sourcerect{ x, y, img->GetWidth(), img->GetHeight() };
 
 	SDL_RenderCopy(renderer, img->GetTexture(), NULL, &sourcerect);
+}
+
+void SDLUtility::PostText(TextInput *text, int x, int y)
+{
+	SDL_Rect sourcerect{ x, y, text->GetWidth(), text->GetHeight() };
+
+	SDL_RenderCopy(renderer, text->GetTexture(), NULL, &sourcerect);
 }
 
 void SDLUtility::PostImage(SDL_Texture *tex, int x, int y)

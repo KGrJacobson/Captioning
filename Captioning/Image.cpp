@@ -4,15 +4,21 @@
 #include <SDL_image.h>
 #include <string>
 #include "SDLUtility.h"
+#include <iostream>
+
+Image::Image()
+{
+}
 
 Image::~Image()
 {
-	SDL_DestroyTexture(texture);
-	texture = NULL;
+	DestroyTexture();
 }
 
 int Image::CreateTextureFromImage(std::string filepath)
 {
+	DestroyTexture();
+
 	SDL_Surface *loadedsurface = IMG_Load( filepath.c_str() );
 
 	if (loadedsurface == NULL) 
@@ -27,10 +33,6 @@ int Image::CreateTextureFromImage(std::string filepath)
 	SDL_FreeSurface(loadedsurface);
 
 	return 0;
-}
-
-void Image::CreateTextureFromText(std::string text)
-{
 }
 
 SDL_Texture *Image::GetTexture()
@@ -48,3 +50,13 @@ int Image::GetHeight()
 	return imageheight;
 }
 
+void Image::DestroyTexture()
+{
+	if (texture != NULL)
+	{
+		SDL_DestroyTexture(texture);
+		texture = NULL;
+		imagewidth= 0;
+		imageheight = 0;
+	}
+}

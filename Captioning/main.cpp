@@ -4,34 +4,17 @@
 #include <string>
 #include <SDL_image.h>
 #include "SDL.h"
+#include "TextInput.h"
 
 int main(int argc, char *argv[]) {
 	if (SDLUtility::Init() < 0)
+	{
+		std::cout << "SDL Initialization failure" << '\n';
 		return 1;
-
-	Image gsquare;
-	if (gsquare.CreateTextureFromImage("greensquare.png") == -1)
-	{
-		return 2;
 	}
 
-
-	/*int pngflag = IMG_INIT_PNG;
-	if (!(IMG_Init(pngflag)))
-	{
-		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-	}
-
-	SDL_Surface *loadedsurface = IMG_Load("greensquare.png");
-
-	if (loadedsurface == NULL)
-	{
-		std::cout << "null surface";
-		return -1;
-	}
-
-	SDL_Texture *texture = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), loadedsurface);
-	SDL_FreeSurface(loadedsurface);*/
+	TextInput test(75);
+	test.CreateTextureFromText("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
 	bool quit = false;
 	SDL_Event e;
@@ -45,7 +28,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 
-		SDLUtility::PostImage(&gsquare, 100, 100);
+		SDLUtility::PostText(&test, 100, 100);
 		SDLUtility::UpdateScreen();
 	}
 
