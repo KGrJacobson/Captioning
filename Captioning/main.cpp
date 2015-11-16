@@ -1,45 +1,53 @@
 #include <iostream>
-#include "SDL.h"
-#include <SDL_ttf.h>
+#include "SDLUtility.h"
+#include "Image.h"
+#include <string>
 #include <SDL_image.h>
+#include "SDL.h"
 
-#include "Texture.h"
-
-SDL_Window* window = NULL;
-SDL_Renderer* renderer = NULL;
-TTF_Font *font = NULL;
-
-int main(int argc, char* argv[]) {
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+int main(int argc, char *argv[]) {
+	if (SDLUtility::Init() < 0)
 		return 1;
 
-	window = SDL_CreateWindow("SDL Test",
-		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		1500, 750, 0);
+	Image gsquare;
+	if (gsquare.CreateTextureFromImage("greensquare.png") == -1)
+	{
+		return 2;
+	}
 
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
+	/*int pngflag = IMG_INIT_PNG;
+	if (!(IMG_Init(pngflag)))
+	{
+		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+	}
+
+	SDL_Surface *loadedsurface = IMG_Load("greensquare.png");
+
+	if (loadedsurface == NULL)
+	{
+		std::cout << "null surface";
+		return -1;
+	}
+
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), loadedsurface);
+	SDL_FreeSurface(loadedsurface);*/
 
 	bool quit = false;
 	SDL_Event e;
 
 	while (!quit) {
+		SDLUtility::ClearScreen();
+
 		while (SDL_PollEvent(&e) != 0) {
 			if (e.type == SDL_QUIT) {
 				quit = true;
 			}
 		}
 
-		SDL_RenderPresent(renderer);
+		SDLUtility::PostImage(&gsquare, 100, 100);
+		SDLUtility::UpdateScreen();
 	}
 
-	SDL_DestroyWindow(window);
-	SDL_DestroyRenderer(renderer);
-	window = NULL;
-	renderer = NULL;
-	 
-	SDL_Quit();
 	return 0;
 }
-
-
