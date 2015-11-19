@@ -123,13 +123,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DebugText.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ManualEntry.cpp" />
     <ClCompile Include="SDLUtility.cpp" />
     <ClCompile Include="TextInput.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DebugText.h" />
     <ClInclude Include="Image.h" />
+    <ClInclude Include="ManualEntry.h" />
     <ClInclude Include="SDLUtility.h" />
     <ClInclude Include="TextInput.h" />
   </ItemGroup>

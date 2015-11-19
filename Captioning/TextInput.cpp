@@ -3,30 +3,51 @@
 #include <SDL_ttf.h>
 #include <string>
 #include "SDLUtility.h"
+#include <iostream>
 
-TextInput::TextInput(int textsize)
+TextInput::TextInput()
 {
-	font = TTF_OpenFont("meiryo.ttc", textsize);
-
-	if (font == NULL)
-		printf("Failed to load font SDL_ttf Error: %s\n", TTF_GetError());
+	texture = NULL;
+	font = NULL;
+	currenttext = "";
 }
 
 TextInput::~TextInput()
 {
+	DestroyTexture();
 	TTF_CloseFont(font);
 	font = NULL;
+	currenttext = "";
 }
 
-void TextInput::CreateTextureFromText(std::string text)
+int TextInput::Init(std::string ttffilepath, int fontsize)
 {
-	SDL_Surface *textsurface = TTF_RenderText_Shaded(font, text.c_str(), SDL_Color{ 0, 0, 0, 255 }, SDL_Color{ 255, 255, 255, 255 });
-	texture = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), textsurface);
+	DestroyTexture();
 
-	imageheight = textsurface->h;
-	imagewidth = textsurface->w;
+	font = TTF_OpenFont(ttffilepath.c_str(), fontsize);
+	if (font == NULL)
+	{
+		printf("Failed to load font SDL_ttf Error: %s\n", TTF_GetError());
+		return -1;
+	}
 
-	SDL_FreeSurface(textsurface);
+	return 0;
+}
+
+void TextInput::CreateTextureFromText(std::string text, int x, int y)
+{
+	if (text != currenttext) {
+		SDL_Surface *textsurface = TTF_RenderText_Shaded(font, text.c_str(), SDL_Color{ 255, 255, 255, 255 }, SDL_Color{ 0, 0, 0, 255 });
+		texture = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), textsurface);
+
+		imageheight = textsurface->h;
+		imagewidth = textsurface->w;
+
+		SDL_FreeSurface(textsurface);
+		currenttext = text;
+	}
+
+	SDLUtility::PostText(this, x, y);
 }
 
 SDL_Texture *TextInput::GetTexture()

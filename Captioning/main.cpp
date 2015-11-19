@@ -5,6 +5,8 @@
 #include <SDL_image.h>
 #include "SDL.h"
 #include "TextInput.h"
+#include "DebugText.h"
+#include "ManualEntry.h"
 
 int main(int argc, char *argv[]) {
 	if (SDLUtility::Init() < 0)
@@ -13,10 +15,11 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	TextInput test(75);
-	test.CreateTextureFromText("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+	ManualEntry x;
+	x.InsertCharacter('a', true);
 
 	bool quit = false;
+	bool shift = false;
 	SDL_Event e;
 
 	while (!quit) {
@@ -26,9 +29,20 @@ int main(int argc, char *argv[]) {
 			if (e.type == SDL_QUIT) {
 				quit = true;
 			}
+
+			if (e.type == SDL_KEYUP && (e.key.keysym.sym == SDLK_LSHIFT || e.key.keysym.sym == SDLK_RSHIFT))
+				shift = false;
+
+			if (e.type == SDL_KEYDOWN)
+			{
+				if (e.key.keysym.sym == SDLK_LSHIFT || e.key.keysym.sym == SDLK_RSHIFT)
+					shift = true;
+
+				x.KeyboardInput(&e, shift);
+			}
 		}
 
-		SDLUtility::PostText(&test, 100, 100);
+		x.PostCurrentEntry(50, 50);
 		SDLUtility::UpdateScreen();
 	}
 

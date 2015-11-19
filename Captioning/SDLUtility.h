@@ -19,4 +19,5 @@ public:
 	static void PostImage(Image *img, int x, int y);
 	static void PostText(TextInput *text, int x, int y);
 	static void PostImage(SDL_Texture *tex, int x, int y);
+	static void PostImage(Image *img, int x, int y, SDL_Rect *sourcerect);
 };

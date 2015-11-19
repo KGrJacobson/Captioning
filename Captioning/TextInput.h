@@ -6,9 +6,10 @@
 class TextInput
 {
 public:
-	TextInput(int textsize);
+	TextInput();
 	~TextInput();
-	void CreateTextureFromText(std::string text);
+	int Init(std::string ttffilepath, int fontsize);
+	void CreateTextureFromText(std::string text, int x, int y);
 	SDL_Texture *GetTexture();
 	int GetWidth();
 	int GetHeight();
@@ -16,6 +17,7 @@ public:
 private:
 	SDL_Texture *texture;
 	TTF_Font *font;
+	std::string currenttext;
 	int imagewidth;
 	int imageheight;
 };

@@ -3,6 +3,7 @@
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 #include <iostream>
+#include "DebugText.h"
 
 int SDLUtility::Init()
 {
@@ -35,6 +36,8 @@ int SDLUtility::Init()
 		return -1;
 	}
 
+	DebugText::Init();
+
 	return 0;
 }
 
@@ -66,20 +69,27 @@ void SDLUtility::UpdateScreen()
 
 void SDLUtility::PostImage(Image *img, int x, int y)
 {
-	SDL_Rect sourcerect{ x, y, img->GetWidth(), img->GetHeight() };
+	SDL_Rect destrect{ x, y, img->GetWidth(), img->GetHeight() };
 
-	SDL_RenderCopy(renderer, img->GetTexture(), NULL, &sourcerect);
+	SDL_RenderCopy(renderer, img->GetTexture(), NULL, &destrect);
 }
 
 void SDLUtility::PostText(TextInput *text, int x, int y)
 {
-	SDL_Rect sourcerect{ x, y, text->GetWidth(), text->GetHeight() };
+	SDL_Rect destrect{ x, y, text->GetWidth(), text->GetHeight() };
 
-	SDL_RenderCopy(renderer, text->GetTexture(), NULL, &sourcerect);
+	SDL_RenderCopy(renderer, text->GetTexture(), NULL, &destrect);
 }
 
 void SDLUtility::PostImage(SDL_Texture *tex, int x, int y)
 {
 	SDL_RenderCopy(renderer, tex, NULL, NULL);
+}
+
+void SDLUtility::PostImage(Image *img, int x, int y, SDL_Rect *sourcerect)
+{
+	SDL_Rect destrect{ x, y, sourcerect->w, sourcerect->h };
+
+	SDL_RenderCopy(renderer, img->GetTexture(), sourcerect, &destrect);
 }
 
