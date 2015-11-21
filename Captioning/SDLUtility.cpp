@@ -36,8 +36,6 @@ int SDLUtility::Init()
 		return -1;
 	}
 
-	DebugText::Init();
-
 	return 0;
 }
 
@@ -64,6 +62,8 @@ void SDLUtility::ClearScreen()
 
 void SDLUtility::UpdateScreen()
 {
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
 	SDL_RenderPresent(renderer);
 }
 
@@ -91,5 +91,12 @@ void SDLUtility::PostImage(Image *img, int x, int y, SDL_Rect *sourcerect)
 	SDL_Rect destrect{ x, y, sourcerect->w, sourcerect->h };
 
 	SDL_RenderCopy(renderer, img->GetTexture(), sourcerect, &destrect);
+}
+
+void SDLUtility::CreateSquare(SDL_Rect *rect, SDL_Color *color)
+{
+	SDL_SetRenderDrawColor(renderer, color->r, color->g, color->b, color->a);
+
+	SDL_RenderFillRect(renderer, rect);
 }
 

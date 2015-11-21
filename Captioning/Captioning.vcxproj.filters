@@ -50,5 +50,11 @@
     <ClInclude Include="ManualEntry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DemoScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CaptionContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

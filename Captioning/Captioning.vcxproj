@@ -131,7 +131,9 @@
     <ClCompile Include="TextInput.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CaptionContainer.h" />
     <ClInclude Include="DebugText.h" />
+    <ClInclude Include="DemoScreen.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ManualEntry.h" />
     <ClInclude Include="SDLUtility.h" />

@@ -34,9 +34,10 @@ int TextInput::Init(std::string ttffilepath, int fontsize)
 	return 0;
 }
 
-void TextInput::CreateTextureFromText(std::string text, int x, int y)
+void TextInput::CreateTextureFromText(std::string text)
 {
-	if (text != currenttext) {
+	if (text != currenttext) 
+	{
 		SDL_Surface *textsurface = TTF_RenderText_Shaded(font, text.c_str(), SDL_Color{ 255, 255, 255, 255 }, SDL_Color{ 0, 0, 0, 255 });
 		texture = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), textsurface);
 
@@ -46,8 +47,6 @@ void TextInput::CreateTextureFromText(std::string text, int x, int y)
 		SDL_FreeSurface(textsurface);
 		currenttext = text;
 	}
-
-	SDLUtility::PostText(this, x, y);
 }
 
 SDL_Texture *TextInput::GetTexture()
@@ -74,4 +73,12 @@ void TextInput::DestroyTexture()
 		imagewidth = 0;
 		imageheight = 0;
 	}
+}
+
+int TextInput::TextWidth(std::string text)
+{
+	int widthoftext;
+	TTF_SizeText(font, text.c_str(), &widthoftext, NULL);
+
+	return widthoftext;
 }

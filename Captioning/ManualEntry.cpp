@@ -10,6 +10,7 @@
 ManualEntry::ManualEntry()
 {
 	charimage.CreateTextureFromImage("ctext.png");
+	textcolor = SDL_Color{ 255, 255, 255, 255 };
 }
 
 void ManualEntry::InsertCharacter(char character, bool isshift)
@@ -64,17 +65,31 @@ void ManualEntry::PostCurrentEntry(int x, int y)
 			nextletterx = nextletterx + 8;
 		}
 	}
+
+	SDL_Rect cursorrect{ nextletterx + x, y, sourcerect.w, sourcerect.h };
+	SDLUtility::CreateSquare(&cursorrect, &textcolor);
 }
 
-std::string ManualEntry::CreateString()
+void ManualEntry::CreateString()
 {
-	return std::string();
+	std::string newstring;
+
+	for (std::list<char>::iterator it = textentry.begin(); it != textentry.end(); it++)
+	{
+		newstring = newstring + (*it);
+	}
+
+	DebugText::CreateMessage(newstring);
+	textentry.erase(textentry.begin(), textentry.end());
 }
 
 void ManualEntry::KeyboardInput(SDL_Event *e, bool shift)
 {
 	switch (e->key.keysym.sym) 
 	{
+	case SDLK_RETURN:
+		CreateString();
+		break;
 	case SDLK_BACKSPACE:
 		DeleteCharacter();
 		break;
