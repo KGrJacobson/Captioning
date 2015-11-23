@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CaptionContainer.cpp" />
     <ClCompile Include="DebugText.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />

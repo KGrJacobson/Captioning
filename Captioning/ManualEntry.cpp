@@ -6,6 +6,7 @@
 #include <iostream>
 #include "SDL.h"
 #include "DebugText.h"
+#include "CaptionContainer.h"
 
 ManualEntry::ManualEntry()
 {
@@ -70,7 +71,7 @@ void ManualEntry::PostCurrentEntry(int x, int y)
 	SDLUtility::CreateSquare(&cursorrect, &textcolor);
 }
 
-void ManualEntry::CreateString()
+void ManualEntry::CreateString(CaptionContainer *captionarea)
 {
 	std::string newstring;
 
@@ -79,7 +80,7 @@ void ManualEntry::CreateString()
 		newstring = newstring + (*it);
 	}
 
-	DebugText::CreateMessage(newstring);
+	captionarea->SetText(newstring);
 	textentry.erase(textentry.begin(), textentry.end());
 }
 
@@ -87,9 +88,6 @@ void ManualEntry::KeyboardInput(SDL_Event *e, bool shift)
 {
 	switch (e->key.keysym.sym) 
 	{
-	case SDLK_RETURN:
-		CreateString();
-		break;
 	case SDLK_BACKSPACE:
 		DeleteCharacter();
 		break;

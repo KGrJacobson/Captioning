@@ -3,6 +3,7 @@
 #include <string>
 #include <list>
 #include "SDL.h"
+#include "CaptionContainer.h"
 
 class ManualEntry
 {
@@ -12,7 +13,7 @@ public:
 	void DeleteCharacter();
 	int TranslateCharacter(char character);
 	void PostCurrentEntry(int x, int y);
-	void CreateString();
+	void CreateString(CaptionContainer *captionarea);
 	void KeyboardInput(SDL_Event *e, bool shift);
 private:
 	Image charimage;

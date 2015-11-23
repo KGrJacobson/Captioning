@@ -82,3 +82,4 @@ int TextInput::TextWidth(std::string text)
 
 	return widthoftext;
 }
+
