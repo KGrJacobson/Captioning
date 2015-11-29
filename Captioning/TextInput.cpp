@@ -2,8 +2,10 @@
 #include "SDL.h"
 #include <SDL_ttf.h>
 #include <string>
+#include <vector>
 #include "SDLUtility.h"
 #include <iostream>
+#include <algorithm>
 
 TextInput::TextInput()
 {
@@ -34,12 +36,23 @@ int TextInput::Init(std::string ttffilepath, int fontsize)
 	return 0;
 }
 
-void TextInput::CreateTextureFromText(std::string text)
+void TextInput::CreateTextureFromText(std::string text, bool isunicode)
 {
 	if (text != currenttext) 
 	{
-		SDL_Surface *textsurface = TTF_RenderText_Shaded(font, text.c_str(), SDL_Color{ 255, 255, 255, 255 }, SDL_Color{ 0, 0, 0, 255 });
-		texture = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), textsurface);
+		SDL_Surface *textsurface;
+
+		if (!isunicode) 
+		{
+			textsurface = TTF_RenderText_Blended(font, text.c_str(), SDL_Color{ 255, 255, 255, 255 });
+			texture = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), textsurface);
+		}
+		else
+		{
+			textsurface = TTF_RenderText_Blended(font, text.c_str(), SDL_Color{ 255, 255, 255, 255 });
+			//textsurface = TTF_RenderGlyph_Solid(font, 12355, SDL_Color{ 255, 255, 255, 255 });
+			texture = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), textsurface);
+		}
 
 		imageheight = textsurface->h;
 		imagewidth = textsurface->w;

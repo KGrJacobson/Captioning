@@ -8,6 +8,7 @@
 #include "DebugText.h"
 #include "ManualEntry.h"
 #include "CaptionContainer.h"
+#include "DemoScreen.h"
 
 int main(int argc, char *argv[]) {
 	if (SDLUtility::Init() < 0)
@@ -16,10 +17,12 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	ManualEntry x;
-	CaptionContainer c; 
-	c.Init("But I must explain to you how all this mistaken idea of denouncing of a pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?",
-		200, 100, 600);
+	//ManualEntry x;
+	DemoScreen y(22);
+	y.CreateCaption("The banded sugar ant (Camponotus consobrinus) is a species of ant endemic to Australia. A member of the genus Camponotus in the subfamily Formicinae, it was described by German entomologist Wilhelm Ferdinand Erichson in 1842. Its common name refers to the ant's preference for sweet food, as well as the distinctive orange-brown band around its gaster. ", 
+		.15, .80, .75, 0);
+
+	DebugText::CreateMessage("test");
 
 	bool quit = false;
 	bool shift = false;
@@ -33,27 +36,26 @@ int main(int argc, char *argv[]) {
 				quit = true;
 			}
 
-			if (e.type == SDL_KEYUP && (e.key.keysym.sym == SDLK_LSHIFT || e.key.keysym.sym == SDLK_RSHIFT))
-				shift = false;
+			//if (e.type == SDL_KEYUP && (e.key.keysym.sym == SDLK_LSHIFT || e.key.keysym.sym == SDLK_RSHIFT))
+			//	shift = false;
 
-			if (e.type == SDL_KEYDOWN)
-			{
-				if (e.key.keysym.sym == SDLK_LSHIFT || e.key.keysym.sym == SDLK_RSHIFT)
-					shift = true;
+			//if (e.type == SDL_KEYDOWN)
+			//{
+			//	if (e.key.keysym.sym == SDLK_LSHIFT || e.key.keysym.sym == SDLK_RSHIFT)
+			//		shift = true;
 
-				if (e.key.keysym.sym == SDLK_DELETE)
-					DebugText::ClearMessages();
+			//	if (e.key.keysym.sym == SDLK_DELETE)
+			//		DebugText::ClearMessages();
 
-				if (e.key.keysym.sym == SDLK_RETURN)
-					x.CreateString(&c);
+			//	if (e.key.keysym.sym == SDLK_RETURN) {}
+			//		//x.CreateString(&c);
 
-				x.KeyboardInput(&e, shift);
-			}
+			//	x.KeyboardInput(&e, shift);
+			//}
 		}
 
-		x.PostCurrentEntry(200, 50);
-		c.ShowContainer();
-		c.ShowCaption();
+		y.ShowScreen();
+		//x.PostCurrentEntry(200, 50);
 		
 		DebugText::PostMessages(); 
 		SDLUtility::UpdateScreen();

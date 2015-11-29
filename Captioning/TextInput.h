@@ -9,7 +9,7 @@ public:
 	TextInput();
 	~TextInput();
 	int Init(std::string ttffilepath, int fontsize);
-	void CreateTextureFromText(std::string text);
+	void CreateTextureFromText(std::string text, bool isunicode);
 	SDL_Texture *GetTexture();
 	int GetWidth();
 	int GetHeight();

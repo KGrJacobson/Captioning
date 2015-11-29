@@ -71,7 +71,7 @@ void ManualEntry::PostCurrentEntry(int x, int y)
 	SDLUtility::CreateSquare(&cursorrect, &textcolor);
 }
 
-void ManualEntry::CreateString(CaptionContainer *captionarea)
+std::string ManualEntry::CreateString()
 {
 	std::string newstring;
 
@@ -80,8 +80,9 @@ void ManualEntry::CreateString(CaptionContainer *captionarea)
 		newstring = newstring + (*it);
 	}
 
-	captionarea->SetText(newstring);
 	textentry.erase(textentry.begin(), textentry.end());
+
+	return newstring;
 }
 
 void ManualEntry::KeyboardInput(SDL_Event *e, bool shift)

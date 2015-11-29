@@ -9,21 +9,19 @@ class CaptionContainer
 {
 public:
 	~CaptionContainer();
-	void Init(std::string initialtext, int initialx, int initialy, int initialw);
-	void SetText(std::string newtext);
+	void Init(std::string initialtext, float initialx, float initialy, float initialw, int destinationw, int initialfontsize, int id);
+	void SetText(std::string newtext, int destinationw);
 	void EraseText();
-	int GetX();
-	int GetY();
-	int GetW();
+	int GetID();
 	std::string GetText();
-	void ShowContainer();
-	void ShowCaption();
-	void FitText(std::string texttofit);
+	void ShowContainer(SDL_Rect destrect);
+	void ShowCaption(SDL_Rect destrect);
+	void FitText(std::string texttofit, float destinationw);
 private:
 	std::string text;
-	int x;
-	int y;
-	int w;
+	float x, y, w;
+	int fontsize;
+	int id;
 	SDL_Color color;
 	std::list<TextInput*> texttextures;
 }; 

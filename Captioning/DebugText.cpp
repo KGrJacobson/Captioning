@@ -7,7 +7,7 @@ void DebugText::CreateMessage(std::string debugmessage)
 {
 	TextInput *newmessage = new TextInput;
 	newmessage->Init("meiryo.ttc", 12);
-	newmessage->CreateTextureFromText(debugmessage);
+	newmessage->CreateTextureFromText(debugmessage, true);
 
 	messagelist.push_back(newmessage);
 }

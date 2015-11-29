@@ -13,7 +13,7 @@ public:
 	void DeleteCharacter();
 	int TranslateCharacter(char character);
 	void PostCurrentEntry(int x, int y);
-	void CreateString(CaptionContainer *captionarea);
+	std::string CreateString();
 	void KeyboardInput(SDL_Event *e, bool shift);
 private:
 	Image charimage;

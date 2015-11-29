@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="CaptionContainer.cpp" />
     <ClCompile Include="DebugText.cpp" />
+    <ClCompile Include="DemoScreen.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ManualEntry.cpp" />

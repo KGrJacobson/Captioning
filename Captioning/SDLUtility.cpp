@@ -12,7 +12,7 @@ int SDLUtility::Init()
 
 	window = SDL_CreateWindow("SDL Test",
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		1500, 750, 0);
+		SCREENW, SCREENH, 0);
 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -55,6 +55,15 @@ SDL_Renderer *SDLUtility::GetRenderer()
 	return renderer;
 }
 
+void SDLUtility::GetScreenWH(int *w, int *h)
+{
+	if (w != NULL)
+		*(w) = SCREENW;
+	
+	if (h != NULL)
+		*(h) = SCREENH;
+}
+
 void SDLUtility::ClearScreen()
 {
 	SDL_RenderClear(renderer);
@@ -62,7 +71,7 @@ void SDLUtility::ClearScreen()
 
 void SDLUtility::UpdateScreen()
 {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(renderer, 102, 0, 75, 255);
 
 	SDL_RenderPresent(renderer);
 }

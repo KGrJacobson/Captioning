@@ -9,11 +9,15 @@
 static SDL_Window *window;
 static SDL_Renderer *renderer;
 
+const static int SCREENW = 1500;
+const static int SCREENH = 750;
+
 class SDLUtility {
 public:
 	static int Init();
 	static void Close();
 	static SDL_Renderer *GetRenderer();
+	static void GetScreenWH(int *w, int *h);
 	static void ClearScreen();
 	static void UpdateScreen();
 	static void PostImage(Image *img, int x, int y);
