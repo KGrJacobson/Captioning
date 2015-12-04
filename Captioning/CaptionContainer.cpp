@@ -45,7 +45,12 @@ std::string CaptionContainer::GetText()
 
 void CaptionContainer::ShowContainer(SDL_Rect destrect)
 {
-	SDL_Rect containertoshow{ destrect.x + (x * destrect.w), destrect.y + (y * destrect.h), w * destrect.w, .5 * destrect.h };
+	int height = fontsize;
+
+	if (texttextures.size() != 0)
+		height = (*texttextures.begin())->GetHeight() * texttextures.size();
+
+	SDL_Rect containertoshow{ destrect.x + (x * destrect.w), destrect.y + (y * destrect.h), w * destrect.w, height };
 
 	SDLUtility::CreateSquare(&containertoshow, &color);
 }
