@@ -35,15 +35,20 @@ int main(int argc, char *argv[]) {
 	MouseHandler *previousmousevent = NULL;
 	MouseHandler *currentmouseevent = NULL;
 
-	int mouseevent;
+	int mouseevent = NO_MOUSE_STATE;
 	bool ismousedown = false;
+	bool foundactive = false;
+	
 	MouseHandler x;
 	x.Init(100, 100, 100, 100);
 	activemice.push_back(&x);
 
 	while (!quit) {
 		SDLUtility::ClearScreen();
-		mouseevent = -1;
+		previousmousevent = currentmouseevent;
+
+		if (ismousedown != true)
+			mouseevent = MOUSEOVER;
 
 		while (SDL_PollEvent(&e) != 0) {
 			if (e.type == SDL_QUIT) {
@@ -51,10 +56,16 @@ int main(int argc, char *argv[]) {
 			}
 
 			if (e.type == SDL_MOUSEBUTTONDOWN)
-				
+			{
+				ismousedown = true;
+				mouseevent = e.button.button;
+			}
 
-			if (e.type == e.type == SDL_MOUSEBUTTONUP)
+			if (e.type == SDL_MOUSEBUTTONUP)
+			{
 				ismousedown = false;
+				mouseevent = e.button.button;
+			}
 
 			//if (e.type == SDL_KEYUP && (e.key.keysym.sym == SDLK_LSHIFT || e.key.keysym.sym == SDLK_RSHIFT))
 			//	shift = false;
@@ -64,9 +75,6 @@ int main(int argc, char *argv[]) {
 			//	if (e.key.keysym.sym == SDLK_LSHIFT || e.key.keysym.sym == SDLK_RSHIFT)
 			//		shift = true;
 
-			//	if (e.key.keysym.sym == SDLK_DELETE)
-			//		DebugText::ClearMessages();
-
 			//	if (e.key.keysym.sym == SDLK_RETURN) {}
 			//		//x.CreateString(&c);
 
@@ -74,10 +82,60 @@ int main(int argc, char *argv[]) {
 			//}
 		}
 
-		y.ShowScreen();
-		//x.PostCurrentEntry(200, 50);
-		x.ShowMouseArea();
+		foundactive = false;
+		for (std::list<MouseHandler*>::iterator it = activemice.begin(); it != activemice.end(); it++)
+		{
+			if ((*it)->IsActive() == true)
+			{
+				currentmouseevent = (*it);
+				foundactive = true;
+			}
+		}
+
+		if (foundactive == false)
+			currentmouseevent = NULL;
+
+		if (previousmousevent != NULL && previousmousevent != currentmouseevent)
+			previousmousevent->ResetMouseEvents();
 		
+		if (currentmouseevent != NULL)
+		{
+			currentmouseevent->SetActive(mouseevent, ismousedown);
+
+			switch (currentmouseevent->GetCurrentState())
+			{
+			case NO_MOUSE_STATE:
+				currentmouseevent->ShowMouseArea(SDL_Color{ 0, 0, 0, 255 });
+				break;
+			case MOUSEOVER:
+				currentmouseevent->ShowMouseArea(SDL_Color{ 255, 0, 0, 255 });
+				break;
+			case LEFT_BUTTON_DOWN:
+				currentmouseevent->ShowMouseArea(SDL_Color{ 0, 255, 0, 255 });
+				break;
+			case RIGHT_BUTTON_DOWN:
+				currentmouseevent->ShowMouseArea(SDL_Color{ 0, 0, 255, 255 });
+				break;
+			case LEFT_BUTTON_UP:
+				DebugText::CreateMessage("left click");
+				break;
+			case RIGHT_BUTTON_UP:
+				DebugText::CreateMessage("right click");
+				break;
+			default:
+				currentmouseevent->ShowMouseArea(SDL_Color{ 255, 255, 255, 255 });
+				break;
+			}
+		}
+		else
+		{
+			x.ShowMouseArea(SDL_Color{ 0, 0, 0, 255 });
+		}
+
+		y.Show();
+		//x.PostCurrentEntry(200, 50);
+
+
 		DebugText::PostMessages(); 
 		SDLUtility::UpdateScreen();
 	}

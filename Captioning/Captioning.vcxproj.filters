@@ -68,5 +68,11 @@
     <ClInclude Include="MouseHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MouseEvaluator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Subscreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

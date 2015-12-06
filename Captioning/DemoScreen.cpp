@@ -5,6 +5,7 @@
 #include "SDLUtility.h"
 #include "CaptionContainer.h"
 #include "DebugText.h"
+#include "MouseHandler.h"
 
 DemoScreen::DemoScreen(int setfontize)
 {
@@ -13,7 +14,7 @@ DemoScreen::DemoScreen(int setfontize)
 	int w;
 	SDLUtility::GetScreenWH(&w, NULL);
 
-	demoarea = SDL_Rect{
+	screenarea = SDL_Rect{
 				w - (aspectratiox * magnification),
 				0,
 				w - (w - (aspectratiox * magnification)),
@@ -25,16 +26,25 @@ DemoScreen::~DemoScreen()
 	captionlist.erase(captionlist.begin(), captionlist.end());
 }
 
-void DemoScreen::ShowScreen()
+void DemoScreen::BuildMouseList()
+{
+}
+
+bool DemoScreen::CheckMouseHandlers(int mouseaction, bool isdown)
+{
+	return false;
+}
+
+void DemoScreen::Show()
 {
 	SDL_Color demoscreencolor{ 0, 0, 0, 255 };
 
-	SDLUtility::CreateSquare(&demoarea, &demoscreencolor);
+	SDLUtility::CreateSquare(&screenarea, &demoscreencolor);
 
 	for (std::list<CaptionContainer*>::iterator it = captionlist.begin(); it != captionlist.end(); it++)
 	{
-		(*it)->ShowContainer(demoarea);
-		(*it)->ShowCaption(demoarea);
+		(*it)->ShowContainer(screenarea);
+		(*it)->ShowCaption(screenarea);
 	}
 }
 
@@ -44,7 +54,7 @@ bool DemoScreen::SetCaptionText(std::string text, int captionid)
 	{
 		if ((*it)->GetID() == captionid) 
 		{
-			(*it)->SetText(text, demoarea.w);
+			(*it)->SetText(text, screenarea.w);
 
 			return true;
 		}
@@ -53,10 +63,10 @@ bool DemoScreen::SetCaptionText(std::string text, int captionid)
 	return false;
 }
 
-void DemoScreen::CreateCaption(std::string text, float x, float y, float w, int containerid)
+void DemoScreen::CreateCaption(std::string text, double x, double y, double w, int containerid)
 {
 	CaptionContainer *newcontainer = new CaptionContainer;
-	newcontainer->Init(text, x, y, w, demoarea.w, static_cast<int>(basefontsize * (static_cast<float>(demoarea.w) / 1600)), containerid);
+	newcontainer->Init(text, x, y, w, screenarea.w, static_cast<int>(basefontsize * (static_cast<float>(screenarea.w) / 1600)), containerid);
 
 	captionlist.push_back(newcontainer);
 }

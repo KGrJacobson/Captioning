@@ -139,8 +139,10 @@
     <ClInclude Include="DemoScreen.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ManualEntry.h" />
+    <ClInclude Include="MouseEvaluator.h" />
     <ClInclude Include="MouseHandler.h" />
     <ClInclude Include="SDLUtility.h" />
+    <ClInclude Include="Subscreen.h" />
     <ClInclude Include="TextInput.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
