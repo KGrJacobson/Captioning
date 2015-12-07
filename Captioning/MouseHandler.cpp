@@ -10,26 +10,14 @@ void MouseHandler::Init(int x, int y, int w, int h)
 	mouseevent = NO_MOUSE_STATE;
 }
 
-bool MouseHandler::IsActive()
+void MouseHandler::SetEvent(int eventtype)
 {
-	int mousex = -1;
-	int mousey = -1;
-	SDL_GetMouseState(&mousex, &mousey);
-
-	if (mousex >= mousearea.x && mousey >= mousearea.y &&
-		mousex <= mousearea.x + mousearea.w && mousey <= mousearea.y + mousearea.h) 
-	{
-		return true;
-	}
-
-	return false;
+	mouseevent = eventtype;
 }
 
-void MouseHandler::SetActive(int eventtype, bool iscurrentdown)
+int MouseHandler::GetEvent()
 {
-	isactive = true;
-	mouseevent = eventtype;
-	isdown = iscurrentdown;
+	return mouseevent;
 }
 
 void MouseHandler::SetMouseArea(int x, int y, int w, int h)
@@ -40,6 +28,11 @@ void MouseHandler::SetMouseArea(int x, int y, int w, int h)
 	mousearea.h = h;
 }
 
+SDL_Rect *MouseHandler::GetMouseArea()
+{
+	return &mousearea;
+}
+
 void MouseHandler::ShowMouseArea(SDL_Color setcolor)
 {
 	SDL_Color color = setcolor;
@@ -47,37 +40,8 @@ void MouseHandler::ShowMouseArea(SDL_Color setcolor)
 	SDLUtility::CreateSquare(&mousearea, &color);
 }
 
-int MouseHandler::GetCurrentState()
-{
-	if (isactive == true)
-	{
-		if (mouseevent == MOUSEOVER)
-			return MOUSEOVER;
-
-		if (isdown == true)
-			if (mouseevent == SDL_BUTTON_LEFT)
-				return LEFT_BUTTON_DOWN;
-			else
-			{
-				if (mouseevent == SDL_BUTTON_RIGHT)
-					return RIGHT_BUTTON_DOWN;
-			}
-		else
-			if (mouseevent == SDL_BUTTON_LEFT)
-				return LEFT_BUTTON_UP;
-			else
-			{
-				if (mouseevent == SDL_BUTTON_RIGHT)
-					return RIGHT_BUTTON_UP;
-			}
-	}
-
-	return NO_MOUSE_STATE;
-}
-
 void MouseHandler::ResetMouseEvents()
 {
-	isactive = false;
 	mouseevent = NO_MOUSE_STATE;
 	ticks = 0;
 }

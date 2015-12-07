@@ -16,16 +16,15 @@ enum mousestate
 class MouseHandler {
 public:
 	void Init(int x, int y, int w, int h);
-	bool IsActive();
-	void SetActive(int eventtype, bool iscurrentdown);
+	void SetEvent(int eventtype);
+	int GetEvent();
 	void SetMouseArea(int x, int y, int w, int h);
+	SDL_Rect *GetMouseArea();
 	void ShowMouseArea(SDL_Color setcolor);
-	int GetCurrentState();
 	int GetTicks();
 	void ResetMouseEvents();
 private:
 	int mouseevent;
-	bool isactive;
 	bool isdown;
 	int ticks;
 	SDL_Rect mousearea;

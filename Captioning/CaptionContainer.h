@@ -4,24 +4,33 @@
 #include "SDL.h"
 #include "SDLUtility.h"
 #include "TextInput.h"
+#include "MouseHandler.h"
+
+enum captioncontainerflags
+{
+	DEFAULT,
+	DELETE_CAPTION
+};
 
 class CaptionContainer
 {
 public:
 	~CaptionContainer();
-	void Init(std::string initialtext, float initialx, float initialy, float initialw, int destinationw, int initialfontsize, int id);
+	void Init(std::string initialtext, float initialx, float initialy, float initialw, SDL_Rect destrect, int initialfontsize, int id);
 	void SetText(std::string newtext, int destinationw);
 	void EraseText();
+	MouseHandler *CheckMouseEvents(int mouseevent);
 	int GetID();
 	std::string GetText();
-	void ShowContainer(SDL_Rect destrect);
-	void ShowCaption(SDL_Rect destrect);
+	int EvaluateCaption(bool showcontainer);
 	void FitText(std::string texttofit, float destinationw);
 private:
 	std::string text;
 	float x, y, w;
 	int fontsize;
 	int id;
+	SDL_Rect absolutecoordinatesrect;
 	SDL_Color color;
 	std::list<TextInput*> texttextures;
+	MouseHandler containermouseevent;
 }; 

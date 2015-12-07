@@ -6,6 +6,6 @@
 class Subscreen {
 public:
 	virtual void BuildMouseList() = 0;
-	virtual bool CheckMouseHandlers(int mouseaction, bool isdown) = 0;
+	virtual MouseHandler *CheckMouseHandlers(int mouseaction) = 0;
 	virtual void Show() = 0;
 };

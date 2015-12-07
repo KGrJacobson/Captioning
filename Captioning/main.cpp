@@ -11,6 +11,40 @@
 #include "DemoScreen.h"
 #include "MouseHandler.h"
 #include <list>
+#include "Subscreen.h"
+
+int GetCurrentMouseState(int mouseevent, bool isdown)
+{
+	if (mouseevent == MOUSEOVER)
+		return MOUSEOVER;
+
+	if (isdown == true)
+	{
+		if (mouseevent == SDL_BUTTON_LEFT)
+		{
+			return LEFT_BUTTON_DOWN;
+		}
+		else
+		{
+			if (mouseevent == SDL_BUTTON_RIGHT)
+				return RIGHT_BUTTON_DOWN;
+		}
+	}
+	else
+	{
+		if (mouseevent == SDL_BUTTON_LEFT)
+		{
+			return LEFT_BUTTON_UP;
+		}
+		else
+		{
+			if (mouseevent == SDL_BUTTON_RIGHT)
+				return RIGHT_BUTTON_UP;
+		}
+	}
+
+	return NO_MOUSE_STATE;
+}
 
 int main(int argc, char *argv[]) {
 	if (SDLUtility::Init() < 0)
@@ -20,9 +54,12 @@ int main(int argc, char *argv[]) {
 	}
 
 	//ManualEntry x;
-	DemoScreen y(22);
-	y.CreateCaption("The banded sugar ant (Camponotus consobrinus) is a species of ant endemic to Australia. A member of the genus Camponotus in the subfamily Formicinae, it was described by German entomologist Wilhelm Ferdinand Erichson in 1842. Its common name refers to the ant's preference for sweet food, as well as the distinctive orange-brown band around its gaster. ", 
+	std::list<Subscreen*> screens;
+	
+	DemoScreen demoscreen(22);
+	demoscreen.CreateCaption("In C++ there are conditional assignment situations where use of the if-else statement is impossible, since this language explicitly distinguishes between initialization and assignment. In such case it is always possible to use a function call, but this can be cumbersome and inelegant. For example, to pass conditionally different values as an argument for a constructor of a field or a base class, it is impossible to use a plain if-else statement; in this case we can use a conditional assignment expression, or a function call.", 
 		.15, .80, .70, 0);
+	screens.push_back(&demoscreen);
 
 	DebugText::CreateMessage("test");
 	//DebugText::CreateMessage("ŽÀŒ±");
@@ -31,17 +68,11 @@ int main(int argc, char *argv[]) {
 	bool shift = false;
 	SDL_Event e;
 
-	std::list<MouseHandler*> activemice;
+	MouseHandler *mousetoevaluate = NULL;
 	MouseHandler *previousmousevent = NULL;
 	MouseHandler *currentmouseevent = NULL;
-
 	int mouseevent = NO_MOUSE_STATE;
 	bool ismousedown = false;
-	bool foundactive = false;
-	
-	MouseHandler x;
-	x.Init(100, 100, 100, 100);
-	activemice.push_back(&x);
 
 	while (!quit) {
 		SDLUtility::ClearScreen();
@@ -82,63 +113,55 @@ int main(int argc, char *argv[]) {
 			//}
 		}
 
-		foundactive = false;
-		for (std::list<MouseHandler*>::iterator it = activemice.begin(); it != activemice.end(); it++)
+		currentmouseevent = NULL;
+		for (std::list<Subscreen*>::iterator it = screens.begin(); it != screens.end(); it++)
 		{
-			if ((*it)->IsActive() == true)
+			mousetoevaluate = (*it)->CheckMouseHandlers(GetCurrentMouseState(mouseevent, ismousedown));
+
+			if (mousetoevaluate != NULL)
 			{
-				currentmouseevent = (*it);
-				foundactive = true;
+				currentmouseevent = mousetoevaluate;
 			}
 		}
-
-		if (foundactive == false)
-			currentmouseevent = NULL;
 
 		if (previousmousevent != NULL && previousmousevent != currentmouseevent)
 			previousmousevent->ResetMouseEvents();
 		
 		if (currentmouseevent != NULL)
 		{
-			currentmouseevent->SetActive(mouseevent, ismousedown);
-
-			switch (currentmouseevent->GetCurrentState())
-			{
-			case NO_MOUSE_STATE:
-				currentmouseevent->ShowMouseArea(SDL_Color{ 0, 0, 0, 255 });
-				break;
-			case MOUSEOVER:
-				currentmouseevent->ShowMouseArea(SDL_Color{ 255, 0, 0, 255 });
-				break;
-			case LEFT_BUTTON_DOWN:
-				currentmouseevent->ShowMouseArea(SDL_Color{ 0, 255, 0, 255 });
-				break;
-			case RIGHT_BUTTON_DOWN:
-				currentmouseevent->ShowMouseArea(SDL_Color{ 0, 0, 255, 255 });
-				break;
-			case LEFT_BUTTON_UP:
-				DebugText::CreateMessage("left click");
-				break;
-			case RIGHT_BUTTON_UP:
-				DebugText::CreateMessage("right click");
-				break;
-			default:
-				currentmouseevent->ShowMouseArea(SDL_Color{ 255, 255, 255, 255 });
-				break;
-			}
+			currentmouseevent->SetEvent(GetCurrentMouseState(mouseevent, ismousedown));
 		}
-		else
+
+		for (std::list<Subscreen*>::iterator it = screens.begin(); it != screens.end(); it++)
 		{
-			x.ShowMouseArea(SDL_Color{ 0, 0, 0, 255 });
+			(*it)->Show();
 		}
 
-		y.Show();
 		//x.PostCurrentEntry(200, 50);
 
-
-		DebugText::PostMessages(); 
+		DebugText::PostMessages();
 		SDLUtility::UpdateScreen();
 	}
 
 	return 0;
 }
+
+
+//switch (mousefunction.GetEvent())
+//{
+//case MOUSEOVER:
+//	mousefunction.ShowMouseArea(SDL_Color{ 255, 0, 0, 55 });
+//	break;
+//case LEFT_BUTTON_DOWN:
+//	mousefunction.ShowMouseArea(SDL_Color{ 0, 255, 0, 55 });
+//	break;
+//case RIGHT_BUTTON_DOWN:
+//	mousefunction.ShowMouseArea(SDL_Color{ 0, 0, 255, 55 });
+//	break;
+//case LEFT_BUTTON_UP:
+//	DebugText::CreateMessage("leftclick");
+//	break;
+//case RIGHT_BUTTON_UP:
+//	DebugText::CreateMessage("rightclick");
+//	break;
+//}

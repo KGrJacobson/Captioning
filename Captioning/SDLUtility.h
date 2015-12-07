@@ -25,4 +25,5 @@ public:
 	static void PostImage(SDL_Texture *tex, int x, int y);
 	static void PostImage(Image *img, int x, int y, SDL_Rect *sourcerect);
 	static void CreateSquare(SDL_Rect *rect, SDL_Color *color);
+	static bool IsMouseActive(SDL_Rect *mousecheckarea);
 };

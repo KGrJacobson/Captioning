@@ -129,6 +129,7 @@
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ManualEntry.cpp" />
+    <ClCompile Include="MouseEvaluator.cpp" />
     <ClCompile Include="MouseHandler.cpp" />
     <ClCompile Include="SDLUtility.cpp" />
     <ClCompile Include="TextInput.cpp" />

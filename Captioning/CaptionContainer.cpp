@@ -9,7 +9,7 @@ CaptionContainer::~CaptionContainer()
 	EraseText();
 }
 
-void CaptionContainer::Init(std::string initialtext, float initialx, float initialy, float initialw, int destinationw, int initialfontsize, int containerid)
+void CaptionContainer::Init(std::string initialtext, float initialx, float initialy, float initialw, SDL_Rect destrect, int initialfontsize, int containerid)
 {
 	text = initialtext;
 	x = initialx;
@@ -18,19 +18,42 @@ void CaptionContainer::Init(std::string initialtext, float initialx, float initi
 	fontsize = initialfontsize;
 	id = containerid;
 	color = SDL_Color{ 255, 0, 0, 50 };
-	FitText(initialtext, (static_cast<float>(destinationw)));
+	if (text != "")
+		FitText(initialtext, (static_cast<float>(destrect.w)));
+
+	absolutecoordinatesrect = SDL_Rect{ 
+		static_cast<int>(destrect.x + (x * static_cast<float>(destrect.w))), 
+		static_cast<int>(destrect.y + (y * static_cast<float>(destrect.h))),
+		static_cast<int>(w * static_cast<float>(destrect.w)),
+		(texttextures.size() != 0) ? static_cast<int>((*texttextures.begin())->GetHeight() * texttextures.size()) : fontsize
+	};
+	containermouseevent.Init(absolutecoordinatesrect.x, absolutecoordinatesrect.y, absolutecoordinatesrect.w, absolutecoordinatesrect.h);
 }
 
 void CaptionContainer::SetText(std::string newtext, int destinationw)
 {
 	EraseText();
 	text = newtext;
-	FitText(newtext, (static_cast<float>(destinationw)));
+	if (text != "")
+		FitText(text, (static_cast<float>(destinationw)));
 }
 
 void CaptionContainer::EraseText()
 {
-	texttextures.erase(texttextures.begin(), texttextures.end());
+	text = "";
+	texttextures.clear();
+	absolutecoordinatesrect.h = fontsize;
+	containermouseevent.SetMouseArea(absolutecoordinatesrect.x, absolutecoordinatesrect.y, absolutecoordinatesrect.w, absolutecoordinatesrect.h);
+}
+
+MouseHandler *CaptionContainer::CheckMouseEvents(int mouseevent)
+{
+	if (SDLUtility::IsMouseActive(containermouseevent.GetMouseArea()))
+	{
+		return &containermouseevent;
+	}
+
+	return NULL;
 }
 
 int CaptionContainer::GetID()
@@ -43,27 +66,47 @@ std::string CaptionContainer::GetText()
 	return text;
 }
 
-void CaptionContainer::ShowContainer(SDL_Rect destrect)
+int CaptionContainer::EvaluateCaption(bool showcontainer)
 {
+	int returncode = DEFAULT;
 	int height = fontsize;
-
 	if (texttextures.size() != 0)
 		height = (*texttextures.begin())->GetHeight() * texttextures.size();
 
-	SDL_Rect containertoshow{ destrect.x + (x * destrect.w), destrect.y + (y * destrect.h), w * destrect.w, height };
+	SDL_Rect containerrect = absolutecoordinatesrect;
+	containerrect.h = height;
 
-	SDLUtility::CreateSquare(&containertoshow, &color);
-}
-
-void CaptionContainer::ShowCaption(SDL_Rect destrect)
-{
-	int totalheight = 0;
-
-	for (std::list<TextInput*>::reverse_iterator it = texttextures.rbegin(); it != texttextures.rend(); it++)
+	if (showcontainer == true)
 	{
-		SDLUtility::PostText((*it), destrect.x + (x * destrect.w), destrect.y + (y * destrect.h) + totalheight);
-		totalheight = totalheight + (*it)->GetHeight();
+		SDLUtility::CreateSquare(&containerrect, &color);
 	}
+
+	if (text != "")
+	{
+		int totalheight = 0;
+		containerrect.h = totalheight;
+
+		for (std::list<TextInput*>::reverse_iterator it = texttextures.rbegin(); it != texttextures.rend(); it++)
+		{
+			SDLUtility::PostText((*it), containerrect.x, containerrect.y + totalheight);
+			totalheight = totalheight + (*it)->GetHeight();
+		}
+	}
+
+	switch (containermouseevent.GetEvent())
+	{
+	case MOUSEOVER:
+		containermouseevent.ShowMouseArea(SDL_Color{ 0, 255, 0, 55 });
+		break;
+	case LEFT_BUTTON_UP:
+		EraseText();
+		break;
+	case RIGHT_BUTTON_UP:
+		returncode = DELETE_CAPTION;
+		break;
+	}
+
+	return returncode;
 }
 
 void CaptionContainer::FitText(std::string texttofit, float destinationw)

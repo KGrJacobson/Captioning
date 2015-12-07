@@ -18,13 +18,13 @@ public:
 	DemoScreen(int setfontsizeint);
 	~DemoScreen();
 	void BuildMouseList();
-	bool CheckMouseHandlers(int mouseaction, bool isdown);
+	MouseHandler *CheckMouseHandlers(int mouseevent);
 	void Show();
 	bool SetCaptionText(std::string text, int captionid);
 	void CreateCaption(std::string text, double x, double y, double w, int containerid);
 private: 
 	int basefontsize;
-	std::list<MouseHandler*> mouselist;
+	MouseHandler mousefunction;
 	SDL_Rect screenarea;
 	std::list<CaptionContainer*> captionlist;
 };

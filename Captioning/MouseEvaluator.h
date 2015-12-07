@@ -1,16 +1,16 @@
 #pragma once
 #include <list>
 #include "MouseHandler.h"
+#include "Subscreen.h"
 
 class MouseEvaluator {
 public:
-	void Init();
-
+	void Init(std::list<Subscreen*> *screenlist);
+	void SetScreenList(std::list<Subscreen*> *screenlist);
+	void CheckMouse(int mouseevent, bool isbuttondown);
 private:
-	std::list<MouseHandler*> activemice;
+	std::list<Subscreen*> *activescreens;
 	MouseHandler *previousmouse;
 	MouseHandler *currentmouse;
-	int mouseevent;
-	bool ismousedown;
 	bool foundactive;
 };

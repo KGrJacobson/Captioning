@@ -19,20 +19,42 @@ DemoScreen::DemoScreen(int setfontize)
 				0,
 				w - (w - (aspectratiox * magnification)),
 				aspectratioy * magnification };
+
+	mousefunction.Init(screenarea.x, screenarea.y, screenarea.w, screenarea.h);
 }
 
 DemoScreen::~DemoScreen()
 {
-	captionlist.erase(captionlist.begin(), captionlist.end());
+	captionlist.clear();
 }
 
 void DemoScreen::BuildMouseList()
 {
 }
 
-bool DemoScreen::CheckMouseHandlers(int mouseaction, bool isdown)
+MouseHandler *DemoScreen::CheckMouseHandlers(int mouseevent)
 {
-	return false;
+	MouseHandler *foundmouse = NULL;
+
+	if (SDLUtility::IsMouseActive(mousefunction.GetMouseArea()))
+	{
+		foundmouse = &mousefunction;
+	}
+	else
+	{
+		return NULL;
+	}
+
+	MouseHandler *currentevaluation = NULL;
+	for (std::list<CaptionContainer*>::iterator it = captionlist.begin(); it != captionlist.end(); it++)
+	{
+		currentevaluation = (*it)->CheckMouseEvents(mouseevent);
+
+		if (currentevaluation != NULL)
+			foundmouse = currentevaluation;
+	}
+
+	return foundmouse;
 }
 
 void DemoScreen::Show()
@@ -41,10 +63,12 @@ void DemoScreen::Show()
 
 	SDLUtility::CreateSquare(&screenarea, &demoscreencolor);
 
+	int captioncode = DEFAULT;
 	for (std::list<CaptionContainer*>::iterator it = captionlist.begin(); it != captionlist.end(); it++)
 	{
-		(*it)->ShowContainer(screenarea);
-		(*it)->ShowCaption(screenarea);
+		captioncode = (*it)->EvaluateCaption(true);
+		//if (captioncode = DELETE_CAPTION)
+		//	captionlist.erase(it++);
 	}
 }
 
@@ -66,7 +90,7 @@ bool DemoScreen::SetCaptionText(std::string text, int captionid)
 void DemoScreen::CreateCaption(std::string text, double x, double y, double w, int containerid)
 {
 	CaptionContainer *newcontainer = new CaptionContainer;
-	newcontainer->Init(text, x, y, w, screenarea.w, static_cast<int>(basefontsize * (static_cast<float>(screenarea.w) / 1600)), containerid);
+	newcontainer->Init(text, x, y, w, screenarea, static_cast<int>(basefontsize * (static_cast<float>(screenarea.w) / 1600)), containerid);
 
 	captionlist.push_back(newcontainer);
 }

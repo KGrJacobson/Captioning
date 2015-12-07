@@ -109,3 +109,18 @@ void SDLUtility::CreateSquare(SDL_Rect *rect, SDL_Color *color)
 	SDL_RenderFillRect(renderer, rect);
 }
 
+
+bool SDLUtility::IsMouseActive(SDL_Rect *mousecheckarea)
+{
+	int mousex = -1;
+	int mousey = -1;
+	SDL_GetMouseState(&mousex, &mousey);
+
+	if (mousex >= mousecheckarea->x && mousey >= mousecheckarea->y &&
+		mousex <= mousecheckarea->x + mousecheckarea->w && mousey <= mousecheckarea->y + mousecheckarea->h)
+	{
+		return true;
+	}
+
+	return false;
+}
