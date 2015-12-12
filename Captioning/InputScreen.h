@@ -18,7 +18,7 @@ public:
 	void Show();
 	void InsertCharacter(char character, bool isshift);
 	void DeleteCharacter();
-	void KeyboardInput(SDL_Event *e, bool shift);
+	void KeyboardInput(const SDL_Event &e, bool shift);
 	std::string PostText();
 private:
 	SDL_Rect screenarea;

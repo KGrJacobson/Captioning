@@ -39,10 +39,10 @@
     <ClCompile Include="MouseHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MouseEvaluator.cpp">
+    <ClCompile Include="InputScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InputScreen.cpp">
+    <ClCompile Include="ScreenHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,13 +68,13 @@
     <ClInclude Include="MouseHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MouseEvaluator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Subscreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="InputScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

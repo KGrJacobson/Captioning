@@ -3,6 +3,7 @@
 #include "SDLUtility.h"
 #include <list>
 #include "DebugText.h"
+#include <algorithm>
 
 CaptionContainer::~CaptionContainer()
 {
@@ -39,6 +40,9 @@ void CaptionContainer::SetText(std::string newtext, int destinationw)
 	text = newtext;
 	if (text != "")
 		FitText(text, (static_cast<float>(destinationw)));
+
+	absolutecoordinatesrect.h = (texttextures.size() != 0) ? std::max(static_cast<int>((*texttextures.begin())->GetHeight() * texttextures.size()), 20) : 20;
+	containermouseevent.SetMouseArea(absolutecoordinatesrect.x, absolutecoordinatesrect.y, absolutecoordinatesrect.w, absolutecoordinatesrect.h);
 }
 
 void CaptionContainer::EraseText()
@@ -90,7 +94,7 @@ int CaptionContainer::EvaluateCaption(bool showcontainer)
 	int returncode = DEFAULT;
 	int height = 20;
 	if (texttextures.size() != 0)
-		height = (*texttextures.begin())->GetHeight() * texttextures.size();
+		height = std::max(static_cast<int>((*texttextures.begin())->GetHeight() * texttextures.size()), 20);
 
 	SDL_Rect containerrect = absolutecoordinatesrect;
 	containerrect.h = height;

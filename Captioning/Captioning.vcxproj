@@ -129,8 +129,8 @@
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="InputScreen.cpp" />
-    <ClCompile Include="MouseEvaluator.cpp" />
     <ClCompile Include="MouseHandler.cpp" />
+    <ClCompile Include="ScreenHandler.cpp" />
     <ClCompile Include="SDLUtility.cpp" />
     <ClCompile Include="TextInput.cpp" />
   </ItemGroup>
@@ -140,8 +140,8 @@
     <ClInclude Include="DemoScreen.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="InputScreen.h" />
-    <ClInclude Include="MouseEvaluator.h" />
     <ClInclude Include="MouseHandler.h" />
+    <ClInclude Include="ScreenHandler.h" />
     <ClInclude Include="SDLUtility.h" />
     <ClInclude Include="Subscreen.h" />
     <ClInclude Include="TextInput.h" />

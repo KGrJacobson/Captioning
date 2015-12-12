@@ -118,9 +118,9 @@ void InputScreen::DeleteCharacter()
 	}
 }
 
-void InputScreen::KeyboardInput(SDL_Event *e, bool shift)
+void InputScreen::KeyboardInput(const SDL_Event &e, bool shift)
 {
-	switch (e->key.keysym.sym) 
+	switch (e.key.keysym.sym) 
 	{
 	case SDLK_BACKSPACE:
 		DeleteCharacter();
