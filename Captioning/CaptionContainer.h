@@ -9,7 +9,8 @@
 enum captioncontainerflags
 {
 	DEFAULT,
-	DELETE_CAPTION
+	DELETE_CAPTION,
+	SELECT_CAPTION
 };
 
 class CaptionContainer
@@ -20,6 +21,8 @@ public:
 	void SetText(std::string newtext, int destinationw);
 	void EraseText();
 	MouseHandler *CheckMouseEvents(int mouseevent);
+	void DeselectCaption();
+	void SelectCaption();
 	int GetID();
 	std::string GetText();
 	int EvaluateCaption(bool showcontainer);
@@ -32,5 +35,8 @@ private:
 	SDL_Rect absolutecoordinatesrect;
 	SDL_Color color;
 	std::list<TextInput*> texttextures;
+	bool isselected;
 	MouseHandler containermouseevent;
+	MouseHandler deletebutton;
+	MouseHandler selectbutton;
 }; 

@@ -6,7 +6,7 @@
 #include "SDL.h"
 #include "TextInput.h"
 #include "DebugText.h"
-#include "ManualEntry.h"
+#include "InputScreen.h"
 #include "CaptionContainer.h"
 #include "DemoScreen.h"
 #include "MouseHandler.h"
@@ -61,7 +61,12 @@ int main(int argc, char *argv[]) {
 		.15, .80, .70, 0);
 	screens.push_back(&demoscreen);
 
-	DebugText::CreateMessage("test");
+	int windowh = -1;
+	SDLUtility::GetScreenWH(NULL, &windowh);
+	InputScreen inputscreen(SDL_Rect{ 0, 0, demoscreen.GetScreenSize().x, windowh });
+	screens.push_back(&inputscreen);
+
+	//DebugText::CreateMessage("test");
 	//DebugText::CreateMessage("ŽÀŒ±");
 
 	bool quit = false;
@@ -98,19 +103,29 @@ int main(int argc, char *argv[]) {
 				mouseevent = e.button.button;
 			}
 
-			//if (e.type == SDL_KEYUP && (e.key.keysym.sym == SDLK_LSHIFT || e.key.keysym.sym == SDLK_RSHIFT))
-			//	shift = false;
+			if (e.type == SDL_KEYDOWN)
+			{
+				switch (e.key.keysym.sym)
+				{
+				case SDLK_DELETE:
+					demoscreen.ClearAllCaptionText();
+					break;
+				}
+			}
 
-			//if (e.type == SDL_KEYDOWN)
-			//{
-			//	if (e.key.keysym.sym == SDLK_LSHIFT || e.key.keysym.sym == SDLK_RSHIFT)
-			//		shift = true;
+			if (e.type == SDL_KEYUP && (e.key.keysym.sym == SDLK_LSHIFT || e.key.keysym.sym == SDLK_RSHIFT))
+				shift = false;
 
-			//	if (e.key.keysym.sym == SDLK_RETURN) {}
-			//		//x.CreateString(&c);
+			if (e.type == SDL_KEYDOWN)
+			{
+				if (e.key.keysym.sym == SDLK_LSHIFT || e.key.keysym.sym == SDLK_RSHIFT)
+					shift = true;
 
-			//	x.KeyboardInput(&e, shift);
-			//}
+				if (e.key.keysym.sym == SDLK_RETURN)
+					demoscreen.SetCaptionText(inputscreen.PostText(), -1);
+
+				inputscreen.KeyboardInput(&e, shift);
+			}
 		}
 
 		currentmouseevent = NULL;
@@ -136,8 +151,6 @@ int main(int argc, char *argv[]) {
 		{
 			(*it)->Show();
 		}
-
-		//x.PostCurrentEntry(200, 50);
 
 		DebugText::PostMessages();
 		SDLUtility::UpdateScreen();

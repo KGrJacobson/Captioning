@@ -38,27 +38,58 @@ int TextInput::Init(std::string ttffilepath, int fontsize)
 
 void TextInput::CreateTextureFromText(std::string text, bool isunicode)
 {
-	if (text != currenttext) 
+	if (text == "")
 	{
-		SDL_Surface *textsurface;
-
-		if (!isunicode) 
+		DestroyTexture();
+	}
+	else
+	{
+		if (currenttext != text)
 		{
-			textsurface = TTF_RenderText_Blended(font, text.c_str(), SDL_Color{ 255, 255, 255, 255 });
-			texture = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), textsurface);
+			SDL_Surface *textsurface;
+
+			if (!isunicode)
+			{
+				textsurface = TTF_RenderText_Blended(font, text.c_str(), SDL_Color{ 255, 255, 255, 255 });
+				texture = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), textsurface);
+			}
+			else
+			{
+				textsurface = TTF_RenderText_Blended(font, text.c_str(), SDL_Color{ 255, 255, 255, 255 });
+				//textsurface = TTF_RenderGlyph_Solid(font, 12355, SDL_Color{ 255, 255, 255, 255 });
+				texture = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), textsurface);
+			}
+
+			imageheight = textsurface->h;
+			imagewidth = textsurface->w;
+
+			SDL_FreeSurface(textsurface);
+			currenttext = text;
 		}
-		else
+	}
+}
+
+void TextInput::CreateQuickTextureFromText(std::string text)
+{
+	if (text == "")
+	{
+		DestroyTexture();
+	}
+	else
+	{
+		if (currenttext != text)
 		{
-			textsurface = TTF_RenderText_Blended(font, text.c_str(), SDL_Color{ 255, 255, 255, 255 });
-			//textsurface = TTF_RenderGlyph_Solid(font, 12355, SDL_Color{ 255, 255, 255, 255 });
+			SDL_Surface *textsurface;
+
+			textsurface = TTF_RenderText_Solid(font, text.c_str(), SDL_Color{ 255, 255, 255, 255 });
 			texture = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), textsurface);
+
+			imageheight = textsurface->h;
+			imagewidth = textsurface->w;
+
+			SDL_FreeSurface(textsurface);
+			currenttext = text;
 		}
-
-		imageheight = textsurface->h;
-		imagewidth = textsurface->w;
-
-		SDL_FreeSurface(textsurface);
-		currenttext = text;
 	}
 }
 
@@ -75,6 +106,11 @@ int TextInput::GetWidth()
 int TextInput::GetHeight()
 {
 	return imageheight;
+}
+
+std::string TextInput::GetCurrentText()
+{
+	return currenttext;
 }
 
 void TextInput::DestroyTexture()
