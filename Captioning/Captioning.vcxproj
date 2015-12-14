@@ -138,6 +138,7 @@
     <ClInclude Include="CaptionContainer.h" />
     <ClInclude Include="DebugText.h" />
     <ClInclude Include="DemoScreen.h" />
+    <ClInclude Include="DemoScreenTab.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="InputScreen.h" />
     <ClInclude Include="MouseHandler.h" />

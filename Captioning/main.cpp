@@ -1,11 +1,13 @@
 #include <iostream>
-#include "SDLUtility.h"
 #include <string>
-#include <SDL_image.h>
+
 #include "SDL.h"
+#include "SDL_image.h"
+
 #include "DebugText.h"
 #include "InputScreen.h"
 #include "ScreenHandler.h"
+#include "SDLUtility.h"
 
 int main(int argc, char *argv[]) {
 	if (SDLUtility::Init() < 0)
@@ -17,7 +19,7 @@ int main(int argc, char *argv[]) {
 	ScreenHandler screenhandler;
 
 	//DebugText::CreateMessage("test");
-	//DebugText::CreateMessage("実験");
+	DebugText::CreateMessage(L"あ、アは、日本語の音節の1つであり、仮名の1つである。1モーラを形成する。五十音図において第1行第1段（あ行あ段）に位置する");
 
 	bool quit = false;
 	SDL_Event e;

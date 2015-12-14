@@ -1,12 +1,16 @@
-#pragma once
-#include "Image.h"
-#include <string>
+#ifndef INPUT_SCREEN
+#define INPUT_SCREEN
+
 #include <list>
+#include <string>
+
 #include "SDL.h"
+
 #include "CaptionContainer.h"
-#include "Subscreen.h"
+#include "Image.h"
 #include "MouseHandler.h"
 #include "TextInput.h"
+#include "Subscreen.h"
 
 static const int TEXT_INPUT_BOX_HEIGHT = 100;
 
@@ -21,12 +25,14 @@ public:
 	void KeyboardInput(const SDL_Event &e, bool shift);
 	std::string PostText();
 private:
-	SDL_Rect screenarea;
-	SDL_Rect textinputbox;
-	TextInput texttexture;
-	MouseHandler mousefunction;
-	MouseHandler confirmbutton;
-	MouseHandler cancelbutton;
-	std::string currenttext;
-	SDL_Color textcolor;
+	SDL_Rect screenarea_;
+	SDL_Rect textinputbox_;
+	TextInput texttexture_;
+	MouseHandler mousefunction_;
+	MouseHandler confirmbutton_;
+	MouseHandler cancelbutton_;
+	std::string currenttext_;
+	SDL_Color textcolor_;
 };
+
+#endif //INPUT_SCREEN

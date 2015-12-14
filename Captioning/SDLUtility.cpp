@@ -1,9 +1,11 @@
-#include "SDLUtility.h"
-#include "SDL.h"
-#include <SDL_ttf.h>
-#include <SDL_image.h>
 #include <iostream>
+
+#include "SDL.h"
+#include "SDL_image.h"
+#include "SDL_ttf.h"
+
 #include "DebugText.h"
+#include "SDLUtility.h"
 
 int SDLUtility::Init()
 {

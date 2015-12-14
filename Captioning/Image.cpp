@@ -1,14 +1,11 @@
-#include "Image.h"
-#include "SDL.h"
-#include <SDL_ttf.h>
-#include <SDL_image.h>
 #include <string>
-#include "SDLUtility.h"
-#include <iostream>
 
-Image::Image()
-{
-}
+#include "SDL.h"
+#include "SDL_image.h"
+#include "SDL_ttf.h"
+
+#include "Image.h"
+#include "SDLUtility.h"
 
 Image::~Image()
 {
@@ -26,10 +23,10 @@ int Image::CreateTextureFromImage(std::string filepath)
 		return -1;
 	}
 
-	imageheight = loadedsurface->h;
-	imagewidth = loadedsurface->w;
+	imageheight_ = loadedsurface->h;
+	imagewidth_ = loadedsurface->w;
 
-	texture = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), loadedsurface);
+	texture_ = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), loadedsurface);
 	SDL_FreeSurface(loadedsurface);
 
 	return 0;
@@ -37,26 +34,26 @@ int Image::CreateTextureFromImage(std::string filepath)
 
 SDL_Texture *Image::GetTexture()
 {
-	return texture;
+	return texture_;
 }
 
 int Image::GetWidth()
 {
-	return imagewidth;
+	return imagewidth_;
 }
 
 int Image::GetHeight()
 {
-	return imageheight;
+	return imageheight_;
 }
 
 void Image::DestroyTexture()
 {
-	if (texture != NULL)
+	if (texture_ != NULL)
 	{
-		SDL_DestroyTexture(texture);
-		texture = NULL;
-		imagewidth= 0;
-		imageheight = 0;
+		SDL_DestroyTexture(texture_);
+		texture_ = NULL;
+		imagewidth_ = 0;
+		imageheight_ = 0;
 	}
 }

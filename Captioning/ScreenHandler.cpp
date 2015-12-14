@@ -1,50 +1,52 @@
 #include <list>
 #include <string>
+
+#include "SDL.h"
+
 #include "DebugText.h"
-#include "sdl.h"
-#include "SDLUtility.h"
-#include "ScreenHandler.h"
-#include "Subscreen.h"
 #include "DemoScreen.h"
 #include "InputScreen.h"
+#include "ScreenHandler.h"
+#include "Subscreen.h"
+#include "SDLUtility.h"
 
 ScreenHandler::ScreenHandler()
 {
-	shift = false;
+	shift_ = false;
 
-	mousetoevaluate = NULL;
-	previousmousevent = NULL;
-	currentmouseevent = NULL;
-	mouseevent = NO_MOUSE_STATE;
-	ismousedown = false;
+	mousetoevaluate_ = NULL;
+	previousmousevent_ = NULL;
+	currentmouseevent_ = NULL;
+	mouseevent_ = NO_MOUSE_STATE;
+	ismousedown_ = false;
 
-	demoscreen = new DemoScreen(22);
-	demoscreen->CreateCaption("In C++ there are conditional assignment situations where use of the if-else statement is impossible, since this language explicitly distinguishes between initialization and assignment. In such case it is always possible to use a function call, but this can be cumbersome and inelegant. For example, to pass conditionally different values as an argument for a constructor of a field or a base class, it is impossible to use a plain if-else statement; in this case we can use a conditional assignment expression, or a function call.",
+	demoscreen_ = new DemoScreen(22);
+	demoscreen_->CreateCaption("In C++ there are conditional assignment situations where use of the if-else statement is impossible, since this language explicitly distinguishes between initialization and assignment. In such case it is always possible to use a function call, but this can be cumbersome and inelegant. For example, to pass conditionally different values as an argument for a constructor of a field or a base class, it is impossible to use a plain if-else statement; in this case we can use a conditional assignment expression, or a function call.",
 		.15, .80, .70, 0);
-	screens.push_back(demoscreen);
+	screens_.push_back(demoscreen_);
 
 	int windowh = -1;
 	SDLUtility::GetScreenWH(NULL, &windowh);
-	inputscreen = new InputScreen(SDL_Rect{ 0, 0, demoscreen->GetScreenSize().x, windowh });
-	screens.push_back(inputscreen);
+	inputscreen_ = new InputScreen(SDL_Rect{ 0, 0, demoscreen_->GetScreenSize().x, windowh });
+	screens_.push_back(inputscreen_);
 }
 
 ScreenHandler::~ScreenHandler()
 {
-	delete demoscreen;
-	demoscreen = NULL;
-	delete inputscreen;
-	inputscreen = NULL;
+	delete demoscreen_;
+	demoscreen_ = NULL;
+	delete inputscreen_;
+	inputscreen_ = NULL;
 
-	screens.clear();
+	screens_.clear();
 }
 
 void ScreenHandler::PreEventMouseSetup()
 {
-	previousmousevent = currentmouseevent;
+	previousmousevent_ = currentmouseevent_;
 
-	if (ismousedown != true)
-		mouseevent = MOUSEOVER;
+	if (ismousedown_ != true)
+		mouseevent_ = MOUSEOVER;
 }
 
 void ScreenHandler::HandleEvents(const SDL_Event &e)
@@ -52,14 +54,14 @@ void ScreenHandler::HandleEvents(const SDL_Event &e)
 
 	if (e.type == SDL_MOUSEBUTTONDOWN)
 	{
-		ismousedown = true;
-		mouseevent = e.button.button;
+		ismousedown_ = true;
+		mouseevent_ = e.button.button;
 	}
 
 	if (e.type == SDL_MOUSEBUTTONUP)
 	{
-		ismousedown = false;
-		mouseevent = e.button.button;
+		ismousedown_ = false;
+		mouseevent_ = e.button.button;
 	}
 
 	if (e.type == SDL_KEYDOWN)
@@ -67,82 +69,82 @@ void ScreenHandler::HandleEvents(const SDL_Event &e)
 		switch (e.key.keysym.sym)
 		{
 		case SDLK_DELETE:
-			demoscreen->ClearAllCaptionText();
+			demoscreen_->ClearAllCaptionText();
 			break;
 		}
 	}
 
 	if (e.type == SDL_KEYUP && (e.key.keysym.sym == SDLK_LSHIFT || e.key.keysym.sym == SDLK_RSHIFT))
-		shift = false;
+		shift_ = false;
 
 	if (e.type == SDL_KEYDOWN)
 	{
 		if (e.key.keysym.sym == SDLK_LSHIFT || e.key.keysym.sym == SDLK_RSHIFT)
-			shift = true;
+			shift_ = true;
 
 		if (e.key.keysym.sym == SDLK_RETURN)
-			demoscreen->SetCaptionText(inputscreen->PostText(), -1);
+			demoscreen_->SetCaptionText(inputscreen_->PostText(), -1);
 
-		inputscreen->KeyboardInput(e, shift);
+		inputscreen_->KeyboardInput(e, shift_);
 	}
 }
 
 void ScreenHandler::PostEventMouseSetup()
 {
-	currentmouseevent = NULL;
-	for (std::list<Subscreen*>::iterator it = screens.begin(); it != screens.end(); it++)
+	currentmouseevent_ = NULL;
+	for (std::list<Subscreen*>::iterator it = screens_.begin(); it != screens_.end(); it++)
 	{
-		mousetoevaluate = (*it)->CheckMouseHandlers(GetCurrentMouseState(mouseevent, ismousedown));
+		mousetoevaluate_ = (*it)->CheckMouseHandlers(GetCurrentMouseState(mouseevent_, ismousedown_));
 
-		if (mousetoevaluate != NULL)
+		if (mousetoevaluate_ != NULL)
 		{
-			currentmouseevent = mousetoevaluate;
+			currentmouseevent_ = mousetoevaluate_;
 		}
 	}
 
-	if (previousmousevent != NULL && previousmousevent != currentmouseevent)
-		previousmousevent->ResetMouseEvents();
+	if (previousmousevent_ != NULL && previousmousevent_ != currentmouseevent_)
+		previousmousevent_->ResetMouseEvents();
 
-	if (currentmouseevent != NULL)
+	if (currentmouseevent_ != NULL)
 	{
-		currentmouseevent->SetEvent(GetCurrentMouseState(mouseevent, ismousedown));
+		currentmouseevent_->SetEvent(GetCurrentMouseState(mouseevent_, ismousedown_));
 	}
 }
 
 void ScreenHandler::ShowScreens()
 {
-	for (std::list<Subscreen*>::iterator it = screens.begin(); it != screens.end(); it++)
+	for (std::list<Subscreen*>::iterator it = screens_.begin(); it != screens_.end(); it++)
 	{
 		(*it)->Show();
 	}
 }
 
-int ScreenHandler::GetCurrentMouseState(int mouseevent, bool isdown)
+int ScreenHandler::GetCurrentMouseState(int mouseevent_, bool isdown)
 {
-	if (mouseevent == MOUSEOVER)
+	if (mouseevent_ == MOUSEOVER)
 		return MOUSEOVER;
 
 	if (isdown == true)
 	{
-		if (mouseevent == SDL_BUTTON_LEFT)
+		if (mouseevent_ == SDL_BUTTON_LEFT)
 		{
 			return LEFT_BUTTON_DOWN;
 		}
 		else
 		{
-			if (mouseevent == SDL_BUTTON_RIGHT)
+			if (mouseevent_ == SDL_BUTTON_RIGHT)
 				return RIGHT_BUTTON_DOWN;
 		}
 	}
 	else
 	{
-		if (mouseevent == SDL_BUTTON_LEFT)
+		if (mouseevent_ == SDL_BUTTON_LEFT)
 		{
 			return LEFT_BUTTON_UP;
 		}
 		else
 		{
-			if (mouseevent == SDL_BUTTON_RIGHT)
+			if (mouseevent_ == SDL_BUTTON_RIGHT)
 				return RIGHT_BUTTON_UP;
 		}
 	}

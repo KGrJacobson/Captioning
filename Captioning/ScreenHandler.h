@@ -1,14 +1,18 @@
-#pragma once
+#ifndef SCREEN_HANDLER
+#define SCREEN_HANDLER
+
 #include <list>
 #include <string>
-#include "DebugText.h"
+
 #include "SDL.h"
-#include "SDLUtility.h"
-#include "ScreenHandler.h"
-#include "Subscreen.h"
-#include "MouseHandler.h"
+
+#include "DebugText.h"
 #include "DemoScreen.h"
 #include "InputScreen.h"
+#include "MouseHandler.h"
+#include "ScreenHandler.h"
+#include "SDLUtility.h"
+#include "Subscreen.h"
 
 class ScreenHandler {
 public:
@@ -20,13 +24,15 @@ public:
 	void ShowScreens();
 	int GetCurrentMouseState(int mouseevent, bool isdown);
 private:
-	std::list<Subscreen*> screens;
-	DemoScreen *demoscreen;
-	InputScreen *inputscreen;
-	bool shift;
-	MouseHandler *mousetoevaluate;
-	MouseHandler *previousmousevent;
-	MouseHandler *currentmouseevent;
-	int mouseevent;
-	bool ismousedown;
+	std::list<Subscreen*> screens_;
+	DemoScreen *demoscreen_;
+	InputScreen *inputscreen_;
+	bool shift_;
+	MouseHandler *mousetoevaluate_;
+	MouseHandler *previousmousevent_;
+	MouseHandler *currentmouseevent_;
+	int mouseevent_;
+	bool ismousedown_;
 };
+
+#endif //SCREEN_HANDLER

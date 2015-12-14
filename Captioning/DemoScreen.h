@@ -1,16 +1,23 @@
-#pragma once
+#ifndef DEMO_SCREEN
+#define DEMO_SCREEN
+
 #include <list>
 #include <string>
+
 #include "SDL.h"
-#include "SDLUtility.h"
+
 #include "CaptionContainer.h"
 #include "DebugText.h"
-#include "Subscreen.h"
+#include "DemoScreenTab.h"
 #include "MouseHandler.h"
+#include "SDLUtility.h"
+#include "Subscreen.h"
 
-static const int aspectratiox = 16;
-static const int aspectratioy = 9;
-static int magnification = 40;
+static const int ASPECT_RATIO_X = 16;
+static const int ASPECT_RATIO_Y = 9;
+static const int MAGNIFICATION_MULTIPLIER = 40;
+
+static const int DEMOSCREEN_TAB_HEIGHT = 20;
 
 class DemoScreen : public Subscreen
 {
@@ -26,10 +33,14 @@ public:
 	void ClearAllCaptionText();
 	void DeleteAllCaptions();
 private: 
-	int basefontsize;
-	MouseHandler mousefunction;
-	SDL_Rect screenarea;
-	SDL_Rect *drawncaptionarea;
-	CaptionContainer *selectedcaption;
-	std::list<CaptionContainer*> captionlist;
+	int basefontsize_;
+	MouseHandler mousefunction_;
+	SDL_Rect screenarea_;
+	SDL_Rect demoarea_;
+	SDL_Rect *drawncaptionarea_;
+	CaptionContainer *selectedcaption_;
+	DemoScreenTab *currenttab_;
+	std::list<CaptionContainer*> captionlist_;
 };
+
+#endif //DEMO_SCREEN

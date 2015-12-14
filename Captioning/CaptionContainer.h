@@ -1,10 +1,14 @@
-#pragma once
-#include <string>
+#ifndef CAPTION_CONTAINER
+#define CAPTION_CONTAINER
+
 #include <list>
+#include <string>
+
 #include "SDL.h"
+
+#include "MouseHandler.h"
 #include "SDLUtility.h"
 #include "TextInput.h"
-#include "MouseHandler.h"
 
 enum captioncontainerflags
 {
@@ -28,15 +32,17 @@ public:
 	int EvaluateCaption(bool showcontainer);
 	void FitText(std::string texttofit, float destinationw);
 private:
-	std::string text;
-	float x, y, w;
-	int fontsize;
-	int id;
-	SDL_Rect absolutecoordinatesrect;
-	SDL_Color color;
-	std::list<TextInput*> texttextures;
-	bool isselected;
-	MouseHandler containermouseevent;
-	MouseHandler deletebutton;
-	MouseHandler selectbutton;
+	std::string text_;
+	float x_, y_, w_;
+	int fontsize_;
+	int id_;
+	SDL_Rect absolutecoordinatesrect_;
+	SDL_Color color_;
+	std::list<TextInput*> texttextures_;
+	bool isselected_;
+	MouseHandler containermouseevent_;
+	MouseHandler deletebutton_;
+	MouseHandler selectbutton_;
 }; 
+
+#endif //CAPTION_CONTAINER

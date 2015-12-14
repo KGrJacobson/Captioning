@@ -1,33 +1,34 @@
-#include "TextInput.h"
-#include "SDL.h"
-#include <SDL_ttf.h>
-#include <string>
-#include <vector>
-#include "SDLUtility.h"
-#include <iostream>
 #include <algorithm>
+#include <list>
+#include <string>
+
+#include "SDL.h"
+#include "SDL_ttf.h"
+
+#include "SDLUtility.h"
+#include "TextInput.h"
 
 TextInput::TextInput()
 {
-	texture = NULL;
-	font = NULL;
-	currenttext = "";
+	texture_ = NULL;
+	font_ = NULL;
+	currenttext_ = "";
 }
 
 TextInput::~TextInput()
 {
 	DestroyTexture();
-	TTF_CloseFont(font);
-	font = NULL;
-	currenttext = "";
+	TTF_CloseFont(font_);
+	font_ = NULL;
+	currenttext_ = "";
 }
 
 int TextInput::Init(std::string ttffilepath, int fontsize)
 {
 	DestroyTexture();
 
-	font = TTF_OpenFont(ttffilepath.c_str(), fontsize);
-	if (font == NULL)
+	font_ = TTF_OpenFont(ttffilepath.c_str(), fontsize);
+	if (font_ == NULL)
 	{
 		printf("Failed to load font SDL_ttf Error: %s\n", TTF_GetError());
 		return -1;
@@ -36,7 +37,7 @@ int TextInput::Init(std::string ttffilepath, int fontsize)
 	return 0;
 }
 
-void TextInput::CreateTextureFromText(std::string text, bool isunicode)
+void TextInput::CreateTextureFromText(std::string text)
 {
 	if (text == "")
 	{
@@ -44,27 +45,65 @@ void TextInput::CreateTextureFromText(std::string text, bool isunicode)
 	}
 	else
 	{
-		if (currenttext != text)
+		if (currenttext_ != text)
 		{
 			SDL_Surface *textsurface;
 
-			if (!isunicode)
-			{
-				textsurface = TTF_RenderText_Blended(font, text.c_str(), SDL_Color{ 255, 255, 255, 255 });
-				texture = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), textsurface);
-			}
-			else
-			{
-				textsurface = TTF_RenderText_Blended(font, text.c_str(), SDL_Color{ 255, 255, 255, 255 });
-				//textsurface = TTF_RenderGlyph_Solid(font, 12355, SDL_Color{ 255, 255, 255, 255 });
-				texture = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), textsurface);
-			}
+			textsurface = TTF_RenderText_Blended(font_, text.c_str(), SDL_Color{ 255, 255, 255, 255 });
+			texture_ = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), textsurface);
 
-			imageheight = textsurface->h;
-			imagewidth = textsurface->w;
+			imageheight_ = textsurface->h;
+			imagewidth_ = textsurface->w;
 
 			SDL_FreeSurface(textsurface);
-			currenttext = text;
+			currenttext_ = text;
+		}
+	}
+}
+
+void TextInput::CreateTextureFromText(std::wstring text)
+{
+	if (text == L"")
+	{
+		DestroyTexture();
+	}
+	else
+	{
+		if (currentunicodetext_ != text)
+		{
+			SDL_Surface *textsurface;
+			
+			SDL_Surface *currentcharsurface;
+			std::list<SDL_Surface*> charsurfacelist;
+			int textwidth = 0;
+			
+			for (std::wstring::iterator it = text.begin(); it != text.end(); ++it)
+			{
+				currentcharsurface = TTF_RenderGlyph_Solid(font_, (*it), SDL_Color{ 255, 255, 255, 255 });
+				charsurfacelist.push_back(currentcharsurface);
+				textwidth = textwidth + currentcharsurface->w;
+			}
+
+			textsurface = SDL_CreateRGBSurface(0, textwidth, TextHeight(), 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+
+			SDL_Rect nextposition;
+			int nextxposition = 0;
+			for (std::list<SDL_Surface*>::iterator it = charsurfacelist.begin(); it != charsurfacelist.end(); ++it)
+			{
+				nextposition = SDL_Rect{ nextxposition, 0, (*it)->w, (*it)->h };
+				SDL_BlitSurface((*it), NULL, textsurface, &nextposition);
+				nextxposition = nextxposition + (*it)->w;
+				SDL_FreeSurface((*it));
+			}
+
+			texture_ = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), textsurface);
+
+			imageheight_ = textsurface->h;
+			imagewidth_ = textsurface->w;
+
+			SDL_FreeSurface(textsurface);
+			charsurfacelist.clear();
+			currentunicodetext_ = text;
 		}
 	}
 }
@@ -77,58 +116,68 @@ void TextInput::CreateQuickTextureFromText(std::string text)
 	}
 	else
 	{
-		if (currenttext != text)
+		if (currenttext_ != text)
 		{
 			SDL_Surface *textsurface;
 
-			textsurface = TTF_RenderText_Solid(font, text.c_str(), SDL_Color{ 255, 255, 255, 255 });
-			texture = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), textsurface);
+			textsurface = TTF_RenderText_Solid(font_, text.c_str(), SDL_Color{ 255, 255, 255, 255 });
+			texture_ = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), textsurface);
 
-			imageheight = textsurface->h;
-			imagewidth = textsurface->w;
+			imageheight_ = textsurface->h;
+			imagewidth_ = textsurface->w;
 
 			SDL_FreeSurface(textsurface);
-			currenttext = text;
+			currenttext_ = text;
 		}
 	}
 }
 
 SDL_Texture *TextInput::GetTexture()
 {
-	return texture;
+	return texture_;
 }
 
 int TextInput::GetWidth()
 {
-	return imagewidth;
+	return imagewidth_;
 }
 
 int TextInput::GetHeight()
 {
-	return imageheight;
+	return imageheight_;
 }
 
 std::string TextInput::GetCurrentText()
 {
-	return currenttext;
+	return currenttext_;
+}
+
+std::wstring TextInput::GetCurrentUnicodeText()
+{
+	return currentunicodetext_;
 }
 
 void TextInput::DestroyTexture()
 {
-	if (texture != NULL)
+	if (texture_ != NULL)
 	{
-		SDL_DestroyTexture(texture);
-		texture = NULL;
-		imagewidth = 0;
-		imageheight = 0;
+		SDL_DestroyTexture(texture_);
+		texture_ = NULL;
+		imagewidth_ = 0;
+		imageheight_ = 0;
 	}
 }
 
 int TextInput::TextWidth(std::string text)
 {
 	int widthoftext;
-	TTF_SizeText(font, text.c_str(), &widthoftext, NULL);
+	TTF_SizeText(font_, text.c_str(), &widthoftext, NULL);
 
 	return widthoftext;
+}
+
+int TextInput::TextHeight()
+{
+	return TTF_FontHeight(font_);
 }
 

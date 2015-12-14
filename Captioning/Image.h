@@ -1,12 +1,14 @@
-#pragma once
-#include "SDL.h"
-#include <SDL_ttf.h>
-#include <SDL_image.h>
+#ifndef IMAGE
+#define IMAGE
+
 #include <string>
+
+#include "SDL.h"
+#include "SDL_image.h"
+#include "SDL_ttf.h"
 
 class Image {
 public:
-	Image();
 	~Image();
 	int CreateTextureFromImage(std::string filepath);
 	SDL_Texture *GetTexture();
@@ -14,7 +16,9 @@ public:
 	int GetHeight();
 	void DestroyTexture();
 private:
-	SDL_Texture *texture;
-	int imagewidth;
-	int imageheight;
+	SDL_Texture *texture_;
+	int imagewidth_;
+	int imageheight_;
 };
+
+#endif //IMAGE

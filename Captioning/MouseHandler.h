@@ -1,7 +1,10 @@
-#pragma once
+#ifndef MOUSE_HANDLER
+#define MOUSE_HANDLER
+
 #include "SDL.h"
-#include "SDLUtility.h"
+
 #include "DebugText.h"
+#include "SDLUtility.h"
 
 enum mousestate
 {
@@ -24,8 +27,10 @@ public:
 	int GetTicks();
 	void ResetMouseEvents();
 private:
-	int mouseevent;
-	bool isdown;
-	int ticks;
-	SDL_Rect mousearea;
+	int mouseevent_;
+	bool isdown_;
+	int ticks_;
+	SDL_Rect mousearea_;
 };
+
+#endif //MOUSE_HANDLER

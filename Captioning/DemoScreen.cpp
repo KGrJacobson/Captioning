@@ -1,55 +1,64 @@
-#include "DemoScreen.h"
+#include <algorithm>
 #include <list>
+#include <stdlib.h>
 #include <string>
+
 #include "SDL.h"
-#include "SDLUtility.h"
+
 #include "CaptionContainer.h"
 #include "DebugText.h"
+#include "DemoScreen.h"
+#include "DemoScreenTab.h"
 #include "MouseHandler.h"
-#include <algorithm>
-#include <stdlib.h>
+#include "SDLUtility.h"
 
 DemoScreen::DemoScreen(int setfontize)
 {
-	basefontsize = setfontize;
+	basefontsize_ = setfontize;
 
 	int w;
 	SDLUtility::GetScreenWH(&w, NULL);
-	selectedcaption = NULL;
-	drawncaptionarea = NULL;
+	selectedcaption_ = NULL;
+	drawncaptionarea_ = NULL;
 
-	screenarea = SDL_Rect{
-				w - (aspectratiox * magnification),
-				0,
-				w - (w - (aspectratiox * magnification)),
-				aspectratioy * magnification };
+	screenarea_ = SDL_Rect{
+		w - (ASPECT_RATIO_X * MAGNIFICATION_MULTIPLIER),
+		0,
+		w - (w - (ASPECT_RATIO_X * MAGNIFICATION_MULTIPLIER)),
+		(ASPECT_RATIO_Y * MAGNIFICATION_MULTIPLIER) + DEMOSCREEN_TAB_HEIGHT };
 
-	mousefunction.Init(screenarea.x, screenarea.y, screenarea.w, screenarea.h);
+	demoarea_ = SDL_Rect{
+				w - (ASPECT_RATIO_X * MAGNIFICATION_MULTIPLIER),
+				0 + DEMOSCREEN_TAB_HEIGHT,
+				w - (w - (ASPECT_RATIO_X * MAGNIFICATION_MULTIPLIER)),
+				ASPECT_RATIO_Y * MAGNIFICATION_MULTIPLIER };
+
+	mousefunction_.Init(demoarea_.x, demoarea_.y, demoarea_.w, demoarea_.h);
 }
 
 DemoScreen::~DemoScreen()
 {
 	DeleteAllCaptions();
-	delete drawncaptionarea;
-	drawncaptionarea = NULL;
+	delete drawncaptionarea_;
+	drawncaptionarea_ = NULL;
 }
 
 void DemoScreen::DrawNewCaption()
 {
-	if (drawncaptionarea == NULL)
+	if (drawncaptionarea_ == NULL)
 	{
-		drawncaptionarea = new SDL_Rect;
-		SDL_GetMouseState(&drawncaptionarea->x, &drawncaptionarea->y);
-		drawncaptionarea->w = 0;
-		drawncaptionarea->h = 0;
+		drawncaptionarea_ = new SDL_Rect;
+		SDL_GetMouseState(&drawncaptionarea_->x, &drawncaptionarea_->y);
+		drawncaptionarea_->w = 0;
+		drawncaptionarea_->h = 0;
 	}
 	else
 	{
 		int mousex, mousey;
 		SDL_GetMouseState(&mousex, &mousey);
 
-		drawncaptionarea->w = mousex - drawncaptionarea->x;
-		drawncaptionarea->h = mousey - drawncaptionarea->y;
+		drawncaptionarea_->w = mousex - drawncaptionarea_->x;
+		drawncaptionarea_->h = mousey - drawncaptionarea_->y;
 	}
 }
 
@@ -58,22 +67,21 @@ MouseHandler *DemoScreen::CheckMouseHandlers(int mouseevent)
 {
 	MouseHandler *foundmouse = NULL;
 
-	if (SDLUtility::IsMouseActive(mousefunction.GetMouseArea()))
+	if (SDLUtility::IsMouseActive(&screenarea_))
 	{
-		foundmouse = &mousefunction;
-	}
-	else
-	{
-		return NULL;
-	}
+		if (SDLUtility::IsMouseActive(mousefunction_.GetMouseArea()))
+		{
+			foundmouse = &mousefunction_;
+		}
 
-	MouseHandler *currentevaluation = NULL;
-	for (std::list<CaptionContainer*>::iterator it = captionlist.begin(); it != captionlist.end(); it++)
-	{
-		currentevaluation = (*it)->CheckMouseEvents(mouseevent);
+		MouseHandler *currentevaluation = NULL;
+		for (std::list<CaptionContainer*>::iterator it = captionlist_.begin(); it != captionlist_.end(); it++)
+		{
+			currentevaluation = (*it)->CheckMouseEvents(mouseevent);
 
-		if (currentevaluation != NULL)
-			foundmouse = currentevaluation;
+			if (currentevaluation != NULL)
+				foundmouse = currentevaluation;
+		}
 	}
 
 	return foundmouse;
@@ -81,7 +89,7 @@ MouseHandler *DemoScreen::CheckMouseHandlers(int mouseevent)
 
 SDL_Rect DemoScreen::GetScreenSize()
 {
-	return screenarea;
+	return screenarea_;
 }
 
 void DemoScreen::Show()
@@ -89,83 +97,83 @@ void DemoScreen::Show()
 	SDL_Color demoscreencolor{ 0, 0, 0, 255 };
 	SDL_Color drawnrectcolor{ 255, 0, 255, 50 };
 
-	SDLUtility::CreateSquare(&screenarea, &demoscreencolor);
+	SDLUtility::CreateSquare(&demoarea_, &demoscreencolor);
 
-	switch (mousefunction.GetEvent())
+	switch (mousefunction_.GetEvent())
 	{
 	case NO_MOUSE_STATE:
-		if (drawncaptionarea != NULL)
+		if (drawncaptionarea_ != NULL)
 		{
-			delete drawncaptionarea;
-			drawncaptionarea = NULL;
+			delete drawncaptionarea_;
+			drawncaptionarea_ = NULL;
 		}
 		break;
 	case LEFT_BUTTON_DOWN:
 		DrawNewCaption();
-		SDLUtility::CreateSquare(drawncaptionarea, &drawnrectcolor);
+		SDLUtility::CreateSquare(drawncaptionarea_, &drawnrectcolor);
 		break;
 	case LEFT_BUTTON_UP:
-		if (drawncaptionarea != NULL)
+		if (drawncaptionarea_ != NULL)
 		{
-			int drawnx = std::min(drawncaptionarea->x, drawncaptionarea->x + drawncaptionarea->w);
-			int drawny = std::min(drawncaptionarea->y, drawncaptionarea->y + drawncaptionarea->h);
-			int drawnw = abs(drawncaptionarea->w);
+			int drawnx = std::min(drawncaptionarea_->x, drawncaptionarea_->x + drawncaptionarea_->w);
+			int drawny = std::min(drawncaptionarea_->y, drawncaptionarea_->y + drawncaptionarea_->h);
+			int drawnw = abs(drawncaptionarea_->w);
 			if (drawnw > 40)
 			{
 				CreateCaption("",
-					static_cast<double>(drawnx - screenarea.x) / static_cast<double>(screenarea.w),
-					static_cast<double>(drawny - screenarea.y) / static_cast<double>(screenarea.h),
-					static_cast<double>(drawnw) / static_cast<double>(screenarea.w),
+					static_cast<double>(drawnx - demoarea_.x) / static_cast<double>(demoarea_.w),
+					static_cast<double>(drawny - demoarea_.y) / static_cast<double>(demoarea_.h),
+					static_cast<double>(drawnw) / static_cast<double>(demoarea_.w),
 					-1);
 				
-				if (selectedcaption != NULL)
+				if (selectedcaption_ != NULL)
 				{
-					selectedcaption->DeselectCaption();
+					selectedcaption_->DeselectCaption();
 				}
-				captionlist.back()->SelectCaption();
-				selectedcaption = captionlist.back();
+				captionlist_.back()->SelectCaption();
+				selectedcaption_ = captionlist_.back();
 			}
 
-			delete drawncaptionarea;
-			drawncaptionarea = NULL;
+			delete drawncaptionarea_;
+			drawncaptionarea_ = NULL;
 		}
 		break;
 	}
 
 	int captioncode = DEFAULT;
-	std::list<CaptionContainer*>::iterator it = captionlist.begin(); 
-	while (it != captionlist.end())
+	std::list<CaptionContainer*>::iterator it = captionlist_.begin(); 
+	while (it != captionlist_.end())
 	{
 		captioncode = (*it)->EvaluateCaption(true);
 
 		switch (captioncode)
 		{
 		case SELECT_CAPTION:
-			if ((*it) == selectedcaption)
+			if ((*it) == selectedcaption_)
 			{
-				selectedcaption->DeselectCaption();
-				selectedcaption = NULL;
+				selectedcaption_->DeselectCaption();
+				selectedcaption_ = NULL;
 			}
 			else
 			{
-				if (selectedcaption != NULL)
+				if (selectedcaption_ != NULL)
 				{
-					selectedcaption->DeselectCaption();
+					selectedcaption_->DeselectCaption();
 				}
 
-				selectedcaption = (*it);
+				selectedcaption_ = (*it);
 			}
 			break;
 		}
 
 		if (captioncode == DELETE_CAPTION)
 		{
-			if ((*it) == selectedcaption)
+			if ((*it) == selectedcaption_)
 			{
-				selectedcaption = NULL;
+				selectedcaption_ = NULL;
 			}
 
-			captionlist.erase(it++);
+			captionlist_.erase(it++);
 		}
 		else
 			++it;
@@ -174,18 +182,18 @@ void DemoScreen::Show()
 
 bool DemoScreen::SetCaptionText(std::string text, int captionid)
 {
-	if (selectedcaption != NULL)
+	if (selectedcaption_ != NULL)
 	{
-		selectedcaption->SetText(text, screenarea.w);
+		selectedcaption_->SetText(text, demoarea_.w);
 		return true;
 	}
 	else
 	{
-		for (std::list<CaptionContainer*>::iterator it = captionlist.begin(); it != captionlist.end(); it++)
+		for (std::list<CaptionContainer*>::iterator it = captionlist_.begin(); it != captionlist_.end(); it++)
 		{
 			if ((*it)->GetID() == captionid)
 			{
-				(*it)->SetText(text, screenarea.w);
+				(*it)->SetText(text, demoarea_.w);
 
 				return true;
 			}
@@ -198,20 +206,20 @@ bool DemoScreen::SetCaptionText(std::string text, int captionid)
 void DemoScreen::CreateCaption(std::string text, double x, double y, double w, int containerid)
 {
 	CaptionContainer *newcontainer = new CaptionContainer;
-	newcontainer->Init(text, x, y, w, screenarea, static_cast<int>(basefontsize * (static_cast<float>(screenarea.w) / 1600)), containerid);
+	newcontainer->Init(text, x, y, w, demoarea_, static_cast<int>(basefontsize_ * (static_cast<double>(demoarea_.w) / 1600)), containerid);
 
-	captionlist.push_back(newcontainer);
+	captionlist_.push_back(newcontainer);
 }
 
 void DemoScreen::ClearAllCaptionText()
 {
-	for (std::list<CaptionContainer*>::iterator it = captionlist.begin(); it != captionlist.end(); it++)
+	for (std::list<CaptionContainer*>::iterator it = captionlist_.begin(); it != captionlist_.end(); it++)
 	{
-		(*it)->SetText("", screenarea.w);
+		(*it)->SetText("", demoarea_.w);
 	}
 }
 
 void DemoScreen::DeleteAllCaptions()
 {
-	captionlist.clear();
+	captionlist_.clear();
 }
