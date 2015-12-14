@@ -49,7 +49,7 @@ void TextInput::CreateTextureFromText(std::string text)
 		{
 			SDL_Surface *textsurface;
 
-			textsurface = TTF_RenderText_Blended(font_, text.c_str(), SDL_Color{ 255, 255, 255, 255 });
+			textsurface = TTF_RenderText_Blended(font_, text.c_str(), SDLUtility::GetSDLColor(WHITE, 255));
 			texture_ = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), textsurface);
 
 			imageheight_ = textsurface->h;
@@ -79,7 +79,7 @@ void TextInput::CreateTextureFromText(std::wstring text)
 			
 			for (std::wstring::iterator it = text.begin(); it != text.end(); ++it)
 			{
-				currentcharsurface = TTF_RenderGlyph_Solid(font_, (*it), SDL_Color{ 255, 255, 255, 255 });
+				currentcharsurface = TTF_RenderGlyph_Solid(font_, (*it), SDLUtility::GetSDLColor(WHITE, 255));
 				charsurfacelist.push_back(currentcharsurface);
 				textwidth = textwidth + currentcharsurface->w;
 			}
@@ -120,7 +120,7 @@ void TextInput::CreateQuickTextureFromText(std::string text)
 		{
 			SDL_Surface *textsurface;
 
-			textsurface = TTF_RenderText_Solid(font_, text.c_str(), SDL_Color{ 255, 255, 255, 255 });
+			textsurface = TTF_RenderText_Solid(font_, text.c_str(), SDLUtility::GetSDLColor(WHITE, 255));
 			texture_ = SDL_CreateTextureFromSurface(SDLUtility::GetRenderer(), textsurface);
 
 			imageheight_ = textsurface->h;

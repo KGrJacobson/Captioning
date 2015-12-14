@@ -8,6 +8,7 @@
 
 #include "DebugText.h"
 #include "DemoScreen.h"
+#include "Image.h"
 #include "InputScreen.h"
 #include "MouseHandler.h"
 #include "ScreenHandler.h"
@@ -33,6 +34,7 @@ private:
 	MouseHandler *currentmouseevent_;
 	int mouseevent_;
 	bool ismousedown_;
+	Image backgroundimage_;
 };
 
 #endif //SCREEN_HANDLER

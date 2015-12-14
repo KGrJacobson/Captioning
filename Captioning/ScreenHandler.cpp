@@ -25,10 +25,11 @@ ScreenHandler::ScreenHandler()
 		.15, .80, .70, 0);
 	screens_.push_back(demoscreen_);
 
-	int windowh = -1;
-	SDLUtility::GetScreenWH(NULL, &windowh);
+	int windowh = SDLUtility::GetScreenHeight();
 	inputscreen_ = new InputScreen(SDL_Rect{ 0, 0, demoscreen_->GetScreenSize().x, windowh });
 	screens_.push_back(inputscreen_);
+
+	backgroundimage_.CreateTextureFromImage("blossom.png");
 }
 
 ScreenHandler::~ScreenHandler()
@@ -113,6 +114,8 @@ void ScreenHandler::PostEventMouseSetup()
 
 void ScreenHandler::ShowScreens()
 {
+	SDLUtility::PostImage(&backgroundimage_, 0,	0, SDL_Rect{ 0, 0, backgroundimage_.GetWidth(), backgroundimage_.GetHeight() });
+
 	for (std::list<Subscreen*>::iterator it = screens_.begin(); it != screens_.end(); it++)
 	{
 		(*it)->Show();
@@ -152,21 +155,16 @@ int ScreenHandler::GetCurrentMouseState(int mouseevent_, bool isdown)
 	return NO_MOUSE_STATE;
 }
 
-//switch (mousefunction.GetEvent())
+//switch (MOUSEHANDLER.GetEvent())
 //{
 //case MOUSEOVER:
-//	mousefunction.ShowMouseArea(SDL_Color{ 255, 0, 0, 55 });
 //	break;
 //case LEFT_BUTTON_DOWN:
-//	mousefunction.ShowMouseArea(SDL_Color{ 0, 255, 0, 55 });
 //	break;
 //case RIGHT_BUTTON_DOWN:
-//	mousefunction.ShowMouseArea(SDL_Color{ 0, 0, 255, 55 });
 //	break;
 //case LEFT_BUTTON_UP:
-//	DebugText::CreateMessage("leftclick");
 //	break;
 //case RIGHT_BUTTON_UP:
-//	DebugText::CreateMessage("rightclick");
 //	break;
 //}

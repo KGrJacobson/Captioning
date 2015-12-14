@@ -18,11 +18,11 @@ enum mousestate
 
 class MouseHandler {
 public:
-	void Init(int x, int y, int w, int h);
+	void Init(SDL_Rect initialmousearea);
 	void SetEvent(int eventtype);
 	int GetEvent();
-	void SetMouseArea(int x, int y, int w, int h);
-	SDL_Rect *GetMouseArea();
+	void SetMouseArea(SDL_Rect newmousearea);
+	SDL_Rect GetMouseArea();
 	void ShowMouseArea(SDL_Color setcolor);
 	int GetTicks();
 	void ResetMouseEvents();

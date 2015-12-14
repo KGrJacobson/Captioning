@@ -13,7 +13,7 @@ InputScreen::InputScreen(SDL_Rect setscreenarea)
 {
 	screenarea_ = setscreenarea;
 	texttexture_.Init("meiryo.ttc", 32);
-	mousefunction_.Init(screenarea_.x, screenarea_.y, screenarea_.w, screenarea_.h);
+	mousefunction_.Init(screenarea_);
 
 	textinputbox_ = SDL_Rect{
 		static_cast<int>((screenarea_.w * .5) - ((screenarea_.w * .95) * .5)),
@@ -21,26 +21,24 @@ InputScreen::InputScreen(SDL_Rect setscreenarea)
 		static_cast<int>(screenarea_.w * .95),
 		TEXT_INPUT_BOX_HEIGHT };
 
-	confirmbutton_.Init(
+	confirmbutton_.Init(SDL_Rect{
 		static_cast<int>(textinputbox_.x + (textinputbox_.w * .01)),
 		static_cast<int>(textinputbox_.y + (textinputbox_.h * .95)) - static_cast<int>(textinputbox_.h * .25),
 		static_cast<int>(textinputbox_.w * .15),
-		static_cast<int>(textinputbox_.h * .25));
+		static_cast<int>(textinputbox_.h * .25) });
 
-	cancelbutton_.Init(
-		static_cast<int>(textinputbox_.x + (textinputbox_.w * .02)) + confirmbutton_.GetMouseArea()->w,
+	cancelbutton_.Init(SDL_Rect{
+		static_cast<int>(textinputbox_.x + (textinputbox_.w * .02)) + confirmbutton_.GetMouseArea().w,
 		static_cast<int>(textinputbox_.y + (textinputbox_.h * .95)) - static_cast<int>(textinputbox_.h * .25),
 		static_cast<int>(textinputbox_.w * .15),
-		static_cast<int>(textinputbox_.h * .25));
-
-	textcolor_ = SDL_Color{ 255, 255, 255, 255 };
+		static_cast<int>(textinputbox_.h * .25) });
 }
 
 MouseHandler *InputScreen::CheckMouseHandlers(int mouseaction)
 {
 	MouseHandler *foundhandler = NULL;
 
-	if (SDLUtility::IsMouseActive(&screenarea_))
+	if (SDLUtility::IsMouseActive(screenarea_))
 	{
 		if (SDLUtility::IsMouseActive(mousefunction_.GetMouseArea()))
 			foundhandler = &mousefunction_;
@@ -57,11 +55,8 @@ MouseHandler *InputScreen::CheckMouseHandlers(int mouseaction)
 
 void InputScreen::Show()
 {
-	SDL_Color screenbackgroundcolor{ 0, 0, 0, 55 };
-	SDL_Color textinputboxcolor{ 77, 77, 77, 255 };
-
-	SDLUtility::CreateSquare(&screenarea_, &screenbackgroundcolor);
-	SDLUtility::CreateSquare(&textinputbox_, &textinputboxcolor);
+	SDLUtility::CreateSquare(screenarea_, SDLUtility::GetSDLColor(BLACK, 50));
+	SDLUtility::CreateSquare(textinputbox_, SDLUtility::GetSDLColor(THIN_COLOR, 255));
 
 	SDLUtility::PostText(&texttexture_, textinputbox_.x, textinputbox_.y);
 
@@ -71,7 +66,7 @@ void InputScreen::Show()
 	switch (confirmbutton_.GetEvent())
 	{
 	case LEFT_BUTTON_DOWN:
-		confirmbutton_.ShowMouseArea(SDL_Color{ 0, 150, 0, 255 });
+		confirmbutton_.ShowMouseArea(SDLUtility::GetSDLColor(IRIS_COLOR, 150));
 		confirmnotshown = false;
 		break;
 	case LEFT_BUTTON_UP:
@@ -81,7 +76,7 @@ void InputScreen::Show()
 	switch (cancelbutton_.GetEvent())
 	{
 	case LEFT_BUTTON_DOWN:
-		cancelbutton_.ShowMouseArea(SDL_Color{ 150, 0, 0, 255 });
+		cancelbutton_.ShowMouseArea(SDLUtility::GetSDLColor(IRIS_COLOR, 150));
 		cancelnotshown = false;
 		break;
 	case LEFT_BUTTON_UP:
@@ -89,10 +84,10 @@ void InputScreen::Show()
 	}
 
 	if (confirmnotshown)
-		confirmbutton_.ShowMouseArea(SDL_Color{ 0, 170, 0, 255 });
+		confirmbutton_.ShowMouseArea(SDLUtility::GetSDLColor(IRIS_COLOR, 255));
 
 	if (cancelnotshown)
-		cancelbutton_.ShowMouseArea(SDL_Color{ 170, 0, 0, 255 });
+		cancelbutton_.ShowMouseArea(SDLUtility::GetSDLColor(IRIS_COLOR, 255));
 }
 
 void InputScreen::InsertCharacter(char character, bool isshift)

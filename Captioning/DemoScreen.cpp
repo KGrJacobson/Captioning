@@ -16,8 +16,7 @@ DemoScreen::DemoScreen(int setfontize)
 {
 	basefontsize_ = setfontize;
 
-	int w;
-	SDLUtility::GetScreenWH(&w, NULL);
+	int w = SDLUtility::GetScreenWidth();
 	selectedcaption_ = NULL;
 	drawncaptionarea_ = NULL;
 
@@ -33,7 +32,7 @@ DemoScreen::DemoScreen(int setfontize)
 				w - (w - (ASPECT_RATIO_X * MAGNIFICATION_MULTIPLIER)),
 				ASPECT_RATIO_Y * MAGNIFICATION_MULTIPLIER };
 
-	mousefunction_.Init(demoarea_.x, demoarea_.y, demoarea_.w, demoarea_.h);
+	mousefunction_.Init(demoarea_);
 }
 
 DemoScreen::~DemoScreen()
@@ -67,7 +66,7 @@ MouseHandler *DemoScreen::CheckMouseHandlers(int mouseevent)
 {
 	MouseHandler *foundmouse = NULL;
 
-	if (SDLUtility::IsMouseActive(&screenarea_))
+	if (SDLUtility::IsMouseActive(screenarea_))
 	{
 		if (SDLUtility::IsMouseActive(mousefunction_.GetMouseArea()))
 		{
@@ -94,10 +93,7 @@ SDL_Rect DemoScreen::GetScreenSize()
 
 void DemoScreen::Show()
 {
-	SDL_Color demoscreencolor{ 0, 0, 0, 255 };
-	SDL_Color drawnrectcolor{ 255, 0, 255, 50 };
-
-	SDLUtility::CreateSquare(&demoarea_, &demoscreencolor);
+	SDLUtility::CreateSquare(demoarea_, SDLUtility::GetSDLColor(BLACK, 255));
 
 	switch (mousefunction_.GetEvent())
 	{
@@ -110,7 +106,7 @@ void DemoScreen::Show()
 		break;
 	case LEFT_BUTTON_DOWN:
 		DrawNewCaption();
-		SDLUtility::CreateSquare(drawncaptionarea_, &drawnrectcolor);
+		SDLUtility::CreateSquare((*drawncaptionarea_), SDLUtility::GetSDLColor(RED_WISTERIA, 150));
 		break;
 	case LEFT_BUTTON_UP:
 		if (drawncaptionarea_ != NULL)
@@ -206,7 +202,7 @@ bool DemoScreen::SetCaptionText(std::string text, int captionid)
 void DemoScreen::CreateCaption(std::string text, double x, double y, double w, int containerid)
 {
 	CaptionContainer *newcontainer = new CaptionContainer;
-	newcontainer->Init(text, x, y, w, demoarea_, static_cast<int>(basefontsize_ * (static_cast<double>(demoarea_.w) / 1600)), containerid);
+	newcontainer->Init(text, x, y, w, demoarea_, static_cast<int>(basefontsize_ * (static_cast<double>(demoarea_.w) / (ASPECT_RATIO_X * 100))), containerid);
 
 	captionlist_.push_back(newcontainer);
 }

@@ -32,7 +32,6 @@ private:
 	MouseHandler confirmbutton_;
 	MouseHandler cancelbutton_;
 	std::string currenttext_;
-	SDL_Color textcolor_;
 };
 
 #endif //INPUT_SCREEN

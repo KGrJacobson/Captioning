@@ -3,9 +3,9 @@
 #include "SDL.h"
 #include "DebugText.h"
 
-void MouseHandler::Init(int x, int y, int w, int h)
+void MouseHandler::Init(SDL_Rect initialmousearea)
 {
-	SetMouseArea(x, y, w, h);
+	SetMouseArea(initialmousearea);
 	ticks_ = 0;
 	mouseevent_ = NO_MOUSE_STATE;
 }
@@ -20,24 +20,19 @@ int MouseHandler::GetEvent()
 	return mouseevent_;
 }
 
-void MouseHandler::SetMouseArea(int x, int y, int w, int h)
+void MouseHandler::SetMouseArea(SDL_Rect newmousearea)
 {
-	mousearea_.x = x;
-	mousearea_.y = y;
-	mousearea_.w = w;
-	mousearea_.h = h;
+	mousearea_ = newmousearea;
 }
 
-SDL_Rect *MouseHandler::GetMouseArea()
+SDL_Rect MouseHandler::GetMouseArea()
 {
-	return &mousearea_;
+	return mousearea_;
 }
 
 void MouseHandler::ShowMouseArea(SDL_Color setcolor)
 {
-	SDL_Color color = setcolor;
-
-	SDLUtility::CreateSquare(&mousearea_, &color);
+	SDLUtility::CreateSquare(mousearea_, setcolor);
 }
 
 void MouseHandler::ResetMouseEvents()
