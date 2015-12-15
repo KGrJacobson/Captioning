@@ -6,6 +6,7 @@
 #include "CaptionContainer.h"
 #include "DebugText.h"
 #include "SDLUtility.h"
+#include "UIElements.h"
 
 CaptionContainer::~CaptionContainer()
 {
@@ -102,7 +103,9 @@ int CaptionContainer::EvaluateCaption(bool showcontainer)
 
 	if (showcontainer == true)
 	{
-		SDLUtility::CreateSquare(containerrect, SDLUtility::GetSDLColor(TREE_PEONY, 100));
+		SDLUtility::CreateSquare(
+			containerrect, 
+			UIElements::GetUIElementColor(UIElements::CAPTION_CONTAINER_COLOR, UIElements::SEMITRANSPARENT_COLOR));
 	}
 
 	if (text_ != "")
@@ -162,7 +165,7 @@ int CaptionContainer::EvaluateCaption(bool showcontainer)
 
 	if (isselected_ == true)
 	{
-		containermouseevent_.ShowMouseArea(SDLUtility::GetSDLColor(WHITE, 35));
+		containermouseevent_.ShowMouseArea(UIElements::GetUIElementColor(UIElements::CAPTION_CONTAINER_SELECTED_COLOR, UIElements::TRANSPARENT_COLOR));
 	}
 
 	return returncode;

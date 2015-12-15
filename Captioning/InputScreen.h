@@ -28,6 +28,8 @@ private:
 	SDL_Rect screenarea_;
 	SDL_Rect textinputbox_;
 	TextInput texttexture_;
+	TextInput confirmbuttontext_;
+	TextInput cancelbuttontext_;
 	MouseHandler mousefunction_;
 	MouseHandler confirmbutton_;
 	MouseHandler cancelbutton_;

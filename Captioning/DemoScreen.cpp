@@ -11,6 +11,7 @@
 #include "DemoScreenTab.h"
 #include "MouseHandler.h"
 #include "SDLUtility.h"
+#include "UIElements.h"
 
 DemoScreen::DemoScreen(int setfontize)
 {
@@ -93,7 +94,7 @@ SDL_Rect DemoScreen::GetScreenSize()
 
 void DemoScreen::Show()
 {
-	SDLUtility::CreateSquare(demoarea_, SDLUtility::GetSDLColor(BLACK, 255));
+	SDLUtility::CreateSquare(demoarea_, UIElements::GetUIElementColor(UIElements::DEMO_SCREEN_COLOR, UIElements::SOLID_COLOR));
 
 	switch (mousefunction_.GetEvent())
 	{
@@ -106,7 +107,10 @@ void DemoScreen::Show()
 		break;
 	case LEFT_BUTTON_DOWN:
 		DrawNewCaption();
-		SDLUtility::CreateSquare((*drawncaptionarea_), SDLUtility::GetSDLColor(RED_WISTERIA, 150));
+		SDLUtility::CreateSquare(
+			(*drawncaptionarea_), 
+			UIElements::GetUIElementColor(UIElements::CAPTION_CONTAINER_DRAWN_CAPTION_COLOR,
+			UIElements::SEMITRANSPARENT_COLOR));
 		break;
 	case LEFT_BUTTON_UP:
 		if (drawncaptionarea_ != NULL)

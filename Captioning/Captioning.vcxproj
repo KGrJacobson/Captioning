@@ -133,6 +133,7 @@
     <ClCompile Include="ScreenHandler.cpp" />
     <ClCompile Include="SDLUtility.cpp" />
     <ClCompile Include="TextInput.cpp" />
+    <ClCompile Include="UIElements.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CaptionContainer.h" />
@@ -146,6 +147,7 @@
     <ClInclude Include="SDLUtility.h" />
     <ClInclude Include="Subscreen.h" />
     <ClInclude Include="TextInput.h" />
+    <ClInclude Include="UIElements.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
