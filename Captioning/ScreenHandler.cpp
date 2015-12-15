@@ -92,24 +92,34 @@ void ScreenHandler::HandleEvents(const SDL_Event &e)
 
 void ScreenHandler::PostEventMouseSetup()
 {
-	currentmouseevent_ = NULL;
-	for (std::list<Subscreen*>::iterator it = screens_.begin(); it != screens_.end(); it++)
-	{
-		mousetoevaluate_ = (*it)->CheckMouseHandlers(GetCurrentMouseState(mouseevent_, ismousedown_));
+		currentmouseevent_ = NULL;
 
-		if (mousetoevaluate_ != NULL)
+		for (std::list<Subscreen*>::iterator it = screens_.begin(); it != screens_.end(); it++)
 		{
-			currentmouseevent_ = mousetoevaluate_;
+			mousetoevaluate_ = (*it)->CheckMouseHandlers(GetCurrentMouseState(mouseevent_, ismousedown_));
+
+			if (mousetoevaluate_ != NULL)
+			{
+				currentmouseevent_ = mousetoevaluate_;
+			}
 		}
-	}
 
-	if (previousmousevent_ != NULL && previousmousevent_ != currentmouseevent_)
-		previousmousevent_->ResetMouseEvents();
+		if (previousmousevent_ != NULL && previousmousevent_ != currentmouseevent_)
+		{
+			if (ismousedown_ == true)
+			{
+				currentmouseevent_ = previousmousevent_;
+			}
+			else
+			{
+				previousmousevent_->ResetMouseEvents();
+			}
+		}
 
-	if (currentmouseevent_ != NULL)
-	{
-		currentmouseevent_->SetEvent(GetCurrentMouseState(mouseevent_, ismousedown_));
-	}
+		if (currentmouseevent_ != NULL)
+		{
+			currentmouseevent_->SetEvent(GetCurrentMouseState(mouseevent_, ismousedown_));
+		}
 }
 
 void ScreenHandler::ShowScreens()
