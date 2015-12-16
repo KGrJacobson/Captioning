@@ -8,13 +8,13 @@
 #include "InputScreen.h"
 #include "MouseHandler.h"
 #include "SDLUtility.h"
+#include "UIButton.h"
 #include "UIElements.h"
 
 InputScreen::InputScreen(SDL_Rect setscreenarea)
 {
 	screenarea_ = setscreenarea;
 	texttexture_.Init("meiryo.ttc", 32);
-	mousefunction_.Init(screenarea_);
 
 	textinputbox_ = SDL_Rect{
 		static_cast<int>((screenarea_.w * .5) - ((screenarea_.w * .95) * .5)),
@@ -22,39 +22,46 @@ InputScreen::InputScreen(SDL_Rect setscreenarea)
 		static_cast<int>(screenarea_.w * .95),
 		TEXT_INPUT_BOX_HEIGHT };
 
-	confirmbutton_.Init(SDL_Rect{
+	confirmbutton_ = new UIButton(SDL_Rect{
 		static_cast<int>(textinputbox_.x + (textinputbox_.w * .01)),
 		static_cast<int>(textinputbox_.y + (textinputbox_.h * .95)) - static_cast<int>(textinputbox_.h * .25),
 		static_cast<int>(textinputbox_.w * .15),
-		static_cast<int>(textinputbox_.h * .25) });
+		static_cast<int>(textinputbox_.h * .25) },
+		"Apply",
+		false);
 
-	confirmbuttontext_.Init("meiryo.ttc", UIElements::STANDARD_UI_FONT_SIZE);
-	confirmbuttontext_.CreateTextureFromText("Apply");
-
-	cancelbutton_.Init(SDL_Rect{
-		static_cast<int>(textinputbox_.x + (textinputbox_.w * .02)) + confirmbutton_.GetMouseArea().w,
+	cancelbutton_ = new UIButton(SDL_Rect{
+		static_cast<int>(textinputbox_.x + (textinputbox_.w * .02)) + confirmbutton_->GetButtonArea().w,
 		static_cast<int>(textinputbox_.y + (textinputbox_.h * .95)) - static_cast<int>(textinputbox_.h * .25),
 		static_cast<int>(textinputbox_.w * .15),
-		static_cast<int>(textinputbox_.h * .25) });
+		static_cast<int>(textinputbox_.h * .25) },
+		"Cancel",
+		false);
+		
+}
 
-	cancelbuttontext_.Init("meiryo.ttc", UIElements::STANDARD_UI_FONT_SIZE);
-	cancelbuttontext_.CreateTextureFromText("Cancel");
+InputScreen::~InputScreen()
+{
+	delete confirmbutton_;
+	confirmbutton_ = NULL;
+	delete cancelbutton_;
+	cancelbutton_ = NULL;
 }
 
 MouseHandler *InputScreen::CheckMouseHandlers(int mouseaction)
 {
 	MouseHandler *foundhandler = NULL;
 
+	MouseHandler *currentmousehandler = NULL;
 	if (SDLUtility::IsMouseActive(screenarea_))
 	{
-		if (SDLUtility::IsMouseActive(mousefunction_.GetMouseArea()))
-			foundhandler = &mousefunction_;
+		currentmousehandler = confirmbutton_->CheckMouseHandler();
+		if (currentmousehandler != NULL)
+			foundhandler = currentmousehandler;
 
-		if (SDLUtility::IsMouseActive(confirmbutton_.GetMouseArea()))
-			foundhandler = &confirmbutton_;
-
-		if (SDLUtility::IsMouseActive(cancelbutton_.GetMouseArea()))
-			foundhandler = &cancelbutton_;
+		currentmousehandler = cancelbutton_->CheckMouseHandler();
+		if (currentmousehandler != NULL)
+			foundhandler = currentmousehandler;
 	}
 
 	return foundhandler;
@@ -65,36 +72,26 @@ void InputScreen::Show()
 	SDLUtility::CreateSquare(screenarea_, UIElements::GetUIElementColor(UIElements::INPUT_SCREEN_COLOR, UIElements::TRANSPARENT_COLOR));
 	SDLUtility::CreateSquare(textinputbox_, UIElements::GetUIElementColor(UIElements::TEXT_INPUT_BOX, UIElements::SOLID_COLOR));
 
-	SDLUtility::PostText(&texttexture_, textinputbox_.x, textinputbox_.y);
+	SDLUtility::PostText(&texttexture_, textinputbox_.x + 3, textinputbox_.y + 3);
 
-	bool confirmnotshown = true;
-	bool cancelnotshown = true;
-
-	switch (confirmbutton_.GetEvent())
+	switch (confirmbutton_->GetMouseEvent())
 	{
 	case LEFT_BUTTON_DOWN:
-		UIElements::ShowAsUIElement(confirmbutton_.GetMouseArea(), UIElements::BUTTON_PRESSED, &confirmbuttontext_);
-		confirmnotshown = false;
 		break;
 	case LEFT_BUTTON_UP:
 		break;
 	}
 
-	switch (cancelbutton_.GetEvent())
+	switch (cancelbutton_->GetMouseEvent())
 	{
 	case LEFT_BUTTON_DOWN:
-		UIElements::ShowAsUIElement(cancelbutton_.GetMouseArea(), UIElements::BUTTON_PRESSED, &cancelbuttontext_);
-		cancelnotshown = false;
 		break;
 	case LEFT_BUTTON_UP:
 		break;
 	}
 
-	if (confirmnotshown)
-		UIElements::ShowAsUIElement(confirmbutton_.GetMouseArea(), UIElements::BUTTON_UNPRESSED, &confirmbuttontext_);
-
-	if (cancelnotshown)
-		UIElements::ShowAsUIElement(cancelbutton_.GetMouseArea(), UIElements::BUTTON_UNPRESSED, &cancelbuttontext_);
+	UIElements::ShowUIButton(confirmbutton_);
+	UIElements::ShowUIButton(cancelbutton_);
 }
 
 void InputScreen::InsertCharacter(char character, bool isshift)

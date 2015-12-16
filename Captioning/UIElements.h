@@ -8,6 +8,7 @@
 
 #include "TextInput.h"
 #include "SDLUtility.h"
+#include "UIButton.h"
 
 static std::vector<SDL_Color> standardcolorvector_;
 static std::vector<std::vector<SDL_Color>*> colorlayouts_;
@@ -94,6 +95,7 @@ public:
 	static SDL_Color GetUIElementColor(int uielement, int alphavalue);
 	static SDL_Color InvertColor(SDL_Color color);
 	static void ShowAsUIElement(SDL_Rect uiarea, int uielement, TextInput *text);
+	static void ShowUIButton(UIButton *button);
 };
 
 #endif //UI_Elements

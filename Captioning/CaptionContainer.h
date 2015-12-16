@@ -23,7 +23,7 @@ class CaptionContainer
 {
 public:
 	~CaptionContainer();
-	void Init(std::string initialtext, double initialx, double initialy, double initialw, SDL_Rect destrect, int initialfontsize, int id);
+	void Init(std::string initialtext, double relativex, double relativey, double relativew, SDL_Rect destrect, int initialfontsize, int id);
 	void SetText(std::string newtext, int destinationw);
 	void EraseText();
 	MouseHandler *CheckMouseEvents(int mouseevent);
@@ -32,13 +32,13 @@ public:
 	int GetID();
 	std::string GetText();
 	int EvaluateCaption(bool showcontainer);
-	void FitText(std::string texttofit, double destinationw);
+	void FitText(std::string texttofit);
 private:
 	std::string text_;
-	double x_, y_, w_;
+	RelativeRect relativecoordinatesrect_;
+	SDL_Rect absolutecoordinatesrect_;
 	int fontsize_;
 	int id_;
-	SDL_Rect absolutecoordinatesrect_;
 	std::list<TextInput*> texttextures_;
 	bool isselected_;
 	MouseHandler containermouseevent_;

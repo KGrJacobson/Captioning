@@ -5,6 +5,7 @@
 
 #include "TextInput.h"
 #include "SDLUtility.h"
+#include "UIButton.h"
 #include "UIElements.h"
 
 void UIElements::Init()
@@ -40,7 +41,7 @@ void UIElements::Init()
 	};
 		
 	colorlayouts_ = std::vector<std::vector<SDL_Color>*>{
-		new std::vector<SDL_Color>{
+		new std::vector<SDL_Color>{				//DEFAULT_COLOR_LAYOUT
 			standardcolorvector_[VIOLET],			//BACKGROUND_COLOR
 			standardcolorvector_[BLACK],			//DEMO_SCREEN_COLOR
 			standardcolorvector_[BLACK],			//INPUT_SCREEN_COLOR
@@ -127,4 +128,40 @@ void UIElements::ShowAsUIElement(SDL_Rect uiarea, int uielement, TextInput *text
 
 	if (text != NULL)
 		SDLUtility::PostText(text, (uiarea.x + 4) + 5, (uiarea.y + 2) + static_cast<int>((uiarea.h - 4 - text->GetHeight()) * .5));
+}
+
+void UIElements::ShowUIButton(UIButton *button)
+{
+	SDL_Rect showrect = button->GetButtonArea();
+	SDLUtility::CreateSquare(showrect, GetUIElementColor(BUTTON_BACKGROUND_COLOR, SOLID_COLOR));
+
+	SDL_Rect innerrect{
+		showrect.x + 4,
+		showrect.y + 2,
+		showrect.w - 8,
+		showrect.h - 4
+	};
+
+	if (button->GetMouseEvent() != LEFT_BUTTON_DOWN)
+	{
+		SDLUtility::CreateBorderedRect(innerrect, GetUIElementColor(OUTLINED_BOX_COLOR, SOLID_COLOR), GetUIElementColor(BUTTON_UNPRESSED_COLOR, SOLID_COLOR));
+	}
+
+	if (button->GetMouseEvent() == LEFT_BUTTON_DOWN)
+	{
+		SDLUtility::CreateBorderedRect(innerrect, GetUIElementColor(OUTLINED_BOX_COLOR, SOLID_COLOR), GetUIElementColor(BUTTON_PRESSED_COLOR, SOLID_COLOR));
+	}
+
+	if (button->IsTextCentered() == false)
+	{
+		SDLUtility::PostText(button->GetText(), 
+			(showrect.x + 4) + 5, 
+			(showrect.y + 2) + static_cast<int>((showrect.h - 4 - button->GetText()->GetHeight()) * .5));
+	}
+	else
+	{
+		SDLUtility::PostText(button->GetText(),
+			innerrect.x + static_cast<int>((innerrect.x - button->GetText()->GetWidth()) * .5),
+			innerrect.y + static_cast<int>((innerrect.h - button->GetText()->GetHeight()) * .5));
+	}
 }

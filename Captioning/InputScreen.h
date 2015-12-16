@@ -11,6 +11,7 @@
 #include "MouseHandler.h"
 #include "TextInput.h"
 #include "Subscreen.h"
+#include "UIButton.h"
 
 static const int TEXT_INPUT_BOX_HEIGHT = 100;
 
@@ -18,6 +19,7 @@ class InputScreen : public Subscreen
 {
 public:
 	InputScreen(SDL_Rect setscreenarea);
+	~InputScreen();
 	MouseHandler *CheckMouseHandlers(int mouseaction);
 	void Show();
 	void InsertCharacter(char character, bool isshift);
@@ -28,11 +30,8 @@ private:
 	SDL_Rect screenarea_;
 	SDL_Rect textinputbox_;
 	TextInput texttexture_;
-	TextInput confirmbuttontext_;
-	TextInput cancelbuttontext_;
-	MouseHandler mousefunction_;
-	MouseHandler confirmbutton_;
-	MouseHandler cancelbutton_;
+	UIButton *confirmbutton_;
+	UIButton *cancelbutton_;
 	std::string currenttext_;
 };
 

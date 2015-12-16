@@ -71,6 +71,18 @@ int SDLUtility::GetScreenHeight()
 	return SCREENH;
 }
 
+SDL_Rect SDLUtility::GetAbsoluteRect(RelativeRect relativerect, SDL_Rect destrect)
+{
+	SDL_Rect absolutecoordinatesrect {
+		static_cast<int>(destrect.x + (relativerect.x * static_cast<double>(destrect.w))),
+		static_cast<int>(destrect.y + (relativerect.y * static_cast<double>(destrect.h))),
+		static_cast<int>(relativerect.w * static_cast<double>(destrect.w)),
+		static_cast<int>(relativerect.h * static_cast<double>(destrect.h))
+	};
+
+	return absolutecoordinatesrect;
+}
+
 void SDLUtility::ClearScreen()
 {
 	SDL_RenderClear(renderer);

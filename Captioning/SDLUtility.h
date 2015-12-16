@@ -17,6 +17,13 @@ static SDL_Renderer *renderer;
 const static int SCREENW = 1500;
 const static int SCREENH = 750;
 
+struct RelativeRect {
+	double x;
+	double y;
+	double w;
+	double h;
+};
+
 class SDLUtility {
 public:
 	static int Init();
@@ -24,6 +31,7 @@ public:
 	static SDL_Renderer *GetRenderer();
 	static int GetScreenWidth();
 	static int GetScreenHeight();
+	static SDL_Rect GetAbsoluteRect(RelativeRect relativerect, SDL_Rect destrect);
 	static void ClearScreen();
 	static void UpdateScreen();
 	static void PostImage(Image *img, int x, int y);

@@ -107,13 +107,9 @@ void ScreenHandler::PostEventMouseSetup()
 		if (previousmousevent_ != NULL && previousmousevent_ != currentmouseevent_)
 		{
 			if (ismousedown_ == true)
-			{
 				currentmouseevent_ = previousmousevent_;
-			}
 			else
-			{
 				previousmousevent_->ResetMouseEvents();
-			}
 		}
 
 		if (currentmouseevent_ != NULL)
