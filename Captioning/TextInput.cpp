@@ -14,6 +14,7 @@ TextInput::TextInput()
 	texture_ = NULL;
 	font_ = NULL;
 	currenttext_ = "";
+	currentunicodetext_ = L"";
 	isfinal_ = false;
 }
 
@@ -22,7 +23,6 @@ TextInput::~TextInput()
 	DestroyTexture();
 	TTF_CloseFont(font_);
 	font_ = NULL;
-	currenttext_ = "";
 }
 
 int TextInput::Init(std::string ttffilepath, int fontsize)
@@ -178,6 +178,8 @@ void TextInput::DestroyTexture()
 		texture_ = NULL;
 		imagewidth_ = 0;
 		imageheight_ = 0;
+		currenttext_ = "";
+		currentunicodetext_ = L"";
 	}
 }
 

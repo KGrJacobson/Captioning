@@ -30,7 +30,46 @@ void KeyboardEntry::InsertCharacter(char character)
 	}
 	else
 	{
-		currenttext_ = currenttext_ + character;
+		if (character >= '0' && character <= '9' && isshift_ == true)
+		{
+			switch (character)
+			{
+			case '0':
+				currenttext_ = currenttext_ + ')';
+				break;
+			case '1':
+				currenttext_ = currenttext_ + '!';
+				break;
+			case '2':
+				currenttext_ = currenttext_ + '@';
+				break;
+			case '3':
+				currenttext_ = currenttext_ + '#';
+				break;
+			case '4':
+				currenttext_ = currenttext_ + '$';
+				break;
+			case '5':
+				currenttext_ = currenttext_ + '%';
+				break;
+			case '6':
+				currenttext_ = currenttext_ + '^';
+				break;
+			case '7':
+				currenttext_ = currenttext_ + '&';
+				break;
+			case '8':
+				currenttext_ = currenttext_ + '*';
+				break;
+			case '9':
+				currenttext_ = currenttext_ + '(';
+				break;
+			}
+		}
+		else
+		{
+			currenttext_ = currenttext_ + character;
+		}
 	}
 
 	if (currenttexttexture_ != NULL)
@@ -163,6 +202,36 @@ void KeyboardEntry::KeyDownInput(const SDL_Event &e)
 	case SDLK_z:
 		InsertCharacter('z');
 		break;
+	case SDLK_0:
+		InsertCharacter('0');
+		break;
+	case SDLK_1:
+		InsertCharacter('1');
+		break;
+	case SDLK_2:
+		InsertCharacter('2');
+		break;
+	case SDLK_3:
+		InsertCharacter('3');
+		break;
+	case SDLK_4:
+		InsertCharacter('4');
+		break;
+	case SDLK_5:
+		InsertCharacter('5');
+		break;
+	case SDLK_6:
+		InsertCharacter('6');
+		break;
+	case SDLK_7:
+		InsertCharacter('7');
+		break;
+	case SDLK_8:
+		InsertCharacter('8');
+		break;
+	case SDLK_9:
+		InsertCharacter('9');
+		break;
 	case SDLK_LSHIFT:
 		SetShift(true);
 		break;
@@ -176,6 +245,9 @@ void KeyboardEntry::KeyDownInput(const SDL_Event &e)
 		SetCTRL(true);
 		break;
 	case SDLK_RETURN:
+		FinalizeCurrentText();
+		break;
+	case SDLK_KP_ENTER:
 		FinalizeCurrentText();
 		break;
 	}

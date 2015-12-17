@@ -75,6 +75,9 @@ public:
 		BUTTON_BACKGROUND_COLOR,
 		BUTTON_UNPRESSED_COLOR,
 		BUTTON_PRESSED_COLOR,
+		TINY_BUTTON_BACKGROUND_COLOR,
+		TINY_BUTTON_UNPRESSED_COLOR,
+		TINY_BUTTON_PRESSED_COLOR,
 		TAB_BACKGROUND_COLOR,
 		TAB_UNPRESSED_COLOR,
 		TAB_PRESSED_COLOR,
@@ -94,8 +97,8 @@ public:
 	static SDL_Color GetSDLColor(int color, int alphavalue);
 	static SDL_Color GetUIElementColor(int uielement, int alphavalue);
 	static SDL_Color InvertColor(SDL_Color color);
-	static void ShowAsUIElement(SDL_Rect uiarea, int uielement, TextInput *text);
 	static void ShowUIButton(UIButton *button);
+	static void ShowUITinyButton(UIButton *button);
 };
 
 #endif //UI_Elements

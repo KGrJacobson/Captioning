@@ -26,6 +26,7 @@ ScreenHandler::ScreenHandler()
 	int windowh = SDLUtility::GetScreenHeight();
 	inputscreen_ = new InputScreen(SDL_Rect{ 0, 0, demoscreen_->GetScreenSize().x, windowh });
 	screens_.push_back(inputscreen_);
+	keyboardentry_.SetTexture(inputscreen_->GetTexture());
 
 	backgroundimage_.CreateTextureFromImage("blossom.png");
 }
@@ -106,6 +107,8 @@ void ScreenHandler::ShowScreens()
 
 	if (inputscreen_ != NULL)
 	{
+		std::string currentstring;
+
 		switch (inputscreen_->Show())
 		{
 		case InputScreen::SET_KEYBOARD_ENTRY:
@@ -119,7 +122,10 @@ void ScreenHandler::ShowScreens()
 			demoscreen_->SetCaptionText(inputscreen_->PostCurrentString(), -1);
 			break;
 		case InputScreen::RETURN_KEY_PRESSED:
-			demoscreen_->SetCaptionText(inputscreen_->PostCurrentString(), -1);
+			currentstring = inputscreen_->PostCurrentString();
+
+			if (demoscreen_->GetSelectedCaptionText() != currentstring && currentstring != "")
+				demoscreen_->SetCaptionText(currentstring, -1);
 			break;
 		case InputScreen::CLOSE_SCREEN:
 			if (keyboardentry_.GetTexture() == inputscreen_->GetTexture())
@@ -172,17 +178,3 @@ void ScreenHandler::SetEntryTexture(TextInput *textinput)
 {
 	keyboardentry_.SetTexture(textinput);
 }
-
-//switch (MOUSEHANDLER.GetEvent())
-//{
-//case MOUSEOVER:
-//	break;
-//case LEFT_BUTTON_DOWN:
-//	break;
-//case RIGHT_BUTTON_DOWN:
-//	break;
-//case LEFT_BUTTON_UP:
-//	break;
-//case RIGHT_BUTTON_UP:
-//	break;
-//}

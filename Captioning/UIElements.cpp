@@ -42,21 +42,24 @@ void UIElements::Init()
 		
 	colorlayouts_ = std::vector<std::vector<SDL_Color>*>{
 		new std::vector<SDL_Color>{				//DEFAULT_COLOR_LAYOUT
-			standardcolorvector_[VIOLET],			//BACKGROUND_COLOR
-			standardcolorvector_[BLACK],			//DEMO_SCREEN_COLOR
-			standardcolorvector_[BLACK],			//INPUT_SCREEN_COLOR
-			standardcolorvector_[WHITE],			//TEXT_COLOR
-			standardcolorvector_[BLACK],			//OUTLINED_BOX_COLOR
-			standardcolorvector_[RABBIT_EAR_IRIS],	//BUTTON_BACKGROUND_COLOR
-			standardcolorvector_[IRIS_COLOR],		//BUTTON_UNPRESSED_COLOR
-			standardcolorvector_[BELLFLOWER],		//BUTTON_PRESSED_COLOR
-			standardcolorvector_[TREE_PEONY],		//TAB_BACKGROUND_COLOR
-			standardcolorvector_[PLUM_PURPLE],		//TAB_UNPRESSED_COLOR
-			standardcolorvector_[VINE_GRAPE],		//TAB_PRESSED_COLOR
-			standardcolorvector_[SAPPANWOOD],		//CAPTION_CONTAINER_COLOR
-			standardcolorvector_[WHITE],			//CAPTION_CONTAINER_SELECTED_COLOR
-			standardcolorvector_[RED_WISTERIA],		//CAPTION_CONTAINER_DRAWN_CAPTION_COLOR
-			standardcolorvector_[DARK_RED]			//TEXT_INPUT_BOX
+			standardcolorvector_[VIOLET],				//BACKGROUND_COLOR
+			standardcolorvector_[BLACK],				//DEMO_SCREEN_COLOR
+			standardcolorvector_[BLACK],				//INPUT_SCREEN_COLOR
+			standardcolorvector_[WHITE],				//TEXT_COLOR
+			standardcolorvector_[BLACK],				//OUTLINED_BOX_COLOR
+			standardcolorvector_[RABBIT_EAR_IRIS],		//BUTTON_BACKGROUND_COLOR
+			standardcolorvector_[IRIS_COLOR],			//BUTTON_UNPRESSED_COLOR
+			standardcolorvector_[BELLFLOWER],			//BUTTON_PRESSED_COLOR
+			standardcolorvector_[DISAPPEARING_PURPLE],	//TINY_BUTTON_BACKGROUND_COLOR
+			standardcolorvector_[MULBERRY_DYE],			//TINY_BUTTON_UNPRESSED_COLOR
+			standardcolorvector_[DARK_RED],				//TINY_BUTTON_PRESSED_COLOR
+			standardcolorvector_[TREE_PEONY],			//TAB_BACKGROUND_COLOR
+			standardcolorvector_[PLUM_PURPLE],			//TAB_UNPRESSED_COLOR
+			standardcolorvector_[VINE_GRAPE],			//TAB_PRESSED_COLOR
+			standardcolorvector_[SAPPANWOOD],			//CAPTION_CONTAINER_COLOR
+			standardcolorvector_[WHITE],				//CAPTION_CONTAINER_SELECTED_COLOR
+			standardcolorvector_[RED_WISTERIA],			//CAPTION_CONTAINER_DRAWN_CAPTION_COLOR
+			standardcolorvector_[DARK_RED]				//TEXT_INPUT_BOX
 		}
 	};
 
@@ -98,38 +101,6 @@ SDL_Color UIElements::InvertColor(SDL_Color color) {
 	return colortoreturn;
 }
 
-void UIElements::ShowAsUIElement(SDL_Rect uiarea, int uielement, TextInput *text)
-{
-	SDLUtility::CreateSquare(uiarea, GetUIElementColor(BUTTON_BACKGROUND_COLOR, SOLID_COLOR));
-
-	if (uielement == BUTTON_UNPRESSED)
-	{
-		SDLUtility::CreateBorderedRect(
-			SDL_Rect{
-				uiarea.x + 4,
-				uiarea.y + 2,
-				uiarea.w - 8,
-				uiarea.h - 4 },
-			GetUIElementColor(OUTLINED_BOX_COLOR, SOLID_COLOR),
-			GetUIElementColor(BUTTON_UNPRESSED_COLOR, SOLID_COLOR));
-	}
-
-	if (uielement == BUTTON_PRESSED)
-	{
-		SDLUtility::CreateBorderedRect(
-			SDL_Rect{
-			uiarea.x + 4,
-			uiarea.y + 2,
-			uiarea.w - 8,
-			uiarea.h - 4 },
-			GetUIElementColor(OUTLINED_BOX_COLOR, SOLID_COLOR),
-			GetUIElementColor(BUTTON_PRESSED_COLOR, SOLID_COLOR));
-	}
-
-	if (text != NULL)
-		SDLUtility::PostText(text, (uiarea.x + 4) + 5, (uiarea.y + 2) + static_cast<int>((uiarea.h - 4 - text->GetHeight()) * .5));
-}
-
 void UIElements::ShowUIButton(UIButton *button)
 {
 	SDL_Rect showrect = button->GetButtonArea();
@@ -161,7 +132,35 @@ void UIElements::ShowUIButton(UIButton *button)
 	else
 	{
 		SDLUtility::PostText(button->GetText(),
-			innerrect.x + static_cast<int>((innerrect.x - button->GetText()->GetWidth()) * .5),
+			innerrect.x + static_cast<int>((innerrect.w - button->GetText()->GetWidth()) * .5),
 			innerrect.y + static_cast<int>((innerrect.h - button->GetText()->GetHeight()) * .5));
 	}
+}
+
+void UIElements::ShowUITinyButton(UIButton *button)
+{
+	SDL_Rect showrect = button->GetButtonArea();
+	SDLUtility::CreateSquare(showrect, GetUIElementColor(TINY_BUTTON_BACKGROUND_COLOR, SOLID_COLOR));
+
+	SDL_Rect innerrect{
+		showrect.x + 2,
+		showrect.y + 2,
+		showrect.w - 4,
+		showrect.h - 4
+	};
+
+	if (button->GetMouseEvent() != LEFT_BUTTON_DOWN)
+	{
+		SDLUtility::CreateBorderedRect(innerrect, GetUIElementColor(OUTLINED_BOX_COLOR, SOLID_COLOR), GetUIElementColor(TINY_BUTTON_UNPRESSED_COLOR, SOLID_COLOR));
+	}
+
+	if (button->GetMouseEvent() == LEFT_BUTTON_DOWN)
+	{
+		SDLUtility::CreateBorderedRect(innerrect, GetUIElementColor(OUTLINED_BOX_COLOR, SOLID_COLOR), GetUIElementColor(TINY_BUTTON_PRESSED_COLOR, SOLID_COLOR));
+	}
+
+	SDLUtility::PostText(button->GetText(),
+		innerrect.x + static_cast<int>((innerrect.w - button->GetText()->GetWidth()) * .5),
+		innerrect.y + static_cast<int>((innerrect.h - button->GetText()->GetHeight()) * .5)
+		);
 }

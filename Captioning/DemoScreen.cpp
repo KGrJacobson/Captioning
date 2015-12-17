@@ -141,6 +141,8 @@ int DemoScreen::Show()
 	}
 
 	int captioncode = DEFAULT;
+	int mousex = -1;
+	int mousey = -1;
 	std::list<CaptionContainer*>::iterator it = captionlist_.begin(); 
 	while (it != captionlist_.end())
 	{
@@ -163,6 +165,10 @@ int DemoScreen::Show()
 
 				selectedcaption_ = (*it);
 			}
+			break;
+		case MOVE_CAPTION:
+			SDL_GetMouseState(&mousex, &mousey);
+			(*it)->SetXY(mousex, mousey);
 			break;
 		}
 
@@ -203,6 +209,16 @@ bool DemoScreen::SetCaptionText(std::string text, int captionid)
 	}
 
 	return false;
+}
+
+std::string DemoScreen::GetSelectedCaptionText()
+{
+	if (selectedcaption_ != NULL)
+	{
+		return selectedcaption_->GetText();
+	}
+	
+	return "";
 }
 
 void DemoScreen::CreateCaption(std::string text, double x, double y, double w, int containerid)

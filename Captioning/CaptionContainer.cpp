@@ -11,6 +11,10 @@
 CaptionContainer::~CaptionContainer()
 {
 	EraseText();
+	delete deletebutton_;
+	deletebutton_ = NULL;
+	delete movebutton_;
+	movebutton_ = NULL;
 }
 
 void CaptionContainer::Init(std::string initialtext, double relativex, double relativey, double relativew, SDL_Rect destrect, int initialfontsize, int containerid)
@@ -29,8 +33,8 @@ void CaptionContainer::Init(std::string initialtext, double relativex, double re
 	absolutecoordinatesrect_.h = (texttextures_.size() != 0) ? static_cast<int>((*texttextures_.begin())->GetHeight() * texttextures_.size()) : MINIMUM_HEIGHT_OF_CAPTION;
 	
 	containermouseevent_.Init(absolutecoordinatesrect_);
-	deletebutton_.Init(SDL_Rect{ absolutecoordinatesrect_.x, absolutecoordinatesrect_.y, 20, MINIMUM_HEIGHT_OF_CAPTION });
-	selectbutton_.Init(SDL_Rect{ absolutecoordinatesrect_.x + deletebutton_.GetMouseArea().w, absolutecoordinatesrect_.y, 20, MINIMUM_HEIGHT_OF_CAPTION });
+	deletebutton_ = new UIButton(SDL_Rect{ absolutecoordinatesrect_.x, absolutecoordinatesrect_.y, 20, MINIMUM_HEIGHT_OF_CAPTION }, "X", true);
+	movebutton_ = new UIButton(SDL_Rect{ absolutecoordinatesrect_.x + 20, absolutecoordinatesrect_.y, 20, MINIMUM_HEIGHT_OF_CAPTION }, "O", true);
 }
 
 void CaptionContainer::SetText(std::string newtext, int destinationw)
@@ -44,6 +48,16 @@ void CaptionContainer::SetText(std::string newtext, int destinationw)
 	containermouseevent_.SetMouseArea(absolutecoordinatesrect_);
 }
 
+void CaptionContainer::SetXY(int x, int y)
+{
+	absolutecoordinatesrect_.x = x;
+	absolutecoordinatesrect_.y = y;
+
+	containermouseevent_.SetMouseArea(absolutecoordinatesrect_);
+	deletebutton_->SetButtonCoordinates(absolutecoordinatesrect_.x, absolutecoordinatesrect_.y);
+	movebutton_->SetButtonCoordinates(absolutecoordinatesrect_.x + 20, absolutecoordinatesrect_.y);
+}
+
 void CaptionContainer::EraseText()
 {
 	text_ = "";
@@ -54,18 +68,23 @@ void CaptionContainer::EraseText()
 
 MouseHandler *CaptionContainer::CheckMouseEvents(int mouseevent)
 {
+	MouseHandler *foundmouse = NULL;
+
+	MouseHandler *currentmousehandler = NULL;
 	if (SDLUtility::IsMouseActive(containermouseevent_.GetMouseArea()))
 	{
-		if (SDLUtility::IsMouseActive(deletebutton_.GetMouseArea()))
-			return &deletebutton_;
+		foundmouse = &containermouseevent_;
 
-		if (SDLUtility::IsMouseActive(selectbutton_.GetMouseArea()))
-			return &selectbutton_;
+		currentmousehandler = deletebutton_->CheckMouseHandler();
+		if (currentmousehandler != NULL)
+			foundmouse = currentmousehandler;
 
-		return &containermouseevent_;
+		currentmousehandler = movebutton_->CheckMouseHandler();
+		if (currentmousehandler != NULL)
+			foundmouse = currentmousehandler;
 	}
 
-	return NULL;
+	return foundmouse;
 }
 
 void CaptionContainer::DeselectCaption()
@@ -115,54 +134,41 @@ int CaptionContainer::EvaluateCaption(bool showcontainer)
 			SDLUtility::PostText((*it), containerrect.x, containerrect.y + totalheight);
 			totalheight = totalheight + (*it)->GetHeight();
 		}
+
+		containerrect.h = totalheight;
+	}
+
+	if (isselected_ == true)
+	{
+		containermouseevent_.ShowMouseArea(UIElements::GetUIElementColor(UIElements::CAPTION_CONTAINER_SELECTED_COLOR, UIElements::TRANSPARENT_COLOR));
+	}
+
+	if (SDLUtility::IsMouseActive(containerrect) == true)
+	{
+		UIElements::ShowUITinyButton(deletebutton_);
+		UIElements::ShowUITinyButton(movebutton_);
 	}
 
 	switch (containermouseevent_.GetEvent())
 	{
-	case MOUSEOVER:
-		deletebutton_.ShowMouseArea(SDL_Color{ 150, 0, 0, 255 });
-		selectbutton_.ShowMouseArea(SDL_Color{ 0, 150, 0, 255 });
-		break;
-	case LEFT_BUTTON_DOWN:
-		deletebutton_.ShowMouseArea(SDL_Color{ 150, 0, 0, 255 });
-		selectbutton_.ShowMouseArea(SDL_Color{ 0, 150, 0, 255 });
-		break;
 	case LEFT_BUTTON_UP:
 		returncode = SELECT_CAPTION;
 		SelectCaption();
 		break;
 	}
 
-	switch (deletebutton_.GetEvent())
+	switch (deletebutton_->GetMouseEvent())
 	{
-	case MOUSEOVER:
-		deletebutton_.ShowMouseArea(SDL_Color{ 150, 0, 0, 255 });
-		selectbutton_.ShowMouseArea(SDL_Color{ 0, 150, 0, 255 });
-		break;
-	case LEFT_BUTTON_DOWN:
-		deletebutton_.ShowMouseArea(SDL_Color{ 50, 0, 0, 255 });
-		selectbutton_.ShowMouseArea(SDL_Color{ 0, 150, 0, 255 });
-		break;
 	case LEFT_BUTTON_UP:
 		returncode = DELETE_CAPTION;
 		break;
 	}
 
-	switch (selectbutton_.GetEvent())
+	switch (movebutton_->GetMouseEvent())
 	{
-	case MOUSEOVER:
-		deletebutton_.ShowMouseArea(SDL_Color{ 150, 0, 0, 255 });
-		selectbutton_.ShowMouseArea(SDL_Color{ 0, 150, 0, 255 });
-		break;
 	case LEFT_BUTTON_DOWN:
-		deletebutton_.ShowMouseArea(SDL_Color{ 150, 0, 0, 255 });
-		selectbutton_.ShowMouseArea(SDL_Color{ 0, 50, 0, 255 });
+		returncode = MOVE_CAPTION;
 		break;
-	}
-
-	if (isselected_ == true)
-	{
-		containermouseevent_.ShowMouseArea(UIElements::GetUIElementColor(UIElements::CAPTION_CONTAINER_SELECTED_COLOR, UIElements::TRANSPARENT_COLOR));
 	}
 
 	return returncode;

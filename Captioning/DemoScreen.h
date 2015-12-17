@@ -29,6 +29,7 @@ public:
 	SDL_Rect GetScreenSize();
 	int Show();
 	bool SetCaptionText(std::string text, int captionid);
+	std::string GetSelectedCaptionText();
 	void CreateCaption(std::string text, double x, double y, double w, int containerid);
 	void ClearAllCaptionText();
 	void DeleteAllCaptions();
