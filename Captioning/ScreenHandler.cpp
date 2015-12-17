@@ -12,8 +12,6 @@
 
 ScreenHandler::ScreenHandler()
 {
-	shift_ = false;
-
 	mousetoevaluate_ = NULL;
 	previousmousevent_ = NULL;
 	currentmouseevent_ = NULL;
@@ -34,6 +32,8 @@ ScreenHandler::ScreenHandler()
 
 ScreenHandler::~ScreenHandler()
 {
+	SetEntryTexture(NULL);
+
 	delete demoscreen_;
 	demoscreen_ = NULL;
 	delete inputscreen_;
@@ -65,29 +65,11 @@ void ScreenHandler::HandleEvents(const SDL_Event &e)
 		mouseevent_ = e.button.button;
 	}
 
-	if (e.type == SDL_KEYDOWN)
-	{
-		switch (e.key.keysym.sym)
-		{
-		case SDLK_DELETE:
-			demoscreen_->ClearAllCaptionText();
-			break;
-		}
-	}
-
-	if (e.type == SDL_KEYUP && (e.key.keysym.sym == SDLK_LSHIFT || e.key.keysym.sym == SDLK_RSHIFT))
-		shift_ = false;
+	if (e.type == SDL_KEYUP)
+		keyboardentry_.KeyUpInput(e);
 
 	if (e.type == SDL_KEYDOWN)
-	{
-		if (e.key.keysym.sym == SDLK_LSHIFT || e.key.keysym.sym == SDLK_RSHIFT)
-			shift_ = true;
-
-		if (e.key.keysym.sym == SDLK_RETURN)
-			demoscreen_->SetCaptionText(inputscreen_->PostText(), -1);
-
-		inputscreen_->KeyboardInput(e, shift_);
-	}
+		keyboardentry_.KeyDownInput(e);
 }
 
 void ScreenHandler::PostEventMouseSetup()
@@ -122,10 +104,35 @@ void ScreenHandler::ShowScreens()
 {
 	SDLUtility::PostImage(&backgroundimage_, 0,	0, SDL_Rect{ 0, 0, backgroundimage_.GetWidth(), backgroundimage_.GetHeight() });
 
-	for (std::list<Subscreen*>::iterator it = screens_.begin(); it != screens_.end(); it++)
+	if (inputscreen_ != NULL)
 	{
-		(*it)->Show();
+		switch (inputscreen_->Show())
+		{
+		case InputScreen::SET_KEYBOARD_ENTRY:
+			if (keyboardentry_.GetTexture() != inputscreen_->GetTexture())
+				keyboardentry_.SetTexture(inputscreen_->GetTexture());
+			break;
+		case InputScreen::APPLY_BUTTON_PRESSED:
+			if (keyboardentry_.GetTexture() == inputscreen_->GetTexture())
+				keyboardentry_.FinalizeCurrentText();
+
+			demoscreen_->SetCaptionText(inputscreen_->PostCurrentString(), -1);
+			break;
+		case InputScreen::RETURN_KEY_PRESSED:
+			demoscreen_->SetCaptionText(inputscreen_->PostCurrentString(), -1);
+			break;
+		case InputScreen::CLOSE_SCREEN:
+			if (keyboardentry_.GetTexture() == inputscreen_->GetTexture())
+				keyboardentry_.SetTexture(NULL);
+
+			screens_.remove(inputscreen_);
+			delete inputscreen_;
+			inputscreen_ = NULL;
+			break;
+		}
 	}
+
+	demoscreen_->Show();
 }
 
 int ScreenHandler::GetCurrentMouseState(int mouseevent_, bool isdown)
@@ -159,6 +166,11 @@ int ScreenHandler::GetCurrentMouseState(int mouseevent_, bool isdown)
 	}
 
 	return NO_MOUSE_STATE;
+}
+
+void ScreenHandler::SetEntryTexture(TextInput *textinput)
+{
+	keyboardentry_.SetTexture(textinput);
 }
 
 //switch (MOUSEHANDLER.GetEvent())

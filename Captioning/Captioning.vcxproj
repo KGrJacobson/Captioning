@@ -127,6 +127,7 @@
     <ClCompile Include="DebugText.cpp" />
     <ClCompile Include="DemoScreen.cpp" />
     <ClCompile Include="Image.cpp" />
+    <ClCompile Include="KeyboardEntry.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="InputScreen.cpp" />
     <ClCompile Include="MouseHandler.cpp" />
@@ -143,6 +144,7 @@
     <ClInclude Include="DemoScreenTab.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="InputScreen.h" />
+    <ClInclude Include="KeyboardEntry.h" />
     <ClInclude Include="MouseHandler.h" />
     <ClInclude Include="ScreenHandler.h" />
     <ClInclude Include="SDLUtility.h" />

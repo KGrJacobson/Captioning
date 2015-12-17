@@ -10,10 +10,12 @@
 #include "DemoScreen.h"
 #include "Image.h"
 #include "InputScreen.h"
+#include "KeyboardEntry.h"
 #include "MouseHandler.h"
 #include "ScreenHandler.h"
 #include "SDLUtility.h"
 #include "Subscreen.h"
+#include "TextInput.h"
 
 class ScreenHandler {
 public:
@@ -24,11 +26,12 @@ public:
 	void PostEventMouseSetup();
 	void ShowScreens();
 	int GetCurrentMouseState(int mouseevent, bool isdown);
+	void SetEntryTexture(TextInput *textinput);
 private:
 	std::list<Subscreen*> screens_;
 	DemoScreen *demoscreen_;
 	InputScreen *inputscreen_;
-	bool shift_;
+	KeyboardEntry keyboardentry_;
 	MouseHandler *mousetoevaluate_;
 	MouseHandler *previousmousevent_;
 	MouseHandler *currentmouseevent_;

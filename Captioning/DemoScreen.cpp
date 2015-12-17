@@ -92,7 +92,7 @@ SDL_Rect DemoScreen::GetScreenSize()
 	return screenarea_;
 }
 
-void DemoScreen::Show()
+int DemoScreen::Show()
 {
 	SDLUtility::CreateSquare(demoarea_, UIElements::GetUIElementColor(UIElements::DEMO_SCREEN_COLOR, UIElements::SOLID_COLOR));
 
@@ -178,6 +178,8 @@ void DemoScreen::Show()
 		else
 			++it;
 	}
+
+	return 0;
 }
 
 bool DemoScreen::SetCaptionText(std::string text, int captionid)

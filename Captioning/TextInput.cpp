@@ -14,6 +14,7 @@ TextInput::TextInput()
 	texture_ = NULL;
 	font_ = NULL;
 	currenttext_ = "";
+	isfinal_ = false;
 }
 
 TextInput::~TextInput()
@@ -60,6 +61,8 @@ void TextInput::CreateTextureFromText(std::string text)
 			currenttext_ = text;
 		}
 	}
+
+	isfinal_ = true;
 }
 
 void TextInput::CreateTextureFromText(std::wstring text)
@@ -107,6 +110,8 @@ void TextInput::CreateTextureFromText(std::wstring text)
 			currentunicodetext_ = text;
 		}
 	}
+
+	isfinal_ = true;
 }
 
 void TextInput::CreateQuickTextureFromText(std::string text)
@@ -131,6 +136,8 @@ void TextInput::CreateQuickTextureFromText(std::string text)
 			currenttext_ = text;
 		}
 	}
+
+	isfinal_ = false;
 }
 
 SDL_Texture *TextInput::GetTexture()
@@ -156,6 +163,11 @@ std::string TextInput::GetCurrentText()
 std::wstring TextInput::GetCurrentUnicodeText()
 {
 	return currentunicodetext_;
+}
+
+bool TextInput::GetFinal()
+{
+	return isfinal_;
 }
 
 void TextInput::DestroyTexture()

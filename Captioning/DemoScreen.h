@@ -27,7 +27,7 @@ public:
 	void DrawNewCaption();
 	MouseHandler *CheckMouseHandlers(int mouseevent);
 	SDL_Rect GetScreenSize();
-	void Show();
+	int Show();
 	bool SetCaptionText(std::string text, int captionid);
 	void CreateCaption(std::string text, double x, double y, double w, int containerid);
 	void ClearAllCaptionText();

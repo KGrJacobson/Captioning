@@ -18,21 +18,27 @@ static const int TEXT_INPUT_BOX_HEIGHT = 100;
 class InputScreen : public Subscreen
 {
 public:
+	enum Input_Screen_Return_Flags 
+	{
+		NO_RETURN_EVENT,
+		SET_KEYBOARD_ENTRY,
+		APPLY_BUTTON_PRESSED,
+		RETURN_KEY_PRESSED,
+		CLOSE_SCREEN
+	};
+
 	InputScreen(SDL_Rect setscreenarea);
 	~InputScreen();
 	MouseHandler *CheckMouseHandlers(int mouseaction);
-	void Show();
-	void InsertCharacter(char character, bool isshift);
-	void DeleteCharacter();
-	void KeyboardInput(const SDL_Event &e, bool shift);
-	std::string PostText();
+	int Show();
+	std::string PostCurrentString();
+	TextInput *GetTexture();
 private:
 	SDL_Rect screenarea_;
-	SDL_Rect textinputbox_;
 	TextInput texttexture_;
+	MouseHandler textinputbox_;
 	UIButton *confirmbutton_;
 	UIButton *cancelbutton_;
-	std::string currenttext_;
 };
 
 #endif //INPUT_SCREEN

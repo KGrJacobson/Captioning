@@ -20,6 +20,7 @@ public:
 	int GetHeight();
 	std::string GetCurrentText();
 	std::wstring GetCurrentUnicodeText();
+	bool GetFinal();
 	void DestroyTexture();
 	int TextWidth(std::string text);
 	int TextHeight();
@@ -30,6 +31,7 @@ private:
 	std::wstring currentunicodetext_;
 	int imagewidth_;
 	int imageheight_;
+	bool isfinal_;
 };
 
 #endif //TEXT_INPUT
