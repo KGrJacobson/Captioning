@@ -33,7 +33,8 @@ public:
 	void FinalizeCurrentText();
 	int KeyDownInput(const SDL_Event &e);
 	char KeyDownInputEnglish(const SDL_Event &e);
-	void KeyDownInputJapanese(const SDL_Event &e);
+	void KeyDownInputJapaneseHiragana(const SDL_Event &e);
+	void KeyDownInputJapaneseKatakana(const SDL_Event &e);
 	void KeyUpInput(const SDL_Event &e);
 	TextInput *GetTexture();
 private:

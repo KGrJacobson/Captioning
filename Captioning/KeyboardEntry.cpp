@@ -157,7 +157,10 @@ int KeyboardEntry::KeyDownInput(const SDL_Event &e)
 				InsertCharacter(chartoadd);
 			break;
 		case JAPANESE:
-			KeyDownInputJapanese(e);
+			if (isshift_ == false)
+				KeyDownInputJapaneseHiragana(e);
+			else
+				KeyDownInputJapaneseKatakana(e);
 
 			if (currenttexttexture_ != NULL)
 				if (tempstring_ == "" && nexttempchar_ == "")
@@ -320,7 +323,7 @@ char KeyboardEntry::KeyDownInputEnglish(const SDL_Event &e)
 	return 0;
 }
 
-void KeyboardEntry::KeyDownInputJapanese(const SDL_Event &e)
+void KeyboardEntry::KeyDownInputJapaneseHiragana(const SDL_Event &e)
 {
 	switch (e.key.keysym.sym)
 	{
@@ -868,6 +871,14 @@ void KeyboardEntry::KeyDownInputJapanese(const SDL_Event &e)
 															{
 																tempstring_ = tempstring_ + u8"に";
 																nexttempchar_ = "";
+															}
+															else
+															{
+																if (nexttempchar_ == "ch")
+																{
+																	tempstring_ = tempstring_ + u8"ち";
+																	nexttempchar_ = "";
+																}
 															}
 														}
 													}
@@ -1596,6 +1607,1316 @@ void KeyboardEntry::KeyDownInputJapanese(const SDL_Event &e)
 		if (nexttempchar_ != "")
 		{
 				nexttempchar_.pop_back();
+		}
+		else
+		{
+			if (tempstring_ != "")
+			{
+				tempstring_.pop_back();
+			}
+			else
+			{
+				DeleteCharacter();
+			}
+		}
+		break;
+	case SDLK_RETURN:
+		InsertString(tempstring_ + nexttempchar_);
+		tempstring_ = "";
+		nexttempchar_ = "";
+		break;
+	case SDLK_KP_ENTER:
+		InsertString(tempstring_ + nexttempchar_);
+		tempstring_ = "";
+		nexttempchar_ = "";
+		break;
+	}
+}
+
+void KeyboardEntry::KeyDownInputJapaneseKatakana(const SDL_Event & e)
+{
+	switch (e.key.keysym.sym)
+	{
+	case SDLK_a:
+		if ((std::string("sh ch hy by d gy j ky my py ry t w z").find(nexttempchar_) != std::string::npos || std::string(u8"ンy").find(nexttempchar_) != std::string::npos) && nexttempchar_ != "")
+		{
+			if (nexttempchar_ == "sh")
+			{
+				tempstring_ = tempstring_ + u8"シャ";
+				nexttempchar_ = "";
+			}
+			else
+			{
+				if (nexttempchar_ == "ch")
+				{
+					tempstring_ = tempstring_ + u8"チャ";
+					nexttempchar_ = "";
+				}
+				else
+				{
+					if (nexttempchar_ == "s")
+					{
+						tempstring_ = tempstring_ + u8"サ";
+						nexttempchar_ = "";
+					}
+					else
+					{
+						if (nexttempchar_ == "h")
+						{
+							tempstring_ = tempstring_ + u8"ハ";
+							nexttempchar_ = "";
+						}
+						else
+						{
+							if (nexttempchar_ == "b")
+							{
+								tempstring_ = tempstring_ + u8"バ";
+								nexttempchar_ = "";
+							}
+							else
+							{
+								if (nexttempchar_ == "d")
+								{
+									tempstring_ = tempstring_ + u8"ダ";
+									nexttempchar_ = "";
+								}
+								else
+								{
+									if (nexttempchar_ == "g")
+									{
+										tempstring_ = tempstring_ + u8"ガ";
+										nexttempchar_ = "";
+									}
+									else
+									{
+										if (nexttempchar_ == "j")
+										{
+											tempstring_ = tempstring_ + u8"ジャ";
+											nexttempchar_ = "";
+										}
+										else
+										{
+											if (nexttempchar_ == "k")
+											{
+												tempstring_ = tempstring_ + u8"カ";
+												nexttempchar_ = "";
+											}
+											else
+											{
+												if (nexttempchar_ == "m")
+												{
+													tempstring_ = tempstring_ + u8"マ";
+													nexttempchar_ = "";
+												}
+												else
+												{
+													if (nexttempchar_ == "p")
+													{
+														tempstring_ = tempstring_ + u8"パ";
+														nexttempchar_ = "";
+													}
+													else
+													{
+														if (nexttempchar_ == "r")
+														{
+															tempstring_ = tempstring_ + u8"ラ";
+															nexttempchar_ = "";
+														}
+														else
+														{
+															if (nexttempchar_ == "t")
+															{
+																tempstring_ = tempstring_ + u8"タ";
+																nexttempchar_ = "";
+															}
+															else
+															{
+																if (nexttempchar_ == "w")
+																{
+																	tempstring_ = tempstring_ + u8"ワ";
+																	nexttempchar_ = "";
+																}
+																else
+																{
+																	if (nexttempchar_ == "y")
+																	{
+																		tempstring_ = tempstring_ + u8"ヤ";
+																		nexttempchar_ = "";
+																	}
+																	else
+																	{
+																		if (nexttempchar_ == "z")
+																		{
+																			tempstring_ = tempstring_ + u8"ザ";
+																			nexttempchar_ = "";
+																		}
+																		else
+																		{
+																			if (nexttempchar_ == u8"ン")
+																			{
+																				tempstring_ = tempstring_ + u8"ナ";
+																				nexttempchar_ = "";
+																			}
+																			else
+																			{
+																				if (nexttempchar_ == "hy")
+																				{
+																					tempstring_ = tempstring_ + u8"ヒャ";
+																					nexttempchar_ = "";
+																				}
+																				else
+																				{
+																					if (nexttempchar_ == "ky")
+																					{
+																						tempstring_ = tempstring_ + u8"キャ";
+																						nexttempchar_ = "";
+																					}
+																					else
+																					{
+																						if (nexttempchar_ == "my")
+																						{
+																							tempstring_ = tempstring_ + u8"ミャ";
+																							nexttempchar_ = "";
+																						}
+																						else
+																						{
+																							if (nexttempchar_ == "ry")
+																							{
+																								tempstring_ = tempstring_ + u8"リャ";
+																								nexttempchar_ = "";
+																							}
+																							else
+																							{
+																								if (nexttempchar_ == u8"ンy")
+																								{
+																									tempstring_ = tempstring_ + u8"ニャ";
+																									nexttempchar_ = "";
+																								}
+																								else
+																								{
+																									if (nexttempchar_ == "gy")
+																									{
+																										tempstring_ = tempstring_ + u8"ギャ";
+																										nexttempchar_ = "";
+																									}
+																									else
+																									{
+																										if (nexttempchar_ == "by")
+																										{
+																											tempstring_ = tempstring_ + u8"ビャ";
+																											nexttempchar_ = "";
+																										}
+																										else
+																										{
+																											if (nexttempchar_ == "py")
+																											{
+																												tempstring_ = tempstring_ + u8"ピャ";
+																												nexttempchar_ = "";
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_ + u8"ア";
+			nexttempchar_ = "";
+		}
+		break;
+	case SDLK_b:
+		if (std::string("b").find(nexttempchar_) != std::string::npos || nexttempchar_ == "")
+		{
+			if (nexttempchar_ == "")
+			{
+				nexttempchar_ = "b";
+			}
+			else
+			{
+				if (nexttempchar_ == "b")
+				{
+					tempstring_ = tempstring_ + u8"ッ";
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_;
+			nexttempchar_ = "b";
+		}
+		break;
+	case SDLK_c:
+		if (std::string("c").find(nexttempchar_) != std::string::npos || nexttempchar_ == "")
+		{
+			if (nexttempchar_ == "")
+			{
+				nexttempchar_ = "c";
+			}
+			else
+			{
+				if (nexttempchar_ == "c")
+				{
+					tempstring_ = tempstring_ + u8"ッ";
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_;
+			nexttempchar_ = "c";
+		}
+		break;
+	case SDLK_d:
+		if (std::string("d").find(nexttempchar_) != std::string::npos || nexttempchar_ == "")
+		{
+			if (nexttempchar_ == "")
+			{
+				nexttempchar_ = "d";
+			}
+			else
+			{
+				if (nexttempchar_ == "d")
+				{
+					tempstring_ = tempstring_ + u8"ッ";
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_;
+			nexttempchar_ = "d";
+		}
+		break;
+	case SDLK_e:
+		if ((std::string("s h b d g j k m p r t w z").find(nexttempchar_) != std::string::npos || std::string(u8"ンy").find(nexttempchar_) != std::string::npos) && nexttempchar_ != "")
+		{
+			if (nexttempchar_ == "s")
+			{
+				tempstring_ = tempstring_ + u8"セ";
+				nexttempchar_ = "";
+			}
+			else
+			{
+				if (nexttempchar_ == "h")
+				{
+					tempstring_ = tempstring_ + u8"ヘ";
+					nexttempchar_ = "";
+				}
+				else
+				{
+					if (nexttempchar_ == "b")
+					{
+						tempstring_ = tempstring_ + u8"ベ";
+						nexttempchar_ = "";
+					}
+					else
+					{
+						if (nexttempchar_ == "d")
+						{
+							tempstring_ = tempstring_ + u8"デ";
+							nexttempchar_ = "";
+						}
+						else
+						{
+							if (nexttempchar_ == "g")
+							{
+								tempstring_ = tempstring_ + u8"ゲ";
+								nexttempchar_ = "";
+							}
+							else
+							{
+								if (nexttempchar_ == "k")
+								{
+									tempstring_ = tempstring_ + u8"ケ";
+									nexttempchar_ = "";
+								}
+								else
+								{
+									if (nexttempchar_ == "m")
+									{
+										tempstring_ = tempstring_ + u8"メ";
+										nexttempchar_ = "";
+									}
+									else
+									{
+										if (nexttempchar_ == "p")
+										{
+											tempstring_ = tempstring_ + u8"ペ";
+											nexttempchar_ = "";
+										}
+										else
+										{
+											if (nexttempchar_ == "r")
+											{
+												tempstring_ = tempstring_ + u8"レ";
+												nexttempchar_ = "";
+											}
+											else
+											{
+												if (nexttempchar_ == "t")
+												{
+													tempstring_ = tempstring_ + u8"テ";
+													nexttempchar_ = "";
+												}
+												else
+												{
+													if (nexttempchar_ == "w")
+													{
+														tempstring_ = tempstring_ + u8"ヱ";
+														nexttempchar_ = "";
+													}
+													else
+													{
+														if (nexttempchar_ == "z")
+														{
+															tempstring_ = tempstring_ + u8"ゼ";
+															nexttempchar_ = "";
+														}
+														else
+														{
+															if (nexttempchar_ == u8"ン")
+															{
+																tempstring_ = tempstring_ + u8"ネ";
+																nexttempchar_ = "";
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_ + u8"エ";
+			nexttempchar_ = "";
+		}
+		break;
+	case SDLK_f:
+		if (std::string("f").find(nexttempchar_) != std::string::npos || nexttempchar_ == "")
+		{
+			if (nexttempchar_ == "")
+			{
+				nexttempchar_ = "f";
+			}
+			else
+			{
+				if (nexttempchar_ == "f")
+				{
+					tempstring_ = tempstring_ + u8"ッ";
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_;
+			nexttempchar_ = "f";
+		}
+		break;
+	case SDLK_g:
+		if (std::string("g").find(nexttempchar_) != std::string::npos || nexttempchar_ == "")
+		{
+			if (nexttempchar_ == "")
+			{
+				nexttempchar_ = "g";
+			}
+			else
+			{
+				if (nexttempchar_ == "g")
+				{
+					tempstring_ = tempstring_ + u8"ッ";
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_;
+			nexttempchar_ = "g";
+		}
+		break;
+	case SDLK_h:
+		if (std::string("csh").find(nexttempchar_) != std::string::npos || nexttempchar_ == "")
+		{
+			if (nexttempchar_ == "")
+			{
+				nexttempchar_ = "h";
+			}
+			else
+			{
+				if (nexttempchar_ == "s")
+				{
+					nexttempchar_ = "sh";
+				}
+				else
+				{
+					if (nexttempchar_ == "c")
+					{
+						nexttempchar_ = "ch";
+					}
+					else
+					{
+						if (nexttempchar_ == "h" && nexttempchar_ != "sh" && nexttempchar_ != "ch")
+						{
+							tempstring_ = tempstring_ + u8"ッ";
+						}
+					}
+				}
+			}
+		}
+		break;
+	case SDLK_i:
+		if ((std::string("sh ch b d g j k m p r t w z").find(nexttempchar_) != std::string::npos || std::string(u8"ンy").find(nexttempchar_) != std::string::npos) && nexttempchar_ != "")
+		{
+			if (nexttempchar_ == "sh")
+			{
+				tempstring_ = tempstring_ + u8"シ";
+				nexttempchar_ = "";
+			}
+			else
+			{
+				if (nexttempchar_ == "h")
+				{
+					tempstring_ = tempstring_ + u8"ヒ";
+					nexttempchar_ = "";
+				}
+				else
+				{
+					if (nexttempchar_ == "b")
+					{
+						tempstring_ = tempstring_ + u8"ビ";
+						nexttempchar_ = "";
+					}
+					else
+					{
+						if (nexttempchar_ == "d")
+						{
+							tempstring_ = tempstring_ + u8"ヂ";
+							nexttempchar_ = "";
+						}
+						else
+						{
+							if (nexttempchar_ == "g")
+							{
+								tempstring_ = tempstring_ + u8"ギ";
+								nexttempchar_ = "";
+							}
+							else
+							{
+								if (nexttempchar_ == "k")
+								{
+									tempstring_ = tempstring_ + u8"キ";
+									nexttempchar_ = "";
+								}
+								else
+								{
+									if (nexttempchar_ == "m")
+									{
+										tempstring_ = tempstring_ + u8"ミ";
+										nexttempchar_ = "";
+									}
+									else
+									{
+										if (nexttempchar_ == "p")
+										{
+											tempstring_ = tempstring_ + u8"ピ";
+											nexttempchar_ = "";
+										}
+										else
+										{
+											if (nexttempchar_ == "r")
+											{
+												tempstring_ = tempstring_ + u8"リ";
+												nexttempchar_ = "";
+											}
+											else
+											{
+												if (nexttempchar_ == "t")
+												{
+													tempstring_ = tempstring_ + u8"チ";
+													nexttempchar_ = "";
+												}
+												else
+												{
+													if (nexttempchar_ == "w")
+													{
+														tempstring_ = tempstring_ + u8"ヰ";
+														nexttempchar_ = "";
+													}
+													else
+													{
+														if (nexttempchar_ == "z")
+														{
+															tempstring_ = tempstring_ + u8"ジ";
+															nexttempchar_ = "";
+														}
+														else
+														{
+															if (nexttempchar_ == u8"ン")
+															{
+																tempstring_ = tempstring_ + u8"ニ";
+																nexttempchar_ = "";
+															}
+															else
+															{
+																if (nexttempchar_ == "ch")
+																{
+																	tempstring_ = tempstring_ + u8"チ";
+																	nexttempchar_ = "";
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_ + u8"イ";
+			nexttempchar_ = "";
+		}
+		break;
+	case SDLK_j:
+		if (std::string("j").find(nexttempchar_) != std::string::npos || nexttempchar_ == "")
+		{
+			if (nexttempchar_ == "")
+			{
+				nexttempchar_ = "j";
+			}
+			else
+			{
+				if (nexttempchar_ == "j")
+				{
+					tempstring_ = tempstring_ + u8"ッ";
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_;
+			nexttempchar_ = "j";
+		}
+		break;
+	case SDLK_k:
+		if (std::string("k").find(nexttempchar_) != std::string::npos || nexttempchar_ == "")
+		{
+			if (nexttempchar_ == "")
+			{
+				nexttempchar_ = "k";
+			}
+			else
+			{
+				if (nexttempchar_ == "k")
+				{
+					tempstring_ = tempstring_ + u8"ッ";
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_;
+			nexttempchar_ = "k";
+		}
+		break;
+	case SDLK_m:
+		if (std::string("m").find(nexttempchar_) != std::string::npos || nexttempchar_ == "")
+		{
+			if (nexttempchar_ == "")
+			{
+				nexttempchar_ = "m";
+			}
+			else
+			{
+				if (nexttempchar_ == "m")
+				{
+					tempstring_ = tempstring_ + u8"ッ";
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_;
+			nexttempchar_ = "m";
+		}
+		break;
+	case SDLK_n:
+		if (std::string(u8"ン").find(nexttempchar_) != std::string::npos || nexttempchar_ == "")
+		{
+			if (nexttempchar_ == "")
+			{
+				nexttempchar_ = u8"ン";
+			}
+			else
+			{
+				if (nexttempchar_ == u8"ン")
+				{
+					tempstring_ = tempstring_ + u8"ッ";
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_;
+			nexttempchar_ = u8"ン";
+		}
+		break;
+	case SDLK_o:
+		if ((std::string("sh ch hy by d gy j ky my py ry t w z").find(nexttempchar_) != std::string::npos || std::string(u8"ンy").find(nexttempchar_) != std::string::npos) && nexttempchar_ != "")
+		{
+			if (nexttempchar_ == "sh")
+			{
+				tempstring_ = tempstring_ + u8"ショ";
+				nexttempchar_ = "";
+			}
+			else
+			{
+				if (nexttempchar_ == "ch")
+				{
+					tempstring_ = tempstring_ + u8"チョ";
+					nexttempchar_ = "";
+				}
+				else
+				{
+					if (nexttempchar_ == "s")
+					{
+						tempstring_ = tempstring_ + u8"ソ";
+						nexttempchar_ = "";
+					}
+					else
+					{
+						if (nexttempchar_ == "h")
+						{
+							tempstring_ = tempstring_ + u8"ホ";
+							nexttempchar_ = "";
+						}
+						else
+						{
+							if (nexttempchar_ == "b")
+							{
+								tempstring_ = tempstring_ + u8"ボ";
+								nexttempchar_ = "";
+							}
+							else
+							{
+								if (nexttempchar_ == "d")
+								{
+									tempstring_ = tempstring_ + u8"ド";
+									nexttempchar_ = "";
+								}
+								else
+								{
+									if (nexttempchar_ == "g")
+									{
+										tempstring_ = tempstring_ + u8"ゴ";
+										nexttempchar_ = "";
+									}
+									else
+									{
+										if (nexttempchar_ == "j")
+										{
+											tempstring_ = tempstring_ + u8"ジョ";
+											nexttempchar_ = "";
+										}
+										else
+										{
+											if (nexttempchar_ == "k")
+											{
+												tempstring_ = tempstring_ + u8"コ";
+												nexttempchar_ = "";
+											}
+											else
+											{
+												if (nexttempchar_ == "m")
+												{
+													tempstring_ = tempstring_ + u8"モ";
+													nexttempchar_ = "";
+												}
+												else
+												{
+													if (nexttempchar_ == "p")
+													{
+														tempstring_ = tempstring_ + u8"ポ";
+														nexttempchar_ = "";
+													}
+													else
+													{
+														if (nexttempchar_ == "r")
+														{
+															tempstring_ = tempstring_ + u8"ロ";
+															nexttempchar_ = "";
+														}
+														else
+														{
+															if (nexttempchar_ == "t")
+															{
+																tempstring_ = tempstring_ + u8"ト";
+																nexttempchar_ = "";
+															}
+															else
+															{
+																if (nexttempchar_ == "w")
+																{
+																	tempstring_ = tempstring_ + u8"ヲ";
+																	nexttempchar_ = "";
+																}
+																else
+																{
+																	if (nexttempchar_ == "y")
+																	{
+																		tempstring_ = tempstring_ + u8"ヨ";
+																		nexttempchar_ = "";
+																	}
+																	else
+																	{
+																		if (nexttempchar_ == "z")
+																		{
+																			tempstring_ = tempstring_ + u8"ゾ";
+																			nexttempchar_ = "";
+																		}
+																		else
+																		{
+																			if (nexttempchar_ == u8"ン")
+																			{
+																				tempstring_ = tempstring_ + u8"ノ";
+																				nexttempchar_ = "";
+																			}
+																			else
+																			{
+																				if (nexttempchar_ == "hy")
+																				{
+																					tempstring_ = tempstring_ + u8"ヒョ";
+																					nexttempchar_ = "";
+																				}
+																				else
+																				{
+																					if (nexttempchar_ == "ky")
+																					{
+																						tempstring_ = tempstring_ + u8"キョ";
+																						nexttempchar_ = "";
+																					}
+																					else
+																					{
+																						if (nexttempchar_ == "my")
+																						{
+																							tempstring_ = tempstring_ + u8"ミョ";
+																							nexttempchar_ = "";
+																						}
+																						else
+																						{
+																							if (nexttempchar_ == "ry")
+																							{
+																								tempstring_ = tempstring_ + u8"リョ";
+																								nexttempchar_ = "";
+																							}
+																							else
+																							{
+																								if (nexttempchar_ == u8"ンy")
+																								{
+																									tempstring_ = tempstring_ + u8"ニョ";
+																									nexttempchar_ = "";
+																								}
+																								else
+																								{
+																									if (nexttempchar_ == "gy")
+																									{
+																										tempstring_ = tempstring_ + u8"ギョ";
+																										nexttempchar_ = "";
+																									}
+																									else
+																									{
+																										if (nexttempchar_ == "by")
+																										{
+																											tempstring_ = tempstring_ + u8"ビョ";
+																											nexttempchar_ = "";
+																										}
+																										else
+																										{
+																											if (nexttempchar_ == "py")
+																											{
+																												tempstring_ = tempstring_ + u8"ピョ";
+																												nexttempchar_ = "";
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_ + u8"オ";
+			nexttempchar_ = "";
+		}
+		break;
+	case SDLK_p:
+		if (std::string("p").find(nexttempchar_) != std::string::npos || nexttempchar_ == "")
+		{
+			if (nexttempchar_ == "")
+			{
+				nexttempchar_ = "p";
+			}
+			else
+			{
+				if (nexttempchar_ == "p")
+				{
+					tempstring_ = tempstring_ + u8"ッ";
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_;
+			nexttempchar_ = "p";
+		}
+		break;
+	case SDLK_r:
+		if (std::string("r").find(nexttempchar_) != std::string::npos || nexttempchar_ == "")
+		{
+			if (nexttempchar_ == "")
+			{
+				nexttempchar_ = "r";
+			}
+			else
+			{
+				if (nexttempchar_ == "r")
+				{
+					tempstring_ = tempstring_ + u8"ッ";
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_;
+			nexttempchar_ = "r";
+		}
+		break;
+	case SDLK_s:
+		if (std::string("ts").find(nexttempchar_) != std::string::npos || nexttempchar_ == "")
+		{
+			if (nexttempchar_ == "")
+			{
+				nexttempchar_ = "s";
+			}
+			else
+			{
+				if (nexttempchar_ == "s" && nexttempchar_ != "ts")
+				{
+					tempstring_ = tempstring_ + u8"ッ";
+				}
+				else
+				{
+					if (nexttempchar_ == "t")
+					{
+						nexttempchar_ = "ts";
+					}
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_;
+			nexttempchar_ = "s";
+		}
+		break;
+	case SDLK_t:
+		if (std::string("t").find(nexttempchar_) != std::string::npos || nexttempchar_ == "")
+		{
+			if (nexttempchar_ == "")
+			{
+				nexttempchar_ = "t";
+			}
+			else
+			{
+				if (nexttempchar_ == "t")
+				{
+					tempstring_ = tempstring_ + u8"ッ";
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_;
+			nexttempchar_ = "t";
+		}
+		break;
+	case SDLK_u:
+		if ((std::string("sh ch hy by d gy j ky my py ry ts w z f").find(nexttempchar_) != std::string::npos || std::string(u8"ンy").find(nexttempchar_) != std::string::npos) && nexttempchar_ != "")
+		{
+			if (nexttempchar_ == "sh")
+			{
+				tempstring_ = tempstring_ + u8"シュ";
+				nexttempchar_ = "";
+			}
+			else
+			{
+				if (nexttempchar_ == "ch")
+				{
+					tempstring_ = tempstring_ + u8"チュ";
+					nexttempchar_ = "";
+				}
+				else
+				{
+					if (nexttempchar_ == "s")
+					{
+						tempstring_ = tempstring_ + u8"ス";
+						nexttempchar_ = "";
+					}
+					else
+					{
+						if (nexttempchar_ == "f")
+						{
+							tempstring_ = tempstring_ + u8"フ";
+							nexttempchar_ = "";
+						}
+						else
+						{
+							if (nexttempchar_ == "b")
+							{
+								tempstring_ = tempstring_ + u8"ブ";
+								nexttempchar_ = "";
+							}
+							else
+							{
+								if (nexttempchar_ == "d")
+								{
+									tempstring_ = tempstring_ + u8"ヅ";
+									nexttempchar_ = "";
+								}
+								else
+								{
+									if (nexttempchar_ == "g")
+									{
+										tempstring_ = tempstring_ + u8"グ";
+										nexttempchar_ = "";
+									}
+									else
+									{
+										if (nexttempchar_ == "j")
+										{
+											tempstring_ = tempstring_ + u8"ジュ";
+											nexttempchar_ = "";
+										}
+										else
+										{
+											if (nexttempchar_ == "k")
+											{
+												tempstring_ = tempstring_ + u8"ク";
+												nexttempchar_ = "";
+											}
+											else
+											{
+												if (nexttempchar_ == "m")
+												{
+													tempstring_ = tempstring_ + u8"ム";
+													nexttempchar_ = "";
+												}
+												else
+												{
+													if (nexttempchar_ == "p")
+													{
+														tempstring_ = tempstring_ + u8"プ";
+														nexttempchar_ = "";
+													}
+													else
+													{
+														if (nexttempchar_ == "r")
+														{
+															tempstring_ = tempstring_ + u8"ル";
+															nexttempchar_ = "";
+														}
+														else
+														{
+															if (nexttempchar_ == "ts")
+															{
+																tempstring_ = tempstring_ + u8"ツ";
+																nexttempchar_ = "";
+															}
+															else
+															{
+																if (nexttempchar_ == "y")
+																{
+																	tempstring_ = tempstring_ + u8"ユ";
+																	nexttempchar_ = "";
+																}
+																else
+																{
+																	if (nexttempchar_ == "z")
+																	{
+																		tempstring_ = tempstring_ + u8"ズ";
+																		nexttempchar_ = "";
+																	}
+																	else
+																	{
+																		if (nexttempchar_ == u8"ン")
+																		{
+																			tempstring_ = tempstring_ + u8"ヌ";
+																			nexttempchar_ = "";
+																		}
+																		else
+																		{
+																			if (nexttempchar_ == "hy")
+																			{
+																				tempstring_ = tempstring_ + u8"ヒュ";
+																				nexttempchar_ = "";
+																			}
+																			else
+																			{
+																				if (nexttempchar_ == "ky")
+																				{
+																					tempstring_ = tempstring_ + u8"キュ";
+																					nexttempchar_ = "";
+																				}
+																				else
+																				{
+																					if (nexttempchar_ == "my")
+																					{
+																						tempstring_ = tempstring_ + u8"ミュ";
+																						nexttempchar_ = "";
+																					}
+																					else
+																					{
+																						if (nexttempchar_ == "ry")
+																						{
+																							tempstring_ = tempstring_ + u8"リュ";
+																							nexttempchar_ = "";
+																						}
+																						else
+																						{
+																							if (nexttempchar_ == u8"ンy")
+																							{
+																								tempstring_ = tempstring_ + u8"ニュ";
+																								nexttempchar_ = "";
+																							}
+																							else
+																							{
+																								if (nexttempchar_ == "gy")
+																								{
+																									tempstring_ = tempstring_ + u8"ギュ";
+																									nexttempchar_ = "";
+																								}
+																								else
+																								{
+																									if (nexttempchar_ == "by")
+																									{
+																										tempstring_ = tempstring_ + u8"ビュ";
+																										nexttempchar_ = "";
+																									}
+																									else
+																									{
+																										if (nexttempchar_ == "py")
+																										{
+																											tempstring_ = tempstring_ + u8"ピュ";
+																											nexttempchar_ = "";
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_ + u8"ウ";
+			nexttempchar_ = "";
+		}
+		break;
+	case SDLK_w:
+		if (std::string("w").find(nexttempchar_) != std::string::npos || nexttempchar_ == "")
+		{
+			if (nexttempchar_ == "")
+			{
+				nexttempchar_ = "w";
+			}
+			else
+			{
+				if (nexttempchar_ == "w")
+				{
+					tempstring_ = tempstring_ + u8"ッ";
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_;
+			nexttempchar_ = "w";
+		}
+		break;
+	case SDLK_y:
+		if (std::string("k h m r g b p").find(nexttempchar_) != std::string::npos || std::string(u8"ン").find(nexttempchar_) != std::string::npos || nexttempchar_ == "")
+		{
+			if (nexttempchar_ == "")
+			{
+				nexttempchar_ = "y";
+			}
+			else
+			{
+				if (nexttempchar_ == "k")
+				{
+					nexttempchar_ = "ky";
+				}
+				else
+				{
+					if (nexttempchar_ == u8"ン")
+					{
+						nexttempchar_ = u8"ンy";
+					}
+					else
+					{
+						if (nexttempchar_ == "h")
+						{
+							nexttempchar_ = "hy";
+						}
+						else
+						{
+							if (nexttempchar_ == "m")
+							{
+								nexttempchar_ = "my";
+							}
+							else
+							{
+								if (nexttempchar_ == "m")
+								{
+									nexttempchar_ = "my";
+								}
+								else
+								{
+									if (nexttempchar_ == "g")
+									{
+										nexttempchar_ = "gy";
+									}
+									else
+									{
+										if (nexttempchar_ == "b")
+										{
+											nexttempchar_ = "by";
+										}
+										else
+										{
+											if (nexttempchar_ == "p")
+											{
+												nexttempchar_ = "py";
+											}
+											else
+											{
+												if (nexttempchar_ == "r")
+												{
+													nexttempchar_ = "ry";
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_;
+			nexttempchar_ = "y";
+		}
+		break;
+	case SDLK_z:
+		if (std::string("z").find(nexttempchar_) != std::string::npos || nexttempchar_ == "")
+		{
+			if (nexttempchar_ == "")
+			{
+				nexttempchar_ = "z";
+			}
+			else
+			{
+				if (nexttempchar_ == "z")
+				{
+					tempstring_ = tempstring_ + u8"ッ";
+				}
+			}
+		}
+		else
+		{
+			tempstring_ = tempstring_ + nexttempchar_;
+			nexttempchar_ = "z";
+		}
+		break;
+	case SDLK_MINUS:
+		tempstring_ = tempstring_ + nexttempchar_ + u8"ー";
+		nexttempchar_ = "";
+		break;
+	case SDLK_BACKSPACE:
+		if (nexttempchar_ != "")
+		{
+			nexttempchar_.pop_back();
 		}
 		else
 		{
