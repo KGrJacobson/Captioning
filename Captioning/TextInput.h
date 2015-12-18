@@ -19,7 +19,6 @@ public:
 	int GetWidth();
 	int GetHeight();
 	std::string GetCurrentText();
-	std::wstring GetCurrentUnicodeText();
 	bool GetFinal();
 	void DestroyTexture();
 	int TextWidth(std::string text);
@@ -28,7 +27,6 @@ private:
 	SDL_Texture *texture_;
 	TTF_Font *font_;
 	std::string currenttext_;
-	std::wstring currentunicodetext_;
 	int imagewidth_;
 	int imageheight_;
 	bool isfinal_;

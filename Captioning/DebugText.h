@@ -12,7 +12,6 @@ class DebugText
 {
 public:
 	static void CreateMessage(std::string debugmessage);
-	static void CreateMessage(std::wstring debugmessage);
 	static void ClearMessages();
 	static void PostMessages();
 };

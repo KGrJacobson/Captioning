@@ -70,7 +70,21 @@ void ScreenHandler::HandleEvents(const SDL_Event &e)
 		keyboardentry_.KeyUpInput(e);
 
 	if (e.type == SDL_KEYDOWN)
-		keyboardentry_.KeyDownInput(e);
+	{
+		switch (keyboardentry_.KeyDownInput(e))
+		{
+		case (KeyboardEntry::DELETE_CAPTIONS) :
+			if (demoscreen_ != NULL)
+				demoscreen_->DeleteAllCaptions();
+			break;
+		case (KeyboardEntry::SET_TEXT_ENGLISH) :
+			DebugText::CreateMessage("English Entry");
+			break;
+		case (KeyboardEntry::SET_TEXT_JAPANESE) :
+			DebugText::CreateMessage("Japanese Entry");
+			break;
+		}
+	}
 }
 
 void ScreenHandler::PostEventMouseSetup()
