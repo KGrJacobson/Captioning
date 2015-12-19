@@ -8,7 +8,7 @@
 #include "CaptionContainer.h"
 #include "DebugText.h"
 #include "DemoScreen.h"
-#include "DemoScreenTab.h"
+#include "UITab.h"
 #include "MouseHandler.h"
 #include "SDLUtility.h"
 #include "UIElements.h"
@@ -240,4 +240,9 @@ void DemoScreen::ClearAllCaptionText()
 void DemoScreen::DeleteAllCaptions()
 {
 	captionlist_.clear();
+}
+
+ContextMenu *DemoScreen::GetCurrentContextMenu()
+{
+	return currentcontextmenu_;
 }

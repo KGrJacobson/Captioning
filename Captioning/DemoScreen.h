@@ -7,6 +7,7 @@
 #include "SDL.h"
 
 #include "CaptionContainer.h"
+#include "ContextMenu.h"
 #include "DebugText.h"
 #include "DemoScreenTab.h"
 #include "MouseHandler.h"
@@ -33,6 +34,7 @@ public:
 	void CreateCaption(std::string text, double x, double y, double w, int containerid);
 	void ClearAllCaptionText();
 	void DeleteAllCaptions();
+	ContextMenu *GetCurrentContextMenu();
 private: 
 	int basefontsize_;
 	MouseHandler mousefunction_;
@@ -42,6 +44,7 @@ private:
 	CaptionContainer *selectedcaption_;
 	DemoScreenTab *currenttab_;
 	std::list<CaptionContainer*> captionlist_;
+	ContextMenu *currentcontextmenu_;
 };
 
 #endif //DEMO_SCREEN

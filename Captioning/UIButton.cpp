@@ -62,12 +62,10 @@ bool UIButton::IsTextCentered()
 	return centertext_;
 }
 
-void UIButton::SetButtonArea(SDL_Rect destrect)
+void UIButton::SetButtonArea(SDL_Rect newarea)
 {
-	if (donotresetarea_ != true)
-	{
-		absolutecoordinatesrect_ = SDLUtility::GetAbsoluteRect(relativecoordinatesrect_, destrect);
-	}
+	absolutecoordinatesrect_ = newarea;
+	mousefunction_.SetMouseArea(newarea);
 }
 
 void UIButton::SetButtonCoordinates(int x, int y)

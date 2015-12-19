@@ -40,7 +40,7 @@ ScreenHandler::ScreenHandler()
 
 	cmenu_.AddListItem(new UIButton(SDL_Rect{ 0, 0, ContextMenu::STANDARD_CONTEXT_MENU_WIDTH, ContextMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Violet Layout", true));
 	cmenu_.AddListItem(new UIButton(SDL_Rect{ 0, 0, ContextMenu::STANDARD_CONTEXT_MENU_WIDTH, ContextMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Yellow-Red Layout", true));
-	cmenu_.SetXY(100, 100);
+	cmenu_.SetXY(0, 0);
 }
 
 ScreenHandler::~ScreenHandler()

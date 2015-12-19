@@ -29,6 +29,7 @@ int ContextMenu::GetButtonPress()
 void ContextMenu::ResetMenu()
 {
 	buttonpressed_ = -1;
+	menuarea_ = SDL_Rect{ 0, 0, 0, 0 };
 }
 
 void ContextMenu::AddListItem(UIButton *newitem)
