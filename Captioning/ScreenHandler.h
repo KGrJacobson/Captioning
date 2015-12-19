@@ -3,9 +3,11 @@
 
 #include <list>
 #include <string>
+#include <vector>
 
 #include "SDL.h"
 
+#include "ContextMenu.h"
 #include "DebugText.h"
 #include "DemoScreen.h"
 #include "Image.h"
@@ -27,17 +29,22 @@ public:
 	void ShowScreens();
 	int GetCurrentMouseState(int mouseevent, bool isdown);
 	void SetEntryTexture(TextInput *textinput);
+	void SetContextMenu(ContextMenu *contextmenu);
 private:
 	std::list<Subscreen*> screens_;
 	DemoScreen *demoscreen_;
 	InputScreen *inputscreen_;
 	KeyboardEntry keyboardentry_;
+	ContextMenu *currentcontextmenu_;
 	MouseHandler *mousetoevaluate_;
 	MouseHandler *previousmousevent_;
 	MouseHandler *currentmouseevent_;
+	MouseHandler mousefunction_;
 	int mouseevent_;
 	bool ismousedown_;
-	Image backgroundimage_;
+	std::vector<Image*> backgroundimages_;
+	int backgroundimage_;
+	ContextMenu cmenu_;
 };
 
 #endif //SCREEN_HANDLER

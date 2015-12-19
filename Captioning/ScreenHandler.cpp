@@ -3,6 +3,7 @@
 
 #include "SDL.h"
 
+#include "ContextMenu.h"
 #include "DebugText.h"
 #include "DemoScreen.h"
 #include "InputScreen.h"
@@ -28,7 +29,18 @@ ScreenHandler::ScreenHandler()
 	screens_.push_back(inputscreen_);
 	keyboardentry_.SetTexture(inputscreen_->GetTexture());
 
-	backgroundimage_.CreateTextureFromImage("blossom.png");
+	currentcontextmenu_ = NULL;
+	mousefunction_.Init(SDL_Rect{ 0, 0, SDLUtility::GetScreenWidth(), SDLUtility::GetScreenHeight() });
+
+	backgroundimages_.push_back(new Image);
+	backgroundimages_[0]->CreateTextureFromImage("blossom.png");
+	backgroundimages_.push_back(new Image);
+	backgroundimages_[1]->CreateTextureFromImage("orange.png");
+	backgroundimage_ = 0;
+
+	cmenu_.AddListItem(new UIButton(SDL_Rect{ 0, 0, ContextMenu::STANDARD_CONTEXT_MENU_WIDTH, ContextMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Violet Layout", true));
+	cmenu_.AddListItem(new UIButton(SDL_Rect{ 0, 0, ContextMenu::STANDARD_CONTEXT_MENU_WIDTH, ContextMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Yellow-Red Layout", true));
+	cmenu_.SetXY(100, 100);
 }
 
 ScreenHandler::~ScreenHandler()
@@ -58,6 +70,12 @@ void ScreenHandler::HandleEvents(const SDL_Event &e)
 	{
 		ismousedown_ = true;
 		mouseevent_ = e.button.button;
+
+		if (currentcontextmenu_ != NULL)
+		{
+			if (currentcontextmenu_->CheckMouseHandlers() == NULL)
+				SetContextMenu(NULL);
+		}
 	}
 
 	if (e.type == SDL_MOUSEBUTTONUP)
@@ -89,7 +107,7 @@ void ScreenHandler::HandleEvents(const SDL_Event &e)
 
 void ScreenHandler::PostEventMouseSetup()
 {
-		currentmouseevent_ = NULL;
+		currentmouseevent_ = &mousefunction_;
 
 		for (std::list<Subscreen*>::iterator it = screens_.begin(); it != screens_.end(); it++)
 		{
@@ -99,6 +117,12 @@ void ScreenHandler::PostEventMouseSetup()
 			{
 				currentmouseevent_ = mousetoevaluate_;
 			}
+		}
+
+		mousetoevaluate_ = cmenu_.CheckMouseHandlers();
+		if (mousetoevaluate_ != NULL)
+		{
+			currentmouseevent_ = mousetoevaluate_;
 		}
 
 		if (previousmousevent_ != NULL && previousmousevent_ != currentmouseevent_)
@@ -117,7 +141,27 @@ void ScreenHandler::PostEventMouseSetup()
 
 void ScreenHandler::ShowScreens()
 {
-	SDLUtility::PostImage(&backgroundimage_, 0,	0, SDL_Rect{ 0, 0, backgroundimage_.GetWidth(), backgroundimage_.GetHeight() });
+	if (mousefunction_.GetEvent() == RIGHT_BUTTON_UP)
+	{
+		int x, y;
+		SDL_GetMouseState(&x, &y);
+		currentcontextmenu_ = &cmenu_;
+		currentcontextmenu_->SetXY(x, y);
+	}
+
+	switch (cmenu_.GetButtonPress())
+	{
+	case UIElements::VIOLET_LAYOUT:
+		UIElements::SetColorLayout(UIElements::VIOLET_LAYOUT);
+		backgroundimage_ = UIElements::VIOLET_LAYOUT;
+		break;
+	case UIElements::YELLOW_RED_LAYOUT:
+		UIElements::SetColorLayout(UIElements::YELLOW_RED_LAYOUT);
+		backgroundimage_ = UIElements::YELLOW_RED_LAYOUT;
+		break;
+	}
+
+	SDLUtility::PostImage(backgroundimages_[backgroundimage_], 0,	0, SDL_Rect{ 0, 0, backgroundimages_[backgroundimage_]->GetWidth(), backgroundimages_[backgroundimage_]->GetHeight() });
 
 	if (inputscreen_ != NULL)
 	{
@@ -153,6 +197,14 @@ void ScreenHandler::ShowScreens()
 	}
 
 	demoscreen_->Show();
+
+	if (currentcontextmenu_ != NULL)
+	{
+		if (currentcontextmenu_->GetButtonPress() > -1)
+			SetContextMenu(NULL);
+		else
+			currentcontextmenu_->ShowMenu();
+	}
 }
 
 int ScreenHandler::GetCurrentMouseState(int mouseevent_, bool isdown)
@@ -191,4 +243,12 @@ int ScreenHandler::GetCurrentMouseState(int mouseevent_, bool isdown)
 void ScreenHandler::SetEntryTexture(TextInput *textinput)
 {
 	keyboardentry_.SetTexture(textinput);
+}
+
+void ScreenHandler::SetContextMenu(ContextMenu *contextmenu)
+{
+	if (currentcontextmenu_ != NULL)
+		currentcontextmenu_->ResetMenu();
+
+	currentcontextmenu_ = contextmenu;
 }

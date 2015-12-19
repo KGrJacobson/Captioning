@@ -50,10 +50,11 @@ void CaptionContainer::SetText(std::string newtext, int destinationw)
 
 void CaptionContainer::SetXY(int x, int y)
 {
-	absolutecoordinatesrect_.x = x;
-	absolutecoordinatesrect_.y = y;
+	absolutecoordinatesrect_.x = x - 30;
+	absolutecoordinatesrect_.y = y - 10;
 
 	containermouseevent_.SetMouseArea(absolutecoordinatesrect_);
+
 	deletebutton_->SetButtonCoordinates(absolutecoordinatesrect_.x, absolutecoordinatesrect_.y);
 	movebutton_->SetButtonCoordinates(absolutecoordinatesrect_.x + 20, absolutecoordinatesrect_.y);
 }

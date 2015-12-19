@@ -75,7 +75,7 @@ MouseHandler *DemoScreen::CheckMouseHandlers(int mouseevent)
 		}
 
 		MouseHandler *currentevaluation = NULL;
-		for (std::list<CaptionContainer*>::iterator it = captionlist_.begin(); it != captionlist_.end(); it++)
+		for (std::list<CaptionContainer*>::iterator it = captionlist_.begin(); it != captionlist_.end(); ++it)
 		{
 			currentevaluation = (*it)->CheckMouseEvents(mouseevent);
 

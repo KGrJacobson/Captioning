@@ -74,4 +74,7 @@ void UIButton::SetButtonCoordinates(int x, int y)
 {
 	absolutecoordinatesrect_.x = x;
 	absolutecoordinatesrect_.y = y;
+
+	SDL_Rect mouserect = mousefunction_.GetMouseArea();
+	mousefunction_.SetMouseArea(SDL_Rect{ x, y, mouserect.w, mouserect.h });
 }

@@ -18,12 +18,49 @@ class UIElements
 {
 public:
 	static const int STANDARD_UI_FONT_SIZE = 10;
+	static const int STANDARD_TAB_WIDTH = 50;
+	static const int STANDARD_TAB_HEIGHT = 20;
 
-	//From the Violet Series of traditional Japanese colors
 	enum Standard_Colors
 	{
 		BLACK,						//23,20,18
 		WHITE,						//235,246,247
+
+		//The Yellow-Red Series of traditional Japanese colors
+		WALNUT_DYED,
+		SUMAC_DYED,
+		RICH_GARDENIA,
+		RED_OCHRE_COLOR,
+		POLISHED_BROWN,
+		STYLISH_PERSIMMON,
+		DAYLILY_COLORED,
+		RED_BRONZE,
+		LEGAL_DYE,
+		AMBER,
+		DECAYING_LEAVES,
+		CLOVE_DYED,
+		BRUSHWOOD_DYED,
+		WEATHERED_BAMBOO,
+		OCHRE,
+		YELLOW_TEA,
+		CATTAIL_COLOR,
+		SCORCHED_BROWN,
+		WASHEDOUT_PERSIMMON,
+		SAWTOOTH_OAK,
+		GREEN_TEA,
+		PALE_PERSIMMON,
+		PLUM_DYED,
+		CLOVE_BROWN,
+		LOQUAT_BROWN,
+		PALE_INCENSE,
+		GOLDEN_BROWN,
+		FOX,
+		ALOEWOOD_COLOR,
+		WHITE_TEA_COLOR,
+		GOLDEN_GREY_BAMBOO,
+		BROWN_OF_FLATTERY,
+
+		//The Violet Series of traditional Japanese colors
 		WISTERIA_PURPLE,			//135,95,154
 		TATARIAN_ASTER,				//151,110,154
 		BLUE_VIOLET,				//43,32,40
@@ -78,17 +115,20 @@ public:
 		TINY_BUTTON_BACKGROUND_COLOR,
 		TINY_BUTTON_UNPRESSED_COLOR,
 		TINY_BUTTON_PRESSED_COLOR,
+		CONTEXT_MENU_ELEMENT_PRESSED_COLOR,
 		TAB_BACKGROUND_COLOR,
 		TAB_UNPRESSED_COLOR,
 		TAB_PRESSED_COLOR,
 		CAPTION_CONTAINER_COLOR,
 		CAPTION_CONTAINER_SELECTED_COLOR,
 		CAPTION_CONTAINER_DRAWN_CAPTION_COLOR,
-		TEXT_INPUT_BOX
+		TEXT_INPUT_BOX,
+		CONTEXT_MENU_BACKGROUND_COLOR
 	};
 
 	enum UI_Color_Layouts {
-		DEFAULT_COLOR_LAYOUT
+		VIOLET_LAYOUT,
+		YELLOW_RED_LAYOUT
 	};
 
 	static void Init();
@@ -99,6 +139,7 @@ public:
 	static SDL_Color InvertColor(SDL_Color color);
 	static void ShowUIButton(UIButton *button);
 	static void ShowUITinyButton(UIButton *button);
+	static void ShowUIContextMenu(UIButton *button);
 };
 
 #endif //UI_Elements

@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CaptionContainer.cpp" />
+    <ClCompile Include="ContextMenu.cpp" />
     <ClCompile Include="DebugText.cpp" />
     <ClCompile Include="DemoScreen.cpp" />
     <ClCompile Include="Image.cpp" />
@@ -139,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CaptionContainer.h" />
+    <ClInclude Include="ContextMenu.h" />
     <ClInclude Include="DebugText.h" />
     <ClInclude Include="DemoScreen.h" />
     <ClInclude Include="DemoScreenTab.h" />
