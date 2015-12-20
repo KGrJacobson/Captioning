@@ -34,6 +34,15 @@ DemoScreen::DemoScreen(int setfontize)
 				ASPECT_RATIO_Y * MAGNIFICATION_MULTIPLIER };
 
 	mousefunction_.Init(demoarea_);
+
+	//tablist_.push_back(new UITab(
+	//	SDL_Rect{ screenarea_.x, screenarea_.y, UIElements::STANDARD_TAB_WIDTH, UIElements::STANDARD_TAB_HEIGHT }, 
+	//	"Default", 
+	//	0,
+	//	CreateNewTabContextMenu
+	//	));
+	currenttab_ = 0;
+	captionlist_.push_back(new std::list<CaptionContainer*>);
 }
 
 DemoScreen::~DemoScreen()
@@ -41,6 +50,7 @@ DemoScreen::~DemoScreen()
 	DeleteAllCaptions();
 	delete drawncaptionarea_;
 	drawncaptionarea_ = NULL;
+	captionlist_.clear();
 }
 
 void DemoScreen::DrawNewCaption()
@@ -75,7 +85,7 @@ MouseHandler *DemoScreen::CheckMouseHandlers(int mouseevent)
 		}
 
 		MouseHandler *currentevaluation = NULL;
-		for (std::list<CaptionContainer*>::iterator it = captionlist_.begin(); it != captionlist_.end(); ++it)
+		for (std::list<CaptionContainer*>::iterator it = captionlist_[currenttab_]->begin(); it != captionlist_[currenttab_]->end(); ++it)
 		{
 			currentevaluation = (*it)->CheckMouseEvents(mouseevent);
 
@@ -130,8 +140,8 @@ int DemoScreen::Show()
 				{
 					selectedcaption_->DeselectCaption();
 				}
-				captionlist_.back()->SelectCaption();
-				selectedcaption_ = captionlist_.back();
+				captionlist_[currenttab_]->back()->SelectCaption();
+				selectedcaption_ = captionlist_[currenttab_]->back();
 			}
 
 			delete drawncaptionarea_;
@@ -143,8 +153,8 @@ int DemoScreen::Show()
 	int captioncode = DEFAULT;
 	int mousex = -1;
 	int mousey = -1;
-	std::list<CaptionContainer*>::iterator it = captionlist_.begin(); 
-	while (it != captionlist_.end())
+	std::list<CaptionContainer*>::iterator it = captionlist_[currenttab_]->begin();
+	while (it != captionlist_[currenttab_]->end())
 	{
 		captioncode = (*it)->EvaluateCaption(true);
 
@@ -179,7 +189,7 @@ int DemoScreen::Show()
 				selectedcaption_ = NULL;
 			}
 
-			captionlist_.erase(it++);
+			captionlist_[currenttab_]->erase(it++);
 		}
 		else
 			++it;
@@ -197,7 +207,7 @@ bool DemoScreen::SetCaptionText(std::string text, int captionid)
 	}
 	else
 	{
-		for (std::list<CaptionContainer*>::iterator it = captionlist_.begin(); it != captionlist_.end(); it++)
+		for (std::list<CaptionContainer*>::iterator it = captionlist_[currenttab_]->begin(); it != captionlist_[currenttab_]->end(); it++)
 		{
 			if ((*it)->GetID() == captionid)
 			{
@@ -226,12 +236,12 @@ void DemoScreen::CreateCaption(std::string text, double x, double y, double w, i
 	CaptionContainer *newcontainer = new CaptionContainer;
 	newcontainer->Init(text, x, y, w, demoarea_, static_cast<int>(basefontsize_ * (static_cast<double>(demoarea_.w) / (ASPECT_RATIO_X * 100))), containerid);
 
-	captionlist_.push_back(newcontainer);
+	captionlist_[currenttab_]->push_back(newcontainer);
 }
 
 void DemoScreen::ClearAllCaptionText()
 {
-	for (std::list<CaptionContainer*>::iterator it = captionlist_.begin(); it != captionlist_.end(); it++)
+	for (std::list<CaptionContainer*>::iterator it = captionlist_[currenttab_]->begin(); it != captionlist_[currenttab_]->end(); it++)
 	{
 		(*it)->SetText("", demoarea_.w);
 	}
@@ -245,4 +255,12 @@ void DemoScreen::DeleteAllCaptions()
 ContextMenu *DemoScreen::GetCurrentContextMenu()
 {
 	return currentcontextmenu_;
+}
+
+ContextMenu *DemoScreen::CreateNewTabContextMenu()
+{
+	ContextMenu *newcontextmenu = new ContextMenu();
+	newcontextmenu->AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, ContextMenu::STANDARD_CONTEXT_MENU_WIDTH, ContextMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Rename", false));
+
+	return newcontextmenu;
 }

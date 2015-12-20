@@ -28,7 +28,7 @@ int ContextMenu::GetButtonPress()
 
 void ContextMenu::ResetMenu()
 {
-	buttonpressed_ = -1;
+	buttonpressed_ = NO_CONTEXT_MENU_BUTTONS_PRESSED;
 	menuarea_ = SDL_Rect{ 0, 0, 0, 0 };
 }
 

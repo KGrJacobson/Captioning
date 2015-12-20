@@ -18,31 +18,31 @@ void UIElements::Init()
 		SDL_Color{ 245, 127, 79, 255 },		//RICH_GARDENIA
 		SDL_Color{ 159, 82, 51, 255 },		//RED_OCHRE_COLOR
 		SDL_Color{ 152, 85, 56, 255 },		//POLISHED_BROWN
-		SDL_Color{ 255, 162, 107, 255 },		//STYLISH_PERSIMMON
+		SDL_Color{ 255, 162, 107, 255 },	//STYLISH_PERSIMMON
 		SDL_Color{ 255, 137, 54, 255 },		//DAYLILY_COLORED
 		SDL_Color{ 251, 129, 54, 255 },		//RED_BRONZE
-		SDL_Color{ 46, 33, 27, 255 },			//LEGAL_DYE
+		SDL_Color{ 46, 33, 27, 255 },		//LEGAL_DYE
 		SDL_Color{ 202, 105, 36, 255 },		//AMBER
 		SDL_Color{ 213, 120, 53, 255 },		//DECAYING_LEAVES
 		SDL_Color{ 169, 98, 50, 255 },		//CLOVE_DYED
 		SDL_Color{ 140, 89, 57, 255 },		//BRUSHWOOD_DYED
-		SDL_Color{ 89, 58, 39, 255 },			//WEATHERED_BAMBOO
+		SDL_Color{ 89, 58, 39, 255 },		//WEATHERED_BAMBOO
 		SDL_Color{ 190, 127, 81, 255 },		//OCHRE
 		SDL_Color{ 183, 112, 45, 255 },		//YELLOW_TEA
 		SDL_Color{ 182, 73, 37, 255 },		//CATTAIL_COLOR
-		SDL_Color{ 53, 31, 25, 255 },			//SCORCHED_BROWN
+		SDL_Color{ 53, 31, 25, 255 },		//SCORCHED_BROWN
 		SDL_Color{ 236, 130, 84, 255 },		//WASHEDOUT_PERSIMMON
-		SDL_Color{ 236, 149, 108, 255 },		//SAWTOOTH_OAK
+		SDL_Color{ 236, 149, 108, 255 },	//SAWTOOTH_OAK
 		SDL_Color{ 130, 75, 53, 255 },		//GREEN_TEA
-		SDL_Color{ 252, 164, 116, 255 },		//PALE_PERSIMMON
+		SDL_Color{ 252, 164, 116, 255 },	//PALE_PERSIMMON
 		SDL_Color{ 250, 146, 88, 255 },		//PLUM_DYED
 		SDL_Color{ 143, 88, 60, 255 },		//CLOVE_BROWN
 		SDL_Color{ 171, 97, 52, 255 },		//LOQUAT_BROWN
-		SDL_Color{ 255, 165, 101, 255 },		//PALE_INCENSE
+		SDL_Color{ 255, 165, 101, 255 },	//PALE_INCENSE
 		SDL_Color{ 198, 107, 39, 255 },		//GOLDEN_BROWN
 		SDL_Color{ 152, 86, 41, 255 },		//FOX
 		SDL_Color{ 106, 67, 45, 255 },		//ALOEWOOD_COLOR
-		SDL_Color{ 196, 142, 105, 255 },		//WHITE_TEA_COLOR
+		SDL_Color{ 196, 142, 105, 255 },	//WHITE_TEA_COLOR
 		SDL_Color{ 125, 78, 45, 255 },		//GOLDEN_GREY_BAMBOO
 		SDL_Color{ 107, 68, 35, 255 },		//BROWN_OF_FLATTERY
 		SDL_Color{ 135, 95, 154, 255 },		//WISTERIA_PURPLE
@@ -219,6 +219,25 @@ void UIElements::ShowUITinyButton(UIButton *button)
 	SDLUtility::PostText(button->GetText(),
 		innerrect.x + static_cast<int>((innerrect.w - button->GetText()->GetWidth()) * .5),
 		innerrect.y + static_cast<int>((innerrect.h - button->GetText()->GetHeight()) * .5)
+		);
+}
+
+void UIElements::ShowUITab(UIButton * button)
+{
+	SDL_Rect showrect = button->GetButtonArea();
+
+	if (button->GetMouseEvent() == LEFT_BUTTON_DOWN)
+	{
+		SDLUtility::CreateSquare(showrect, GetUIElementColor(TAB_PRESSED_COLOR, SOLID_COLOR));
+	}
+	else
+	{
+		SDLUtility::CreateSquare(showrect, GetUIElementColor(TAB_BACKGROUND_COLOR, SOLID_COLOR));
+	}
+
+	SDLUtility::PostText(button->GetText(),
+		showrect.x + 5,
+		showrect.y + static_cast<int>((showrect.h - button->GetText()->GetHeight()) * .5)
 		);
 }
 

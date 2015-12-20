@@ -94,15 +94,6 @@ public:
 		SOLID_COLOR = 255
 	};
 
-	//UI elements that contain multiple colors. This enum is utilized in the "uielement" argument of
-	//the ShowAsUIElement function.
-	enum Standard_UI_Elements {
-		BUTTON_UNPRESSED,
-		BUTTON_PRESSED,
-		TAB_UNPRESSED,
-		TAB_PRESSED
-	};
-
 	enum Standard_UI_Element_Colors {
 		BACKGROUND_COLOR,
 		DEMO_SCREEN_COLOR,
@@ -139,6 +130,7 @@ public:
 	static SDL_Color InvertColor(SDL_Color color);
 	static void ShowUIButton(UIButton *button);
 	static void ShowUITinyButton(UIButton *button);
+	static void ShowUITab(UIButton *button);
 	static void ShowUIContextMenu(UIButton *button);
 };
 

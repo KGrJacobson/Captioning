@@ -9,12 +9,13 @@
 #include "UIElements.h"
 #include "UIButton.h"
 
-UITab::UITab(SDL_Rect tabarea, std::string text, int tabnumber)
+UITab::UITab(SDL_Rect tabarea, std::string text, int tabnumber, ContextMenu *contextmenu)
 {
 	tabnumber_ = tabnumber;
 	tabarea_ = tabarea;
 	tabbutton_ = new UIButton(tabarea, text, false);
 	closebutton_ = new UIButton(SDL_Rect{ tabarea.x, tabarea.y, 20, UIElements::STANDARD_TAB_HEIGHT }, "X", true);
+	SetContextMenu(contextmenu);
 }
 
 UITab::~UITab()
@@ -23,6 +24,8 @@ UITab::~UITab()
 	tabbutton_ = NULL;
 	delete closebutton_;
 	closebutton_ = NULL;
+	delete contextmenu_;
+	contextmenu_ = NULL;
 }
 
 MouseHandler *UITab::CheckMouseEvents()
@@ -46,18 +49,47 @@ MouseHandler *UITab::CheckMouseEvents()
 	return foundmouse;
 }
 
-int UITab::ShowTab()
+int UITab::ShowTab(bool isselected)
 {
-	//UIElements::
+	int returncode = NO_RETURN_VALUE;
+
+	UIElements::ShowUITab(tabbutton_);
+	if (isselected == true)
+		SDLUtility::CreateSquare(tabarea_, UIElements::GetSDLColor(UIElements::CAPTION_CONTAINER_SELECTED_COLOR, UIElements::TRANSPARENT_COLOR));
+
 	UIElements::ShowUITinyButton(closebutton_);
 
-	return 0;
+	switch (tabbutton_->GetMouseEvent())
+	{
+	case LEFT_BUTTON_DOWN:
+		returncode = MOVE_TAB;
+		break;
+	case LEFT_BUTTON_UP:
+		returncode = SELECT_TAB;
+		break;
+	case RIGHT_BUTTON_UP:
+		returncode = OPEN_CONTEXT_MENU;
+		break;
+	}
+
+	if (closebutton_->GetMouseEvent() == LEFT_BUTTON_UP)
+		returncode = CLOSE_TAB;
+
+	if (contextmenu_->GetButtonPress() != ContextMenu::NO_CONTEXT_MENU_BUTTONS_PRESSED)
+		returncode = CHECK_CONTEXT_MENU;
+
+	return returncode;
 }
 
 void UITab::SetTabArea(SDL_Rect newarea)
 {
 	tabarea_ = newarea;
 	tabbutton_->SetButtonArea(newarea);
+}
+
+void UITab::SetContextMenu(ContextMenu *newmenu)
+{
+	contextmenu_ = newmenu;
 }
 
 void UITab::SetTabNumber(int number)
@@ -70,7 +102,12 @@ int UITab::GetTabNumber()
 	return tabnumber_;
 }
 
-ContextMenu *UITab::GetContextMenu()
+TextInput *UITab::GetTabText()
 {
-	return contextmenu_;
+	return tabbutton_->GetText();
+}
+
+int UITab::GetContextMenuAction()
+{
+	return contextmenu_->GetButtonPress();
 }
