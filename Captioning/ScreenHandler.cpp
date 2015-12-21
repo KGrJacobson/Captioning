@@ -57,17 +57,15 @@ ScreenHandler::~ScreenHandler()
 
 void ScreenHandler::PreEventMouseSetup()
 {
-	previousmousevent_ = currentmouseevent_;
-
 	if (ismousedown_ != true)
 		mouseevent_ = MOUSEOVER;
 }
 
 void ScreenHandler::HandleEvents(const SDL_Event &e)
 {
-
-	if (e.type == SDL_MOUSEBUTTONDOWN)
+	switch (e.type)
 	{
+	case (SDL_MOUSEBUTTONDOWN):
 		ismousedown_ = true;
 		mouseevent_ = e.button.button;
 
@@ -76,19 +74,19 @@ void ScreenHandler::HandleEvents(const SDL_Event &e)
 			if (currentcontextmenu_->CheckMouseHandlers() == NULL)
 				SetContextMenu(NULL);
 		}
-	}
-
-	if (e.type == SDL_MOUSEBUTTONUP)
-	{
+		break;
+	case SDL_MOUSEBUTTONUP:
 		ismousedown_ = false;
 		mouseevent_ = e.button.button;
+		break;
 	}
 
-	if (e.type == SDL_KEYUP)
-		keyboardentry_.KeyUpInput(e);
-
-	if (e.type == SDL_KEYDOWN)
+	switch (e.type)
 	{
+	case SDL_KEYUP:
+		keyboardentry_.KeyUpInput(e);
+		break;
+	case SDL_KEYDOWN:
 		switch (keyboardentry_.KeyDownInput(e))
 		{
 		case (KeyboardEntry::DELETE_CAPTIONS) :
@@ -102,11 +100,13 @@ void ScreenHandler::HandleEvents(const SDL_Event &e)
 			DebugText::CreateMessage("Japanese Entry");
 			break;
 		}
+		break;
 	}
 }
 
 void ScreenHandler::PostEventMouseSetup()
 {
+		previousmousevent_ = currentmouseevent_;
 		currentmouseevent_ = &mousefunction_;
 
 		for (std::list<Subscreen*>::iterator it = screens_.begin(); it != screens_.end(); it++)
@@ -146,10 +146,7 @@ void ScreenHandler::ShowScreens()
 {
 	if (mousefunction_.GetEvent() == RIGHT_BUTTON_UP)
 	{
-		int x, y;
-		SDL_GetMouseState(&x, &y);
-		currentcontextmenu_ = &cmenu_;
-		currentcontextmenu_->SetXY(x, y);
+		SetContextMenu(&cmenu_);
 	}
 
 	switch (cmenu_.GetButtonPress())
@@ -164,7 +161,7 @@ void ScreenHandler::ShowScreens()
 		break;
 	}
 
-	SDLUtility::PostImage(backgroundimages_[backgroundimage_], 0,	0, SDL_Rect{ 0, 0, backgroundimages_[backgroundimage_]->GetWidth(), backgroundimages_[backgroundimage_]->GetHeight() });
+	SDLUtility::PostImage(backgroundimages_[backgroundimage_], 0, 0, SDL_Rect{ 0, 0, backgroundimages_[backgroundimage_]->GetWidth(), backgroundimages_[backgroundimage_]->GetHeight() });
 
 	if (inputscreen_ != NULL)
 	{
@@ -201,10 +198,7 @@ void ScreenHandler::ShowScreens()
 
 	if (demoscreen_->Show() == DemoScreen::GET_CONTEXT_MENU)
 	{
-		int dsmousex, dsmousey;
-		SDL_GetMouseState(&dsmousex, &dsmousey);
-		currentcontextmenu_ = demoscreen_->GetCurrentContextMenu();
-		currentcontextmenu_->SetXY(dsmousex, dsmousey);
+		SetContextMenu(demoscreen_->GetCurrentContextMenu());
 	}
 
 	if (currentcontextmenu_ != NULL)
@@ -259,5 +253,15 @@ void ScreenHandler::SetContextMenu(ContextMenu *contextmenu)
 	if (currentcontextmenu_ != NULL)
 		currentcontextmenu_->ResetMenu();
 
-	currentcontextmenu_ = contextmenu;
+	if (contextmenu != NULL)
+	{
+		int x, y;
+		SDL_GetMouseState(&x, &y);
+		currentcontextmenu_ = contextmenu;
+		currentcontextmenu_->SetXY(x, y);
+	}
+	else
+	{
+		currentcontextmenu_ = contextmenu;
+	}
 }
