@@ -24,6 +24,12 @@ static const int DEMOSCREEN_TAB_HEIGHT = 20;
 class DemoScreen : public Subscreen
 {
 public:
+	enum Demo_Screen_Return_Code
+	{
+		NO_RETURN_CODE,
+		GET_CONTEXT_MENU
+	};
+
 	enum Tab_Context_Menu_Code
 	{
 		RENAME_TAB
@@ -42,6 +48,7 @@ public:
 	void DeleteAllCaptions();
 	ContextMenu *GetCurrentContextMenu();
 	ContextMenu *CreateNewTabContextMenu();
+	void CreateNewTab();
 private: 
 	int basefontsize_;
 	MouseHandler mousefunction_;
@@ -52,6 +59,7 @@ private:
 	std::vector<std::list<CaptionContainer*>*> captionlist_;
 	std::vector<UITab*> tablist_;
 	int currenttab_;
+	UIButton *newtabbutton_;
 	ContextMenu *currentcontextmenu_;
 };
 

@@ -18,7 +18,7 @@ class UIElements
 {
 public:
 	static const int STANDARD_UI_FONT_SIZE = 10;
-	static const int STANDARD_TAB_WIDTH = 50;
+	static const int STANDARD_TAB_WIDTH = 100;
 	static const int STANDARD_TAB_HEIGHT = 20;
 
 	enum Standard_Colors
@@ -108,7 +108,7 @@ public:
 		TINY_BUTTON_PRESSED_COLOR,
 		CONTEXT_MENU_ELEMENT_PRESSED_COLOR,
 		TAB_BACKGROUND_COLOR,
-		TAB_UNPRESSED_COLOR,
+		TAB_SELECTED_COLOR,
 		TAB_PRESSED_COLOR,
 		CAPTION_CONTAINER_COLOR,
 		CAPTION_CONTAINER_SELECTED_COLOR,
@@ -130,7 +130,7 @@ public:
 	static SDL_Color InvertColor(SDL_Color color);
 	static void ShowUIButton(UIButton *button);
 	static void ShowUITinyButton(UIButton *button);
-	static void ShowUITab(UIButton *button);
+	static void ShowUITab(UIButton *button, bool isselected);
 	static void ShowUIContextMenu(UIButton *button);
 };
 

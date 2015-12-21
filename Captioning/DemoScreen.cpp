@@ -35,14 +35,18 @@ DemoScreen::DemoScreen(int setfontize)
 
 	mousefunction_.Init(demoarea_);
 
-	//tablist_.push_back(new UITab(
-	//	SDL_Rect{ screenarea_.x, screenarea_.y, UIElements::STANDARD_TAB_WIDTH, UIElements::STANDARD_TAB_HEIGHT }, 
-	//	"Default", 
-	//	0,
-	//	CreateNewTabContextMenu
-	//	));
-	currenttab_ = 0;
+	tablist_.push_back(new UITab(
+		SDL_Rect{ screenarea_.x, screenarea_.y, UIElements::STANDARD_TAB_WIDTH, UIElements::STANDARD_TAB_HEIGHT }, 
+		"Default", 
+		0,
+		CreateNewTabContextMenu()
+		));
 	captionlist_.push_back(new std::list<CaptionContainer*>);
+	currenttab_ = 0;
+
+	newtabbutton_ = new UIButton(SDL_Rect{ tablist_.back()->GetTabArea().x + tablist_.back()->GetTabArea().w , screenarea_.y, 20, 20 },
+		"+",
+		true);
 }
 
 DemoScreen::~DemoScreen()
@@ -77,14 +81,22 @@ MouseHandler *DemoScreen::CheckMouseHandlers(int mouseevent)
 {
 	MouseHandler *foundmouse = NULL;
 
+	MouseHandler *currentevaluation = NULL;
 	if (SDLUtility::IsMouseActive(screenarea_))
 	{
+		for (std::vector<UITab*>::iterator it = tablist_.begin(); it != tablist_.end(); ++it)
+		{
+			currentevaluation = (*it)->CheckMouseEvents();
+
+			if (currentevaluation != NULL)
+				foundmouse = currentevaluation;
+		}
+
 		if (SDLUtility::IsMouseActive(mousefunction_.GetMouseArea()))
 		{
 			foundmouse = &mousefunction_;
 		}
 
-		MouseHandler *currentevaluation = NULL;
 		for (std::list<CaptionContainer*>::iterator it = captionlist_[currenttab_]->begin(); it != captionlist_[currenttab_]->end(); ++it)
 		{
 			currentevaluation = (*it)->CheckMouseEvents(mouseevent);
@@ -92,6 +104,11 @@ MouseHandler *DemoScreen::CheckMouseHandlers(int mouseevent)
 			if (currentevaluation != NULL)
 				foundmouse = currentevaluation;
 		}
+
+		currentevaluation = newtabbutton_->CheckMouseHandler();
+
+		if (currentevaluation != NULL)
+			foundmouse = currentevaluation;
 	}
 
 	return foundmouse;
@@ -104,6 +121,10 @@ SDL_Rect DemoScreen::GetScreenSize()
 
 int DemoScreen::Show()
 {
+	UIElements::ShowUITinyButton(newtabbutton_);
+	if (newtabbutton_->GetMouseEvent() == LEFT_BUTTON_UP)
+		CreateNewTab();
+
 	SDLUtility::CreateSquare(demoarea_, UIElements::GetUIElementColor(UIElements::DEMO_SCREEN_COLOR, UIElements::SOLID_COLOR));
 
 	switch (mousefunction_.GetEvent())
@@ -195,7 +216,72 @@ int DemoScreen::Show()
 			++it;
 	}
 
-	return 0;
+	int returncode = UITab::NO_RETURN_VALUE;
+	int closetab = 0;
+	std::vector<UITab*>::iterator tabit = tablist_.begin();
+	while (tabit != tablist_.end())
+	{
+		bool isselected;
+
+		if ((*tabit)->GetTabNumber() == currenttab_)
+			isselected = true;
+		else
+			isselected = false;
+
+		int tabcode = (*tabit)->ShowTab(isselected);
+
+		switch (tabcode)
+		{
+		case UITab::CLOSE_TAB:
+			closetab = (*tabit)->GetTabNumber();
+			break;
+		case UITab::SELECT_TAB:
+			if (selectedcaption_ != NULL)
+			{
+				selectedcaption_->DeselectCaption();
+				selectedcaption_ = NULL;
+			}
+			currenttab_ = (*tabit)->GetTabNumber();
+			break;
+		case UITab::MOVE_TAB:
+			break;
+		case UITab::OPEN_CONTEXT_MENU:
+			currentcontextmenu_ = (*tabit)->GetContextMenu();
+			returncode = GET_CONTEXT_MENU;
+			break;
+		case UITab::CHECK_CONTEXT_MENU:
+			if ((*tabit)->GetContextMenuAction() == RENAME_TAB)
+			{
+
+			}
+			break;
+		}
+
+		++tabit;
+	}
+
+	if (closetab != 0)
+	{
+		tablist_.erase(tablist_.begin() + closetab);
+		captionlist_.erase(captionlist_.begin() + closetab);
+	
+		int newposition = 0;
+		for (std::vector<UITab*>::iterator repositionit = tablist_.begin(); repositionit != tablist_.end(); ++repositionit)
+		{
+			(*repositionit)->SetTabNumber(newposition);
+			(*repositionit)->SetTabArea(
+				SDL_Rect{ screenarea_.x + (newposition * UIElements::STANDARD_TAB_WIDTH),
+				screenarea_.y, 
+				UIElements::STANDARD_TAB_WIDTH, 
+				UIElements::STANDARD_TAB_HEIGHT }
+				);
+			++newposition;
+		}
+
+		newtabbutton_->SetButtonCoordinates(tablist_.back()->GetTabArea().x + tablist_.back()->GetTabArea().w, screenarea_.y);
+	}
+
+	return returncode;
 }
 
 bool DemoScreen::SetCaptionText(std::string text, int captionid)
@@ -207,7 +293,7 @@ bool DemoScreen::SetCaptionText(std::string text, int captionid)
 	}
 	else
 	{
-		for (std::list<CaptionContainer*>::iterator it = captionlist_[currenttab_]->begin(); it != captionlist_[currenttab_]->end(); it++)
+		for (std::list<CaptionContainer*>::iterator it = captionlist_[currenttab_]->begin(); it != captionlist_[currenttab_]->end(); ++it)
 		{
 			if ((*it)->GetID() == captionid)
 			{
@@ -249,7 +335,7 @@ void DemoScreen::ClearAllCaptionText()
 
 void DemoScreen::DeleteAllCaptions()
 {
-	captionlist_.clear();
+	captionlist_[currenttab_]->clear();
 }
 
 ContextMenu *DemoScreen::GetCurrentContextMenu()
@@ -263,4 +349,17 @@ ContextMenu *DemoScreen::CreateNewTabContextMenu()
 	newcontextmenu->AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, ContextMenu::STANDARD_CONTEXT_MENU_WIDTH, ContextMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Rename", false));
 
 	return newcontextmenu;
+}
+
+void DemoScreen::CreateNewTab()
+{
+	tablist_.push_back(new UITab(
+		SDL_Rect{ tablist_.back()->GetTabArea().x + tablist_.back()->GetTabArea().w , screenarea_.y, UIElements::STANDARD_TAB_WIDTH, UIElements::STANDARD_TAB_HEIGHT },
+		"New Tab",
+		tablist_.back()->GetTabNumber() + 1,
+		CreateNewTabContextMenu()
+		));
+	captionlist_.push_back(new std::list<CaptionContainer*>);
+
+	newtabbutton_->SetButtonCoordinates(tablist_.back()->GetTabArea().x + tablist_.back()->GetTabArea().w, screenarea_.y);
 }

@@ -30,8 +30,10 @@ public:
 	void SetContextMenu(ContextMenu *newmenu);
 	void SetTabNumber(int tabnumber);
 	int GetTabNumber();
+	SDL_Rect GetTabArea();
 	TextInput *GetTabText();
 	int GetContextMenuAction();
+	ContextMenu *GetContextMenu();
 private:
 	int tabnumber_;
 	SDL_Rect tabarea_;

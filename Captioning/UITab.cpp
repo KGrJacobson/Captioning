@@ -3,9 +3,10 @@
 #include "SDL.h"
 
 #include "CaptionContainer.h"
-#include "UITab.h"
+#include "DebugText.h"
 #include "MouseHandler.h"
 #include "SDLUtility.h"
+#include "UITab.h"
 #include "UIElements.h"
 #include "UIButton.h"
 
@@ -14,7 +15,7 @@ UITab::UITab(SDL_Rect tabarea, std::string text, int tabnumber, ContextMenu *con
 	tabnumber_ = tabnumber;
 	tabarea_ = tabarea;
 	tabbutton_ = new UIButton(tabarea, text, false);
-	closebutton_ = new UIButton(SDL_Rect{ tabarea.x, tabarea.y, 20, UIElements::STANDARD_TAB_HEIGHT }, "X", true);
+	closebutton_ = new UIButton(SDL_Rect{ tabarea.x + tabarea.w - 20, tabarea.y, 20, UIElements::STANDARD_TAB_HEIGHT }, "X", true);
 	SetContextMenu(contextmenu);
 }
 
@@ -53,11 +54,10 @@ int UITab::ShowTab(bool isselected)
 {
 	int returncode = NO_RETURN_VALUE;
 
-	UIElements::ShowUITab(tabbutton_);
-	if (isselected == true)
-		SDLUtility::CreateSquare(tabarea_, UIElements::GetSDLColor(UIElements::CAPTION_CONTAINER_SELECTED_COLOR, UIElements::TRANSPARENT_COLOR));
+	UIElements::ShowUITab(tabbutton_, isselected);
 
-	UIElements::ShowUITinyButton(closebutton_);
+	if (SDLUtility::IsMouseActive(tabarea_) == true)
+		UIElements::ShowUITinyButton(closebutton_);
 
 	switch (tabbutton_->GetMouseEvent())
 	{
@@ -85,6 +85,7 @@ void UITab::SetTabArea(SDL_Rect newarea)
 {
 	tabarea_ = newarea;
 	tabbutton_->SetButtonArea(newarea);
+	closebutton_->SetButtonCoordinates(tabarea_.x + tabarea_.w - 20, tabarea_.y);
 }
 
 void UITab::SetContextMenu(ContextMenu *newmenu)
@@ -102,6 +103,11 @@ int UITab::GetTabNumber()
 	return tabnumber_;
 }
 
+SDL_Rect UITab::GetTabArea()
+{
+	return tabarea_;
+}
+
 TextInput *UITab::GetTabText()
 {
 	return tabbutton_->GetText();
@@ -110,4 +116,9 @@ TextInput *UITab::GetTabText()
 int UITab::GetContextMenuAction()
 {
 	return contextmenu_->GetButtonPress();
+}
+
+ContextMenu *UITab::GetContextMenu()
+{
+	return contextmenu_;
 }

@@ -119,10 +119,13 @@ void ScreenHandler::PostEventMouseSetup()
 			}
 		}
 
-		mousetoevaluate_ = cmenu_.CheckMouseHandlers();
-		if (mousetoevaluate_ != NULL)
+		if (currentcontextmenu_ != NULL)
 		{
-			currentmouseevent_ = mousetoevaluate_;
+			mousetoevaluate_ = currentcontextmenu_->CheckMouseHandlers();
+			if (mousetoevaluate_ != NULL)
+			{
+				currentmouseevent_ = mousetoevaluate_;
+			}
 		}
 
 		if (previousmousevent_ != NULL && previousmousevent_ != currentmouseevent_)
@@ -196,7 +199,13 @@ void ScreenHandler::ShowScreens()
 		}
 	}
 
-	demoscreen_->Show();
+	if (demoscreen_->Show() == DemoScreen::GET_CONTEXT_MENU)
+	{
+		int dsmousex, dsmousey;
+		SDL_GetMouseState(&dsmousex, &dsmousey);
+		currentcontextmenu_ = demoscreen_->GetCurrentContextMenu();
+		currentcontextmenu_->SetXY(dsmousex, dsmousey);
+	}
 
 	if (currentcontextmenu_ != NULL)
 	{

@@ -86,8 +86,8 @@ void UIElements::Init()
 			standardcolorvector_[MULBERRY_DYE],			//TINY_BUTTON_UNPRESSED_COLOR
 			standardcolorvector_[DARK_RED],				//TINY_BUTTON_PRESSED_COLOR
 			standardcolorvector_[HALF_COLOR],			//CONTEXT_MENU_ELEMENT_PRESSED_COLOR
-			standardcolorvector_[TREE_PEONY],			//TAB_BACKGROUND_COLOR
-			standardcolorvector_[PLUM_PURPLE],			//TAB_UNPRESSED_COLOR
+			standardcolorvector_[FAKE_PURPLE],			//TAB_BACKGROUND_COLOR
+			standardcolorvector_[PLUM_PURPLE],			//TAB_SELECTED_COLOR
 			standardcolorvector_[VINE_GRAPE],			//TAB_PRESSED_COLOR
 			standardcolorvector_[SAPPANWOOD],			//CAPTION_CONTAINER_COLOR
 			standardcolorvector_[WHITE],				//CAPTION_CONTAINER_SELECTED_COLOR
@@ -110,7 +110,7 @@ void UIElements::Init()
 			standardcolorvector_[SCORCHED_BROWN],		//TINY_BUTTON_PRESSED_COLOR
 			standardcolorvector_[STYLISH_PERSIMMON],	//CONTEXT_MENU_ELEMENT_PRESSED_COLOR
 			standardcolorvector_[CLOVE_DYED],			//TAB_BACKGROUND_COLOR
-			standardcolorvector_[PALE_PERSIMMON],		//TAB_UNPRESSED_COLOR
+			standardcolorvector_[PALE_PERSIMMON],		//TAB_SELECTED_COLOR
 			standardcolorvector_[WASHEDOUT_PERSIMMON],	//TAB_PRESSED_COLOR
 			standardcolorvector_[DAYLILY_COLORED],		//CAPTION_CONTAINER_COLOR
 			standardcolorvector_[WHITE],				//CAPTION_CONTAINER_SELECTED_COLOR
@@ -222,17 +222,20 @@ void UIElements::ShowUITinyButton(UIButton *button)
 		);
 }
 
-void UIElements::ShowUITab(UIButton * button)
+void UIElements::ShowUITab(UIButton *button, bool isselected)
 {
 	SDL_Rect showrect = button->GetButtonArea();
 
 	if (button->GetMouseEvent() == LEFT_BUTTON_DOWN)
 	{
-		SDLUtility::CreateSquare(showrect, GetUIElementColor(TAB_PRESSED_COLOR, SOLID_COLOR));
+		SDLUtility::CreateBorderedRect(showrect, GetUIElementColor(OUTLINED_BOX_COLOR, SOLID_COLOR), GetUIElementColor(TAB_PRESSED_COLOR, SOLID_COLOR));
 	}
 	else
 	{
-		SDLUtility::CreateSquare(showrect, GetUIElementColor(TAB_BACKGROUND_COLOR, SOLID_COLOR));
+		if (isselected == true)
+			SDLUtility::CreateBorderedRect(showrect, GetUIElementColor(OUTLINED_BOX_COLOR, SOLID_COLOR), GetUIElementColor(TAB_SELECTED_COLOR, SOLID_COLOR));
+		else
+			SDLUtility::CreateBorderedRect(showrect, GetUIElementColor(OUTLINED_BOX_COLOR, SOLID_COLOR), GetUIElementColor(TAB_BACKGROUND_COLOR, SOLID_COLOR));
 	}
 
 	SDLUtility::PostText(button->GetText(),

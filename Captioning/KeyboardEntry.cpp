@@ -287,7 +287,6 @@ char KeyboardEntry::KeyDownInputEnglish(const SDL_Event &e)
 		return 'j';
 	case SDLK_k:
 		return 'k';
-		break;
 	case SDLK_l:
 		return 'l';
 	case SDLK_m:
