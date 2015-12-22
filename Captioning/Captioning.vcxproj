@@ -127,6 +127,7 @@
     <ClCompile Include="ContextMenu.cpp" />
     <ClCompile Include="DebugText.cpp" />
     <ClCompile Include="DemoScreen.cpp" />
+    <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="UITab.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="KeyboardEntry.cpp" />

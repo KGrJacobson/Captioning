@@ -10,12 +10,14 @@
 
 namespace Input_Handler_Inputs
 {
-	KeyboardEntry *keyboardentry_ = NULL;
-	ContextMenu *currentcontextmenu_ = NULL;
-	MouseHandler *mousetoevaluate_ = NULL;
-	MouseHandler *previousmousevent_ = NULL;
-	MouseHandler *currentmouseevent_ = NULL;
-	std::list<MouseHandler*> mouselist_;
+	static KeyboardEntry *keyboardentry_ = new KeyboardEntry();
+	static ContextMenu *currentcontextmenu_ = NULL;
+	static MouseHandler *mousetoevaluate_ = NULL;
+	static MouseHandler *previousmousevent_ = NULL;
+	static MouseHandler *currentmouseevent_ = NULL;
+	static int mouseevent_ = NO_MOUSE_STATE;
+	static bool ismousedown_ = false;
+	static std::list<MouseHandler*> mouselist_;
 }
 
 class InputHandler
@@ -24,10 +26,12 @@ public:
 	static void CloseInputs();
 	static void AddMouseHandler(MouseHandler *mousehandler);
 	static void RemoveMouseHandler(MouseHandler *mousehandler);
+	static int HandleEvents(const SDL_Event &e);
 	static void CheckMouseHandlers();
-	static void EvaluateMouseHandlers(int mouseaction);
-	static void SetKeyboardEntry(KeyboardEntry *keyboardentry);
+	static void SetKeyboardEntryTexture(TextInput *textinput);
 	static void SetContextMenu(ContextMenu *contextmenu);
+	static ContextMenu *GetContextMenu();
+	static int GetCurrentMouseState(int mouseevent_, bool isdown);
 };
 
 #endif //INPUT_HANDLER

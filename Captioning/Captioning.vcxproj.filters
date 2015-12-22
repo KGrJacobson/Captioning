@@ -60,6 +60,9 @@
     <ClCompile Include="UITab.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="InputHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDLUtility.h">

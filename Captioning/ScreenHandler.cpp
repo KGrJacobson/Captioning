@@ -6,6 +6,7 @@
 #include "ContextMenu.h"
 #include "DebugText.h"
 #include "DemoScreen.h"
+#include "InputHandler.h"
 #include "InputScreen.h"
 #include "ScreenHandler.h"
 #include "Subscreen.h"
@@ -109,7 +110,7 @@ void ScreenHandler::PostEventMouseSetup()
 		previousmousevent_ = currentmouseevent_;
 		currentmouseevent_ = &mousefunction_;
 
-		for (std::list<Subscreen*>::iterator it = screens_.begin(); it != screens_.end(); it++)
+		for (std::list<Subscreen*>::iterator it = screens_.begin(); it != screens_.end(); ++it)
 		{
 			mousetoevaluate_ = (*it)->CheckMouseHandlers(GetCurrentMouseState(mouseevent_, ismousedown_));
 
