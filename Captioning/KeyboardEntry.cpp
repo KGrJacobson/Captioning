@@ -244,10 +244,10 @@ int KeyboardEntry::KeyDownInput(const SDL_Event &e)
 				currenttexttexture_->CreateQuickTextureFromText(currenttext_ + '|');
 			break;
 		case SDLK_RETURN:
-			FinalizeCurrentText();
+			return TEXT_FINALIZED;
 			break;
 		case SDLK_KP_ENTER:
-			FinalizeCurrentText();
+			return TEXT_FINALIZED;
 			break;
 		}
 	}

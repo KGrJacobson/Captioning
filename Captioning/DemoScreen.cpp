@@ -205,19 +205,30 @@ int DemoScreen::Show()
 				selectedcaption_->DeselectCaption();
 				selectedcaption_ = NULL;
 			}
+
+			for (std::list<CaptionContainer*>::iterator removeit = captionlist_[currenttab_]->begin(); removeit != captionlist_[currenttab_]->end(); ++removeit)
+			{
+				(*removeit)->RemoveMouseHandler();
+			}
+
 			currenttab_ = (*tabit)->GetTabNumber();
+
+			for (std::list<CaptionContainer*>::iterator addit = captionlist_[currenttab_]->begin(); addit != captionlist_[currenttab_]->end(); ++addit)
+			{
+				(*addit)->AddMouseHandler();
+			}
 			break;
 		case UITab::MOVE_TAB:
 			break;
 		case UITab::OPEN_CONTEXT_MENU:
-			currentcontextmenu_ = (*tabit)->GetContextMenu();
-			returncode = GET_CONTEXT_MENU;
+			InputHandler::SetContextMenu((*tabit)->GetContextMenu());
 			break;
 		case UITab::CHECK_CONTEXT_MENU:
 			if ((*tabit)->GetContextMenuAction() == RENAME_TAB)
 			{
-
+				InputHandler::SetKeyboardEntryTexture((*tabit)->GetTabText());
 			}
+			InputHandler::SetContextMenu(NULL);
 			break;
 		}
 
@@ -300,11 +311,6 @@ void DemoScreen::ClearAllCaptionText()
 void DemoScreen::DeleteAllCaptions()
 {
 	captionlist_[currenttab_]->clear();
-}
-
-ContextMenu *DemoScreen::GetCurrentContextMenu()
-{
-	return currentcontextmenu_;
 }
 
 ContextMenu *DemoScreen::CreateNewTabContextMenu()

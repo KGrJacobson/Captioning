@@ -84,6 +84,9 @@ void ScreenHandler::ShowScreens(int macro)
 	case KeyboardEntry::SET_TEXT_JAPANESE:
 		DebugText::CreateMessage("Japanese Text");
 		break;
+	case KeyboardEntry::TEXT_FINALIZED:
+		InputHandler::SetKeyboardEntryTexture(NULL);
+		break;
 	}
 
 	SDLUtility::PostImage(backgroundimages_[backgroundimage_], 0, 0, SDL_Rect{ 0, 0, backgroundimages_[backgroundimage_]->GetWidth(), backgroundimages_[backgroundimage_]->GetHeight() });
@@ -94,14 +97,18 @@ void ScreenHandler::ShowScreens(int macro)
 
 		switch (inputscreen_->Show())
 		{
-		case InputScreen::SET_KEYBOARD_ENTRY:
-			InputHandler::SetKeyboardEntryTexture(inputscreen_->GetTexture());
-			break;
 		case InputScreen::APPLY_BUTTON_PRESSED:
-			demoscreen_->SetCaptionText(inputscreen_->PostCurrentString(), -1);
+			currentstring = inputscreen_->PostCurrentString();
+			if (InputHandler::IsKeyboardEntryNull() == true)
+				InputHandler::SetKeyboardEntryTexture(inputscreen_->GetTexture());
+
+			if (demoscreen_->GetSelectedCaptionText() != currentstring && currentstring != "")
+				demoscreen_->SetCaptionText(currentstring, -1);
 			break;
 		case InputScreen::RETURN_KEY_PRESSED:
 			currentstring = inputscreen_->PostCurrentString();
+			if (InputHandler::IsKeyboardEntryNull() == true)
+				InputHandler::SetKeyboardEntryTexture(inputscreen_->GetTexture());
 
 			if (demoscreen_->GetSelectedCaptionText() != currentstring && currentstring != "")
 				demoscreen_->SetCaptionText(currentstring, -1);

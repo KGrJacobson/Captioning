@@ -11,7 +11,7 @@
 
 CaptionContainer::~CaptionContainer()
 {
-	InputHandler::RemoveMouseHandler(&containermouseevent_);
+	RemoveMouseHandler();
 
 	EraseText();
 	delete deletebutton_;
@@ -194,4 +194,18 @@ void CaptionContainer::FitText(std::string texttofit)
 		newtext->CreateTextureFromText(fittingtext);
 		texttextures_.push_back(newtext);
 	}
+}
+
+void CaptionContainer::RemoveMouseHandler()
+{
+	InputHandler::RemoveMouseHandler(&containermouseevent_);
+	deletebutton_->RemoveMouseHandler();
+	movebutton_->RemoveMouseHandler();
+}
+
+void CaptionContainer::AddMouseHandler()
+{
+	InputHandler::AddMouseHandler(&containermouseevent_);
+	deletebutton_->SetMouseHandler();
+	movebutton_->SetMouseHandler();
 }

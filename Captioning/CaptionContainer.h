@@ -36,6 +36,8 @@ public:
 	std::string GetText();
 	int EvaluateCaption(bool showcontainer);
 	void FitText(std::string texttofit);
+	void RemoveMouseHandler();
+	void AddMouseHandler();
 private:
 	std::string text_;
 	RelativeRect relativecoordinatesrect_;

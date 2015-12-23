@@ -66,6 +66,8 @@ int InputHandler::HandleEvents(const SDL_Event &e)
 			return KeyboardEntry::SET_TEXT_ENGLISH;
 		case KeyboardEntry::SET_TEXT_JAPANESE:
 			return KeyboardEntry::SET_TEXT_JAPANESE;
+		case KeyboardEntry::TEXT_FINALIZED:
+			return KeyboardEntry::TEXT_FINALIZED;
 		}
 		break;
 	}
@@ -105,10 +107,15 @@ void InputHandler::CheckMouseHandlers()
 
 void InputHandler::SetKeyboardEntryTexture(TextInput *textinput)
 {
-	if (Input_Handler_Inputs::keyboardentry_ != NULL)
-		Input_Handler_Inputs::keyboardentry_->FinalizeCurrentText();
-
 	Input_Handler_Inputs::keyboardentry_->SetTexture(textinput);
+}
+
+bool InputHandler::IsKeyboardEntryNull()
+{
+	if (Input_Handler_Inputs::keyboardentry_->GetTexture() == NULL)
+		return true;
+
+	return false;
 }
 
 void InputHandler::SetContextMenu(ContextMenu *contextmenu)

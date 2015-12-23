@@ -27,7 +27,6 @@ public:
 	enum Demo_Screen_Return_Code
 	{
 		NO_RETURN_CODE,
-		GET_CONTEXT_MENU
 	};
 
 	enum Tab_Context_Menu_Code
@@ -45,7 +44,6 @@ public:
 	void CreateCaption(std::string text, double x, double y, double w, int containerid);
 	void ClearAllCaptionText();
 	void DeleteAllCaptions();
-	ContextMenu *GetCurrentContextMenu();
 	ContextMenu *CreateNewTabContextMenu();
 	void CreateNewTab();
 private: 
@@ -59,7 +57,6 @@ private:
 	std::vector<UITab*> tablist_;
 	int currenttab_;
 	UIButton *newtabbutton_;
-	ContextMenu *currentcontextmenu_;
 };
 
 #endif //DEMO_SCREEN
