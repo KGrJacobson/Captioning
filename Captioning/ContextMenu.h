@@ -22,8 +22,8 @@ public:
 	void ResetMenu();
 	void AddListItem(UIButton *newitem);
 	void SetXY(int x, int y);
-	MouseHandler *CheckMouseHandlers();
 	void ShowMenu();
+	SDL_Rect GetMenuArea();
 private:
 	SDL_Rect menuarea_;
 	std::vector<UIButton*> optionlist_;

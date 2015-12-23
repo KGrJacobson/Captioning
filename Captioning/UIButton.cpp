@@ -2,6 +2,7 @@
 
 #include "SDL.h"
 
+#include "InputHandler.h"
 #include "MouseHandler.h"
 #include "SDLUtility.h"
 #include "TextInput.h"
@@ -28,18 +29,12 @@ UIButton::UIButton(SDL_Rect buttonarea, std::string text, bool istextcentered)
 	centertext_ = istextcentered;
 	donotresetarea_ = true;
 	mousefunction_.Init(absolutecoordinatesrect_);
+	InputHandler::AddMouseHandler(&mousefunction_);
 }
 
 UIButton::~UIButton()
 {
-}
-
-MouseHandler *UIButton::CheckMouseHandler()
-{
-	if (SDLUtility::IsMouseActive(mousefunction_.GetMouseArea()))
-		return &mousefunction_;
-	
-	return NULL;
+	InputHandler::RemoveMouseHandler(&mousefunction_);
 }
 
 int UIButton::GetMouseEvent()
@@ -75,4 +70,14 @@ void UIButton::SetButtonCoordinates(int x, int y)
 
 	SDL_Rect mouserect = mousefunction_.GetMouseArea();
 	mousefunction_.SetMouseArea(SDL_Rect{ x, y, mouserect.w, mouserect.h });
+}
+
+void UIButton::SetMouseHandler()
+{
+	InputHandler::AddMouseHandler(&mousefunction_);
+}
+
+void UIButton::RemoveMouseHandler()
+{
+	InputHandler::RemoveMouseHandler(&mousefunction_);
 }

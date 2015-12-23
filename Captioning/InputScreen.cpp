@@ -5,6 +5,7 @@
 
 #include "CaptionContainer.h"
 #include "DebugText.h"
+#include "InputHandler.h"
 #include "InputScreen.h"
 #include "MouseHandler.h"
 #include "ScreenHandler.h"
@@ -24,6 +25,7 @@ InputScreen::InputScreen(SDL_Rect setscreenarea)
 		TEXT_INPUT_BOX_HEIGHT };
 
 	textinputbox_.Init(textinputboxrect);
+	InputHandler::AddMouseHandler(&textinputbox_);
 
 	confirmbutton_ = new UIButton(SDL_Rect{
 		static_cast<int>(textinputboxrect.x + (textinputboxrect.w * .01)),
@@ -44,32 +46,12 @@ InputScreen::InputScreen(SDL_Rect setscreenarea)
 
 InputScreen::~InputScreen()
 {
+	InputHandler::RemoveMouseHandler(&textinputbox_);
+
 	delete confirmbutton_;
 	confirmbutton_ = NULL;
 	delete cancelbutton_;
 	cancelbutton_ = NULL;
-}
-
-MouseHandler *InputScreen::CheckMouseHandlers(int mouseaction)
-{
-	MouseHandler *foundhandler = NULL;
-
-	MouseHandler *currentmousehandler = NULL;
-	if (SDLUtility::IsMouseActive(screenarea_))
-	{
-		if (SDLUtility::IsMouseActive(textinputbox_.GetMouseArea()))
-			foundhandler = &textinputbox_;
-
-		currentmousehandler = confirmbutton_->CheckMouseHandler();
-		if (currentmousehandler != NULL)
-			foundhandler = currentmousehandler;
-
-		currentmousehandler = cancelbutton_->CheckMouseHandler();
-		if (currentmousehandler != NULL)
-			foundhandler = currentmousehandler;
-	}
-
-	return foundhandler;
 }
 
 int InputScreen::Show()

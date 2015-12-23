@@ -29,27 +29,6 @@ UITab::~UITab()
 	contextmenu_ = NULL;
 }
 
-MouseHandler *UITab::CheckMouseEvents()
-{
-	MouseHandler *foundmouse = NULL;
-
-	MouseHandler *currentmousehandler = NULL;
-	if (SDLUtility::IsMouseActive(tabarea_))
-	{
-		currentmousehandler = tabbutton_->CheckMouseHandler();
-
-		if (currentmousehandler != NULL)
-			foundmouse = currentmousehandler;
-
-		currentmousehandler = closebutton_->CheckMouseHandler();
-
-		if (currentmousehandler != NULL)
-			foundmouse = currentmousehandler;
-	}
-
-	return foundmouse;
-}
-
 int UITab::ShowTab(bool isselected)
 {
 	int returncode = NO_RETURN_VALUE;

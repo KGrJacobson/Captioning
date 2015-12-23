@@ -7,7 +7,6 @@
 
 class Subscreen {
 public:
-	virtual MouseHandler *CheckMouseHandlers(int mouseaction) = 0;
 	virtual int Show() = 0;
 };
 

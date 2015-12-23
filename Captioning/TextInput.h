@@ -13,7 +13,6 @@ public:
 	~TextInput();
 	int Init(std::string ttffilepath, int fontsize);
 	void CreateTextureFromText(std::string text);
-	void CreateTextureFromText(std::wstring text);
 	void CreateQuickTextureFromText(std::string text);
 	SDL_Texture *GetTexture();
 	int GetWidth();

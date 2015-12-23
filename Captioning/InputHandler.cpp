@@ -3,6 +3,7 @@
 #include "SDL.h"
 
 #include "ContextMenu.h"
+#include "DebugText.h"
 #include "InputHandler.h"
 #include "KeyboardEntry.h"
 #include "MouseHandler.h"
@@ -41,7 +42,7 @@ int InputHandler::HandleEvents(const SDL_Event &e)
 
 		if (Input_Handler_Inputs::currentcontextmenu_ != NULL)
 		{
-			if (Input_Handler_Inputs::currentcontextmenu_->CheckMouseHandlers() == NULL)
+			if (SDLUtility::IsMouseActive(Input_Handler_Inputs::currentcontextmenu_->GetMenuArea()) == false)
 				SetContextMenu(NULL);
 		}
 		break;
@@ -85,16 +86,6 @@ void InputHandler::CheckMouseHandlers()
 		}
 	}
 
-	MouseHandler *mousetoevaluate = NULL;
-	if (Input_Handler_Inputs::currentcontextmenu_ != NULL)
-	{
-		mousetoevaluate = Input_Handler_Inputs::currentcontextmenu_->CheckMouseHandlers();
-		if (mousetoevaluate != NULL)
-		{
-			Input_Handler_Inputs::currentmouseevent_ = mousetoevaluate;
-		}
-	}
-
 	if (Input_Handler_Inputs::previousmousevent_ != NULL && Input_Handler_Inputs::previousmousevent_ != Input_Handler_Inputs::currentmouseevent_)
 	{
 		if (Input_Handler_Inputs::ismousedown_ == true)
@@ -108,15 +99,15 @@ void InputHandler::CheckMouseHandlers()
 		Input_Handler_Inputs::currentmouseevent_->SetEvent(GetCurrentMouseState(Input_Handler_Inputs::mouseevent_, Input_Handler_Inputs::ismousedown_));
 	}
 
-	if (Input_Handler_Inputs::currentcontextmenu_->GetButtonPress() > -1)
-		SetContextMenu(NULL);
-
 	if (Input_Handler_Inputs::ismousedown_ != true)
 		Input_Handler_Inputs::mouseevent_ = MOUSEOVER;
 }
 
 void InputHandler::SetKeyboardEntryTexture(TextInput *textinput)
 {
+	if (Input_Handler_Inputs::keyboardentry_ != NULL)
+		Input_Handler_Inputs::keyboardentry_->FinalizeCurrentText();
+
 	Input_Handler_Inputs::keyboardentry_->SetTexture(textinput);
 }
 

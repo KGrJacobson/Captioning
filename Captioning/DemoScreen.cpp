@@ -8,10 +8,11 @@
 #include "CaptionContainer.h"
 #include "DebugText.h"
 #include "DemoScreen.h"
-#include "UITab.h"
+#include "InputHandler.h"
 #include "MouseHandler.h"
 #include "SDLUtility.h"
 #include "UIElements.h"
+#include "UITab.h"
 
 DemoScreen::DemoScreen(int setfontize)
 {
@@ -34,6 +35,7 @@ DemoScreen::DemoScreen(int setfontize)
 				ASPECT_RATIO_Y * MAGNIFICATION_MULTIPLIER };
 
 	mousefunction_.Init(demoarea_);
+	InputHandler::AddMouseHandler(&mousefunction_);
 
 	tablist_.push_back(new UITab(
 		SDL_Rect{ screenarea_.x, screenarea_.y, UIElements::STANDARD_TAB_WIDTH, UIElements::STANDARD_TAB_HEIGHT }, 
@@ -74,44 +76,6 @@ void DemoScreen::DrawNewCaption()
 		drawncaptionarea_->w = mousex - drawncaptionarea_->x;
 		drawncaptionarea_->h = mousey - drawncaptionarea_->y;
 	}
-}
-
-
-MouseHandler *DemoScreen::CheckMouseHandlers(int mouseevent)
-{
-	MouseHandler *foundmouse = NULL;
-
-	MouseHandler *currentevaluation = NULL;
-	if (SDLUtility::IsMouseActive(screenarea_))
-	{
-		for (std::vector<UITab*>::iterator it = tablist_.begin(); it != tablist_.end(); ++it)
-		{
-			currentevaluation = (*it)->CheckMouseEvents();
-
-			if (currentevaluation != NULL)
-				foundmouse = currentevaluation;
-		}
-
-		if (SDLUtility::IsMouseActive(mousefunction_.GetMouseArea()))
-		{
-			foundmouse = &mousefunction_;
-		}
-
-		for (std::list<CaptionContainer*>::iterator it = captionlist_[currenttab_]->begin(); it != captionlist_[currenttab_]->end(); ++it)
-		{
-			currentevaluation = (*it)->CheckMouseEvents(mouseevent);
-
-			if (currentevaluation != NULL)
-				foundmouse = currentevaluation;
-		}
-
-		currentevaluation = newtabbutton_->CheckMouseHandler();
-
-		if (currentevaluation != NULL)
-			foundmouse = currentevaluation;
-	}
-
-	return foundmouse;
 }
 
 SDL_Rect DemoScreen::GetScreenSize()

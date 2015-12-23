@@ -38,7 +38,6 @@ public:
 	DemoScreen(int setfontsizeint);
 	~DemoScreen();
 	void DrawNewCaption();
-	MouseHandler *CheckMouseHandlers(int mouseevent);
 	SDL_Rect GetScreenSize();
 	int Show();
 	bool SetCaptionText(std::string text, int captionid);

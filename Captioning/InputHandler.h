@@ -26,8 +26,8 @@ public:
 	static void CloseInputs();
 	static void AddMouseHandler(MouseHandler *mousehandler);
 	static void RemoveMouseHandler(MouseHandler *mousehandler);
-	static int HandleEvents(const SDL_Event &e);
 	static void CheckMouseHandlers();
+	static int HandleEvents(const SDL_Event &e);
 	static void SetKeyboardEntryTexture(TextInput *textinput);
 	static void SetContextMenu(ContextMenu *contextmenu);
 	static ContextMenu *GetContextMenu();

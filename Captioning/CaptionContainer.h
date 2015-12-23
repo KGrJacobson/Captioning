@@ -30,7 +30,6 @@ public:
 	void SetText(std::string newtext, int destinationw);
 	void SetXY(int x, int y);
 	void EraseText();
-	MouseHandler *CheckMouseEvents(int mouseevent);
 	void DeselectCaption();
 	void SelectCaption();
 	int GetID();

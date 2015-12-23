@@ -23,25 +23,12 @@ class ScreenHandler {
 public:
 	ScreenHandler();
 	~ScreenHandler();
-	void PreEventMouseSetup();
-	void HandleEvents(const SDL_Event &e);
-	void PostEventMouseSetup();
-	void ShowScreens();
-	int GetCurrentMouseState(int mouseevent, bool isdown);
-	void SetEntryTexture(TextInput *textinput);
-	void SetContextMenu(ContextMenu *contextmenu);
+	void ShowScreens(int macro);
 private:
 	std::list<Subscreen*> screens_;
 	DemoScreen *demoscreen_;
 	InputScreen *inputscreen_;
-	KeyboardEntry keyboardentry_;
-	ContextMenu *currentcontextmenu_;
-	MouseHandler *mousetoevaluate_;
-	MouseHandler *previousmousevent_;
-	MouseHandler *currentmouseevent_;
 	MouseHandler mousefunction_;
-	int mouseevent_;
-	bool ismousedown_;
 	std::vector<Image*> backgroundimages_;
 	int backgroundimage_;
 	ContextMenu cmenu_;

@@ -14,11 +14,10 @@
 
 ScreenHandler::ScreenHandler()
 {
-	mousetoevaluate_ = NULL;
-	previousmousevent_ = NULL;
-	currentmouseevent_ = NULL;
-	mouseevent_ = NO_MOUSE_STATE;
-	ismousedown_ = false;
+	InputHandler::SetContextMenu(NULL);
+
+	mousefunction_.Init(SDL_Rect{ 0, 0, SDLUtility::GetScreenWidth(), SDLUtility::GetScreenHeight() });
+	InputHandler::AddMouseHandler(&mousefunction_);
 
 	demoscreen_ = new DemoScreen(22);
 	demoscreen_->CreateCaption("In C++ there are conditional assignment situations where use of the if-else statement is impossible, since this language explicitly distinguishes between initialization and assignment. In such case it is always possible to use a function call, but this can be cumbersome and inelegant. For example, to pass conditionally different values as an argument for a constructor of a field or a base class, it is impossible to use a plain if-else statement; in this case we can use a conditional assignment expression, or a function call.",
@@ -28,10 +27,7 @@ ScreenHandler::ScreenHandler()
 	int windowh = SDLUtility::GetScreenHeight();
 	inputscreen_ = new InputScreen(SDL_Rect{ 0, 0, demoscreen_->GetScreenSize().x, windowh });
 	screens_.push_back(inputscreen_);
-	keyboardentry_.SetTexture(inputscreen_->GetTexture());
-
-	currentcontextmenu_ = NULL;
-	mousefunction_.Init(SDL_Rect{ 0, 0, SDLUtility::GetScreenWidth(), SDLUtility::GetScreenHeight() });
+	InputHandler::SetKeyboardEntryTexture(inputscreen_->GetTexture());
 
 	backgroundimages_.push_back(new Image);
 	backgroundimages_[0]->CreateTextureFromImage("blossom.png");
@@ -39,14 +35,14 @@ ScreenHandler::ScreenHandler()
 	backgroundimages_[1]->CreateTextureFromImage("orange.png");
 	backgroundimage_ = 0;
 
-	cmenu_.AddListItem(new UIButton(SDL_Rect{ 0, 0, ContextMenu::STANDARD_CONTEXT_MENU_WIDTH, ContextMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Violet Layout", true));
-	cmenu_.AddListItem(new UIButton(SDL_Rect{ 0, 0, ContextMenu::STANDARD_CONTEXT_MENU_WIDTH, ContextMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Yellow-Red Layout", true));
+	cmenu_.AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, ContextMenu::STANDARD_CONTEXT_MENU_WIDTH, ContextMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Violet Layout", true));
+	cmenu_.AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, ContextMenu::STANDARD_CONTEXT_MENU_WIDTH, ContextMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Yellow-Red Layout", true));
 	cmenu_.SetXY(0, 0);
 }
 
 ScreenHandler::~ScreenHandler()
 {
-	SetEntryTexture(NULL);
+	InputHandler::RemoveMouseHandler(&mousefunction_);
 
 	delete demoscreen_;
 	demoscreen_ = NULL;
@@ -56,98 +52,11 @@ ScreenHandler::~ScreenHandler()
 	screens_.clear();
 }
 
-void ScreenHandler::PreEventMouseSetup()
-{
-	if (ismousedown_ != true)
-		mouseevent_ = MOUSEOVER;
-}
-
-void ScreenHandler::HandleEvents(const SDL_Event &e)
-{
-	switch (e.type)
-	{
-	case (SDL_MOUSEBUTTONDOWN):
-		ismousedown_ = true;
-		mouseevent_ = e.button.button;
-
-		if (currentcontextmenu_ != NULL)
-		{
-			if (currentcontextmenu_->CheckMouseHandlers() == NULL)
-				SetContextMenu(NULL);
-		}
-		break;
-	case SDL_MOUSEBUTTONUP:
-		ismousedown_ = false;
-		mouseevent_ = e.button.button;
-		break;
-	}
-
-	switch (e.type)
-	{
-	case SDL_KEYUP:
-		keyboardentry_.KeyUpInput(e);
-		break;
-	case SDL_KEYDOWN:
-		switch (keyboardentry_.KeyDownInput(e))
-		{
-		case (KeyboardEntry::DELETE_CAPTIONS) :
-			if (demoscreen_ != NULL)
-				demoscreen_->DeleteAllCaptions();
-			break;
-		case (KeyboardEntry::SET_TEXT_ENGLISH) :
-			DebugText::CreateMessage("English Entry");
-			break;
-		case (KeyboardEntry::SET_TEXT_JAPANESE) :
-			DebugText::CreateMessage("Japanese Entry");
-			break;
-		}
-		break;
-	}
-}
-
-void ScreenHandler::PostEventMouseSetup()
-{
-		previousmousevent_ = currentmouseevent_;
-		currentmouseevent_ = &mousefunction_;
-
-		for (std::list<Subscreen*>::iterator it = screens_.begin(); it != screens_.end(); ++it)
-		{
-			mousetoevaluate_ = (*it)->CheckMouseHandlers(GetCurrentMouseState(mouseevent_, ismousedown_));
-
-			if (mousetoevaluate_ != NULL)
-			{
-				currentmouseevent_ = mousetoevaluate_;
-			}
-		}
-
-		if (currentcontextmenu_ != NULL)
-		{
-			mousetoevaluate_ = currentcontextmenu_->CheckMouseHandlers();
-			if (mousetoevaluate_ != NULL)
-			{
-				currentmouseevent_ = mousetoevaluate_;
-			}
-		}
-
-		if (previousmousevent_ != NULL && previousmousevent_ != currentmouseevent_)
-		{
-			if (ismousedown_ == true)
-				currentmouseevent_ = previousmousevent_;
-			else
-				previousmousevent_->ResetMouseEvents();
-		}
-
-		if (currentmouseevent_ != NULL)
-		{
-			currentmouseevent_->SetEvent(GetCurrentMouseState(mouseevent_, ismousedown_));
-		}
-}
-
-void ScreenHandler::ShowScreens()
+void ScreenHandler::ShowScreens(int macro)
 {
 	if (mousefunction_.GetEvent() == RIGHT_BUTTON_UP)
 	{
-		SetContextMenu(&cmenu_);
+		InputHandler::SetContextMenu(&cmenu_);
 	}
 
 	switch (cmenu_.GetButtonPress())
@@ -155,10 +64,25 @@ void ScreenHandler::ShowScreens()
 	case UIElements::VIOLET_LAYOUT:
 		UIElements::SetColorLayout(UIElements::VIOLET_LAYOUT);
 		backgroundimage_ = UIElements::VIOLET_LAYOUT;
+		InputHandler::SetContextMenu(NULL);
 		break;
 	case UIElements::YELLOW_RED_LAYOUT:
 		UIElements::SetColorLayout(UIElements::YELLOW_RED_LAYOUT);
 		backgroundimage_ = UIElements::YELLOW_RED_LAYOUT;
+		InputHandler::SetContextMenu(NULL);
+		break;
+	}
+
+	switch(macro)
+	{
+	case KeyboardEntry::DELETE_CAPTIONS:
+		demoscreen_->DeleteAllCaptions();
+		break;
+	case KeyboardEntry::SET_TEXT_ENGLISH:
+		DebugText::CreateMessage("English Text");
+		break;
+	case KeyboardEntry::SET_TEXT_JAPANESE:
+		DebugText::CreateMessage("Japanese Text");
 		break;
 	}
 
@@ -171,13 +95,9 @@ void ScreenHandler::ShowScreens()
 		switch (inputscreen_->Show())
 		{
 		case InputScreen::SET_KEYBOARD_ENTRY:
-			if (keyboardentry_.GetTexture() != inputscreen_->GetTexture())
-				keyboardentry_.SetTexture(inputscreen_->GetTexture());
+			InputHandler::SetKeyboardEntryTexture(inputscreen_->GetTexture());
 			break;
 		case InputScreen::APPLY_BUTTON_PRESSED:
-			if (keyboardentry_.GetTexture() == inputscreen_->GetTexture())
-				keyboardentry_.FinalizeCurrentText();
-
 			demoscreen_->SetCaptionText(inputscreen_->PostCurrentString(), -1);
 			break;
 		case InputScreen::RETURN_KEY_PRESSED:
@@ -187,8 +107,7 @@ void ScreenHandler::ShowScreens()
 				demoscreen_->SetCaptionText(currentstring, -1);
 			break;
 		case InputScreen::CLOSE_SCREEN:
-			if (keyboardentry_.GetTexture() == inputscreen_->GetTexture())
-				keyboardentry_.SetTexture(NULL);
+			InputHandler::SetKeyboardEntryTexture(NULL);
 
 			screens_.remove(inputscreen_);
 			delete inputscreen_;
@@ -197,72 +116,11 @@ void ScreenHandler::ShowScreens()
 		}
 	}
 
-	if (demoscreen_->Show() == DemoScreen::GET_CONTEXT_MENU)
+	demoscreen_->Show();
+
+	ContextMenu *currentcontextmenu = InputHandler::GetContextMenu();
+	if (currentcontextmenu != NULL)
 	{
-		SetContextMenu(demoscreen_->GetCurrentContextMenu());
-	}
-
-	if (currentcontextmenu_ != NULL)
-	{
-		if (currentcontextmenu_->GetButtonPress() > -1)
-			SetContextMenu(NULL);
-		else
-			currentcontextmenu_->ShowMenu();
-	}
-}
-
-int ScreenHandler::GetCurrentMouseState(int mouseevent_, bool isdown)
-{
-	if (mouseevent_ == MOUSEOVER)
-		return MOUSEOVER;
-
-	if (isdown == true)
-	{
-		if (mouseevent_ == SDL_BUTTON_LEFT)
-		{
-			return LEFT_BUTTON_DOWN;
-		}
-		else
-		{
-			if (mouseevent_ == SDL_BUTTON_RIGHT)
-				return RIGHT_BUTTON_DOWN;
-		}
-	}
-	else
-	{
-		if (mouseevent_ == SDL_BUTTON_LEFT)
-		{
-			return LEFT_BUTTON_UP;
-		}
-		else
-		{
-			if (mouseevent_ == SDL_BUTTON_RIGHT)
-				return RIGHT_BUTTON_UP;
-		}
-	}
-
-	return NO_MOUSE_STATE;
-}
-
-void ScreenHandler::SetEntryTexture(TextInput *textinput)
-{
-	keyboardentry_.SetTexture(textinput);
-}
-
-void ScreenHandler::SetContextMenu(ContextMenu *contextmenu)
-{
-	if (currentcontextmenu_ != NULL)
-		currentcontextmenu_->ResetMenu();
-
-	if (contextmenu != NULL)
-	{
-		int x, y;
-		SDL_GetMouseState(&x, &y);
-		currentcontextmenu_ = contextmenu;
-		currentcontextmenu_->SetXY(x, y);
-	}
-	else
-	{
-		currentcontextmenu_ = contextmenu;
+		currentcontextmenu->ShowMenu();
 	}
 }

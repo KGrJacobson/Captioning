@@ -29,7 +29,6 @@ public:
 
 	InputScreen(SDL_Rect setscreenarea);
 	~InputScreen();
-	MouseHandler *CheckMouseHandlers(int mouseaction);
 	int Show();
 	std::string PostCurrentString();
 	TextInput *GetTexture();

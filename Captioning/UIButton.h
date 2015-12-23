@@ -15,13 +15,14 @@ public:
 	UIButton(RelativeRect relativerect, SDL_Rect destrect, std::string text, bool istextcentered);
 	UIButton(SDL_Rect buttonarea, std::string text, bool istextcentered);
 	~UIButton();
-	MouseHandler *CheckMouseHandler();
 	int GetMouseEvent();
 	SDL_Rect GetButtonArea();
 	TextInput *GetText();
 	bool IsTextCentered();
 	void SetButtonArea(SDL_Rect destrect);
 	void SetButtonCoordinates(int x, int y);
+	void SetMouseHandler();
+	void RemoveMouseHandler();
 private:
 	RelativeRect relativecoordinatesrect_;
 	SDL_Rect absolutecoordinatesrect_;

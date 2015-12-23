@@ -5,11 +5,14 @@
 
 #include "CaptionContainer.h"
 #include "DebugText.h"
+#include "InputHandler.h"
 #include "SDLUtility.h"
 #include "UIElements.h"
 
 CaptionContainer::~CaptionContainer()
 {
+	InputHandler::RemoveMouseHandler(&containermouseevent_);
+
 	EraseText();
 	delete deletebutton_;
 	deletebutton_ = NULL;
@@ -33,6 +36,7 @@ void CaptionContainer::Init(std::string initialtext, double relativex, double re
 	absolutecoordinatesrect_.h = (texttextures_.size() != 0) ? static_cast<int>((*texttextures_.begin())->GetHeight() * texttextures_.size()) : MINIMUM_HEIGHT_OF_CAPTION;
 	
 	containermouseevent_.Init(absolutecoordinatesrect_);
+	InputHandler::AddMouseHandler(&containermouseevent_);
 	deletebutton_ = new UIButton(SDL_Rect{ absolutecoordinatesrect_.x, absolutecoordinatesrect_.y, 20, MINIMUM_HEIGHT_OF_CAPTION }, "X", true);
 	movebutton_ = new UIButton(SDL_Rect{ absolutecoordinatesrect_.x + 20, absolutecoordinatesrect_.y, 20, MINIMUM_HEIGHT_OF_CAPTION }, "O", true);
 }
@@ -65,27 +69,6 @@ void CaptionContainer::EraseText()
 	texttextures_.clear();
 	absolutecoordinatesrect_.h = MINIMUM_HEIGHT_OF_CAPTION;
 	containermouseevent_.SetMouseArea(absolutecoordinatesrect_);
-}
-
-MouseHandler *CaptionContainer::CheckMouseEvents(int mouseevent)
-{
-	MouseHandler *foundmouse = NULL;
-
-	MouseHandler *currentmousehandler = NULL;
-	if (SDLUtility::IsMouseActive(containermouseevent_.GetMouseArea()))
-	{
-		foundmouse = &containermouseevent_;
-
-		currentmousehandler = deletebutton_->CheckMouseHandler();
-		if (currentmousehandler != NULL)
-			foundmouse = currentmousehandler;
-
-		currentmousehandler = movebutton_->CheckMouseHandler();
-		if (currentmousehandler != NULL)
-			foundmouse = currentmousehandler;
-	}
-
-	return foundmouse;
 }
 
 void CaptionContainer::DeselectCaption()
