@@ -5,6 +5,7 @@
 #include "SDL_ttf.h"
 
 #include "DebugText.h"
+#include "NetworkUtility.h"
 #include "SDLUtility.h"
 #include "UIElements.h"
 
@@ -39,6 +40,11 @@ int SDLUtility::Init()
 		return -1;
 	}
 
+	if (NetworkUtility::Init() == false)
+	{
+		return -1;
+	}
+
 	UIElements::Init();
 
 	return 0;
@@ -53,6 +59,7 @@ void SDLUtility::Close()
 	renderer = NULL;
 	TTF_Quit(); 
 	IMG_Quit();
+	NetworkUtility::Close();
 	SDL_Quit();
 }
 

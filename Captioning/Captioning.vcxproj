@@ -69,8 +69,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\vs_dev_lib\SDL\include;C:\vs_dev_lib\SDL\SDL2_ttf-2.0.12\include;C:\vs_dev_lib\SDL\SDL2_image-2.0.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\vs_dev_lib\SDL\lib\win32;C:\vs_dev_lib\SDL\SDL2_ttf-2.0.12\lib\x86;C:\vs_dev_lib\SDL\SDL2_image-2.0.0\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\vs_dev_lib\SDL\include;C:\vs_dev_lib\SDL\SDL2_ttf-2.0.12\include;C:\vs_dev_lib\SDL\SDL2_net-2.0.0\include;C:\vs_dev_lib\SDL\SDL2_image-2.0.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\vs_dev_lib\SDL\lib\win32;C:\vs_dev_lib\SDL\SDL2_ttf-2.0.12\lib\x86;C:\vs_dev_lib\SDL\SDL2_net-2.0.0\lib\x86;C:\vs_dev_lib\SDL\SDL2_image-2.0.0\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -80,7 +80,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_image.lib;SDL2_net.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -125,6 +125,10 @@
   <ItemGroup>
     <ClCompile Include="CaptionContainer.cpp" />
     <ClCompile Include="ContextMenu.cpp" />
+    <ClCompile Include="NetworkUtility.cpp" />
+    <ClCompile Include="ShortenedText.cpp" />
+    <ClCompile Include="StoredCaptionContainer.cpp" />
+    <ClCompile Include="StoredCaptionScreen.cpp" />
     <ClCompile Include="DebugText.cpp" />
     <ClCompile Include="DemoScreen.cpp" />
     <ClCompile Include="InputHandler.cpp" />
@@ -143,6 +147,10 @@
   <ItemGroup>
     <ClInclude Include="CaptionContainer.h" />
     <ClInclude Include="ContextMenu.h" />
+    <ClInclude Include="NetworkUtility.h" />
+    <ClInclude Include="ShortenedText.h" />
+    <ClInclude Include="StoredCaptionContainer.h" />
+    <ClInclude Include="StoredCaptionScreen.h" />
     <ClInclude Include="DebugText.h" />
     <ClInclude Include="DemoScreen.h" />
     <ClInclude Include="InputHandler.h" />

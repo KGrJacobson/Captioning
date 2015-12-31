@@ -12,7 +12,6 @@
 class UIButton 
 {
 public:
-	UIButton(RelativeRect relativerect, SDL_Rect destrect, std::string text, bool istextcentered);
 	UIButton(SDL_Rect buttonarea, std::string text, bool istextcentered);
 	~UIButton();
 	int GetMouseEvent();
@@ -24,7 +23,6 @@ public:
 	void SetMouseHandler();
 	void RemoveMouseHandler();
 private:
-	RelativeRect relativecoordinatesrect_;
 	SDL_Rect absolutecoordinatesrect_;
 	TextInput buttontext_;
 	MouseHandler mousefunction_;

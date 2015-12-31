@@ -6,8 +6,8 @@
 
 #include "SDL.h"
 
-#include "TextInput.h"
 #include "SDLUtility.h"
+#include "TextInput.h"
 #include "UIButton.h"
 
 static std::vector<SDL_Color> standardcolorvector_;
@@ -18,6 +18,8 @@ class UIElements
 {
 public:
 	static const int STANDARD_UI_FONT_SIZE = 10;
+	static const int STANDARD_MENU_WIDTH = 75;
+	static const int STANDARD_MENU_HEIGHT = 20;
 	static const int STANDARD_TAB_WIDTH = 100;
 	static const int STANDARD_TAB_HEIGHT = 20;
 
@@ -114,7 +116,8 @@ public:
 		CAPTION_CONTAINER_SELECTED_COLOR,
 		CAPTION_CONTAINER_DRAWN_CAPTION_COLOR,
 		TEXT_INPUT_BOX,
-		CONTEXT_MENU_BACKGROUND_COLOR
+		CONTEXT_MENU_BACKGROUND_COLOR,
+		HOVER_TEXT_BACKGROUND_COLOR
 	};
 
 	enum UI_Color_Layouts {
@@ -128,6 +131,7 @@ public:
 	static SDL_Color GetSDLColor(int color, int alphavalue);
 	static SDL_Color GetUIElementColor(int uielement, int alphavalue);
 	static SDL_Color InvertColor(SDL_Color color);
+	static void ShowUIHoverText(TextInput *text);
 	static void ShowUIButton(UIButton *button);
 	static void ShowUITinyButton(UIButton *button);
 	static void ShowUITab(UIButton *button, bool isselected);

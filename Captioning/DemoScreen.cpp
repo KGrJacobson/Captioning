@@ -10,6 +10,7 @@
 #include "DemoScreen.h"
 #include "InputHandler.h"
 #include "MouseHandler.h"
+#include "NetworkUtility.h"
 #include "SDLUtility.h"
 #include "UIElements.h"
 #include "UITab.h"
@@ -85,6 +86,8 @@ SDL_Rect DemoScreen::GetScreenSize()
 
 int DemoScreen::Show()
 {
+	int returncode = NO_RETURN_CODE;
+
 	UIElements::ShowUITinyButton(newtabbutton_);
 	if (newtabbutton_->GetMouseEvent() == LEFT_BUTTON_UP)
 		CreateNewTab();
@@ -180,7 +183,7 @@ int DemoScreen::Show()
 			++it;
 	}
 
-	int returncode = UITab::NO_RETURN_VALUE;
+
 	int closetab = 0;
 	std::vector<UITab*>::iterator tabit = tablist_.begin();
 	while (tabit != tablist_.end())
@@ -221,14 +224,14 @@ int DemoScreen::Show()
 		case UITab::MOVE_TAB:
 			break;
 		case UITab::OPEN_CONTEXT_MENU:
-			InputHandler::SetContextMenu((*tabit)->GetContextMenu());
+			InputHandler::SetMenu((*tabit)->GetContextMenu(), NULL, NULL);
 			break;
 		case UITab::CHECK_CONTEXT_MENU:
 			if ((*tabit)->GetContextMenuAction() == RENAME_TAB)
 			{
 				InputHandler::SetKeyboardEntryTexture((*tabit)->GetTabText());
 			}
-			InputHandler::SetContextMenu(NULL);
+			InputHandler::SetMenu(NULL, NULL, NULL);
 			break;
 		}
 
@@ -237,6 +240,12 @@ int DemoScreen::Show()
 
 	if (closetab != 0)
 	{
+		if (tablist_.begin() + closetab == tablist_.end() - 1 && closetab == currenttab_)
+		{
+			currenttab_ = currenttab_ - 1;
+		}
+
+		delete tablist_.at(closetab);
 		tablist_.erase(tablist_.begin() + closetab);
 		captionlist_.erase(captionlist_.begin() + closetab);
 	

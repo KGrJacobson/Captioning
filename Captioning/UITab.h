@@ -24,7 +24,6 @@ public:
 
 	UITab(SDL_Rect tabarea, std::string text, int tabnumber, ContextMenu *contextmenu);
 	~UITab();
-	MouseHandler *CheckMouseEvents();
 	int ShowTab(bool isselected);
 	void SetTabArea(SDL_Rect newarea);
 	void SetContextMenu(ContextMenu *newmenu);

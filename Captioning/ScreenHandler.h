@@ -8,6 +8,7 @@
 #include "SDL.h"
 
 #include "ContextMenu.h"
+#include "StoredCaptionScreen.h"
 #include "DebugText.h"
 #include "DemoScreen.h"
 #include "Image.h"
@@ -21,17 +22,30 @@
 
 class ScreenHandler {
 public:
+	enum Screens
+	{
+		NO_SCREEN = -1,
+		PREENTRED_CAPTION_SCREEN,
+		MANUAL_CAPTION_SCREEN,
+		DEMO_SCREEN
+	};
+
 	ScreenHandler();
 	~ScreenHandler();
 	void ShowScreens(int macro);
 private:
-	std::list<Subscreen*> screens_;
+	std::vector<Subscreen*> screens_;
 	DemoScreen *demoscreen_;
+	Subscreen *currentleftscreen_;
+	StoredCaptionScreen *storedcaptionscreen_;
 	InputScreen *inputscreen_;
 	MouseHandler mousefunction_;
 	std::vector<Image*> backgroundimages_;
 	int backgroundimage_;
+	int leftscreen_;
 	ContextMenu cmenu_;
+	UIButton* menubuttonscreens_;
+	ContextMenu menuscreens_;
 };
 
 #endif //SCREEN_HANDLER

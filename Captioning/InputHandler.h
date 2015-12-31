@@ -11,7 +11,7 @@
 namespace Input_Handler_Inputs
 {
 	static KeyboardEntry *keyboardentry_ = new KeyboardEntry();
-	static ContextMenu *currentcontextmenu_ = NULL;
+	static ContextMenu *currentmenu_ = NULL;
 	static MouseHandler *mousetoevaluate_ = NULL;
 	static MouseHandler *previousmousevent_ = NULL;
 	static MouseHandler *currentmouseevent_ = NULL;
@@ -30,7 +30,7 @@ public:
 	static int HandleEvents(const SDL_Event &e);
 	static void SetKeyboardEntryTexture(TextInput *textinput);
 	static bool IsKeyboardEntryNull();
-	static void SetContextMenu(ContextMenu *contextmenu);
+	static void SetMenu(ContextMenu *contextmenu, int *x, int *y);
 	static ContextMenu *GetContextMenu();
 	static int GetCurrentMouseState(int mouseevent_, bool isdown);
 };

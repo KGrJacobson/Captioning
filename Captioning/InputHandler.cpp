@@ -13,7 +13,7 @@ void InputHandler::CloseInputs()
 	delete Input_Handler_Inputs::keyboardentry_;
 	Input_Handler_Inputs::keyboardentry_ = NULL;
 
-	Input_Handler_Inputs::currentcontextmenu_ = NULL;
+	Input_Handler_Inputs::currentmenu_ = NULL;
 	
 	Input_Handler_Inputs::mousetoevaluate_ = NULL;
 	Input_Handler_Inputs::previousmousevent_ = NULL;
@@ -40,10 +40,10 @@ int InputHandler::HandleEvents(const SDL_Event &e)
 		Input_Handler_Inputs::ismousedown_ = true;
 		Input_Handler_Inputs::mouseevent_ = e.button.button;
 
-		if (Input_Handler_Inputs::currentcontextmenu_ != NULL)
+		if (Input_Handler_Inputs::currentmenu_ != NULL)
 		{
-			if (SDLUtility::IsMouseActive(Input_Handler_Inputs::currentcontextmenu_->GetMenuArea()) == false)
-				SetContextMenu(NULL);
+			if (SDLUtility::IsMouseActive(Input_Handler_Inputs::currentmenu_->GetMenuArea()) == false)
+				SetMenu(NULL, NULL, NULL);
 		}
 		break;
 	case SDL_MOUSEBUTTONUP:
@@ -118,27 +118,36 @@ bool InputHandler::IsKeyboardEntryNull()
 	return false;
 }
 
-void InputHandler::SetContextMenu(ContextMenu *contextmenu)
+void InputHandler::SetMenu(ContextMenu *contextmenu, int *x, int *y)
 {
-	if (Input_Handler_Inputs::currentcontextmenu_ != NULL)
-		Input_Handler_Inputs::currentcontextmenu_->ResetMenu();
+	if (Input_Handler_Inputs::currentmenu_ != NULL)
+		Input_Handler_Inputs::currentmenu_->ResetMenu();
 
 	if (contextmenu != NULL)
 	{
-		int x, y;
-		SDL_GetMouseState(&x, &y);
-		Input_Handler_Inputs::currentcontextmenu_ = contextmenu;
-		Input_Handler_Inputs::currentcontextmenu_->SetXY(x, y);
+		
+		Input_Handler_Inputs::currentmenu_ = contextmenu;
+
+		if (x != NULL && y != NULL)
+		{
+			Input_Handler_Inputs::currentmenu_->SetXY((*x), (*y));
+		}
+		else
+		{	
+			int mousex, mousey;
+			SDL_GetMouseState(&mousex, &mousey);
+			Input_Handler_Inputs::currentmenu_->SetXY(mousex, mousey);
+		}
 	}
 	else
 	{
-		Input_Handler_Inputs::currentcontextmenu_ = contextmenu;
+		Input_Handler_Inputs::currentmenu_ = contextmenu;
 	}
 }
 
 ContextMenu *InputHandler::GetContextMenu()
 {
-	return Input_Handler_Inputs::currentcontextmenu_;
+	return Input_Handler_Inputs::currentmenu_;
 }
 
 int InputHandler::GetCurrentMouseState(int mouseevent_, bool isdown)

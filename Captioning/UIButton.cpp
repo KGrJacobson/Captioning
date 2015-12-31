@@ -9,20 +9,8 @@
 #include "UIButton.h"
 #include "UIElements.h"
 
-UIButton::UIButton(RelativeRect relativerect, SDL_Rect destrect, std::string text, bool istextcentered)
-{
-	relativecoordinatesrect_ = relativerect;
-	absolutecoordinatesrect_ = SDLUtility::GetAbsoluteRect(relativecoordinatesrect_, destrect);
-	buttontext_.Init("meiryo.ttc", UIElements::STANDARD_UI_FONT_SIZE);
-	buttontext_.CreateTextureFromText(text);
-	centertext_ = istextcentered;
-	donotresetarea_ = false;
-	mousefunction_.Init(absolutecoordinatesrect_);
-}
-
 UIButton::UIButton(SDL_Rect buttonarea, std::string text, bool istextcentered)
 {
-	relativecoordinatesrect_ = RelativeRect{ 0.0, 0.0, 0.0, 0.0 };
 	absolutecoordinatesrect_ = buttonarea;
 	buttontext_.Init("meiryo.ttc", UIElements::STANDARD_UI_FONT_SIZE);
 	buttontext_.CreateTextureFromText(text);
