@@ -1,5 +1,5 @@
-#ifndef CONTEXT_MENU
-#define CONTEXT_MENU
+#ifndef UI_MENU
+#define UI_MENU
 
 #include <vector>
 
@@ -8,7 +8,7 @@
 #include "MouseHandler.h"
 #include "UIButton.h"
 
-class ContextMenu
+class UIMenu
 {
 public:
 	static const int STANDARD_CONTEXT_MENU_HEIGHT = 20;
@@ -16,8 +16,8 @@ public:
 	static const int STANDARD_CONTEXT_MENU_NUMBER_OF_ELEMENTS_IN_COLUMN = 17;
 	static const int NO_CONTEXT_MENU_BUTTONS_PRESSED = -1;
 
-	ContextMenu();
-	~ContextMenu();
+	UIMenu();
+	~UIMenu();
 	int GetButtonPress();
 	void ResetMenu();
 	void AddListItem(UIButton *newitem);
@@ -30,4 +30,4 @@ private:
 	int buttonpressed_;
 };
 
-#endif //CONTEXT_MENU
+#endif //UI_MENU

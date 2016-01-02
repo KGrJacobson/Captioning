@@ -4,30 +4,30 @@
 
 #include "SDL.h"
 
-#include "ContextMenu.h"
+#include "UIMenu.h"
 #include "InputHandler.h"
 #include "MouseHandler.h"
 #include "SDLUtility.h"
 #include "UIButton.h"
 #include "UIElements.h"
 
-ContextMenu::ContextMenu()
+UIMenu::UIMenu()
 {
 	ResetMenu();
 }
 
-ContextMenu::~ContextMenu()
+UIMenu::~UIMenu()
 {
 	optionlist_.clear();
 	ResetMenu();
 }
 
-int ContextMenu::GetButtonPress()
+int UIMenu::GetButtonPress()
 {
 	return buttonpressed_;
 }
 
-void ContextMenu::ResetMenu()
+void UIMenu::ResetMenu()
 {
 	buttonpressed_ = NO_CONTEXT_MENU_BUTTONS_PRESSED;
 	menuarea_ = SDL_Rect{ 0, 0, 0, 0 };
@@ -38,13 +38,13 @@ void ContextMenu::ResetMenu()
 	}
 }
 
-void ContextMenu::AddListItem(UIButton *newitem)
+void UIMenu::AddListItem(UIButton *newitem)
 {
 	optionlist_.push_back(newitem);
 	newitem->RemoveMouseHandler();
 }
 
-void ContextMenu::SetXY(int x, int y)
+void UIMenu::SetXY(int x, int y)
 {
 	int nextx = x;
 	int nexty = y;
@@ -75,7 +75,7 @@ void ContextMenu::SetXY(int x, int y)
 	};
 }
 
-void ContextMenu::ShowMenu()
+void UIMenu::ShowMenu()
 {
 	int currentbutton = 0;
 	for (std::vector<UIButton*>::iterator it = optionlist_.begin(); it != optionlist_.end(); ++it)
@@ -91,7 +91,7 @@ void ContextMenu::ShowMenu()
 	}
 }
 
-SDL_Rect ContextMenu::GetMenuArea()
+SDL_Rect UIMenu::GetMenuArea()
 {
 	return menuarea_;
 }

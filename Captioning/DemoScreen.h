@@ -8,7 +8,7 @@
 #include "SDL.h"
 
 #include "CaptionContainer.h"
-#include "ContextMenu.h"
+#include "UIMenu.h"
 #include "DebugText.h"
 #include "MouseHandler.h"
 #include "SDLUtility.h"
@@ -44,7 +44,7 @@ public:
 	void CreateCaption(std::string text, double x, double y, double w, int containerid);
 	void ClearAllCaptionText();
 	void DeleteAllCaptions();
-	ContextMenu *CreateNewTabContextMenu();
+	UIMenu *CreateNewTabContextMenu();
 	void CreateNewTab();
 private: 
 	int basefontsize_;

@@ -3,6 +3,7 @@
 
 #include "SDL.h"
 
+#include "StoredCaptionContainer.h"
 #include "Subscreen.h"
 
 class StoredCaptionScreen : public Subscreen
@@ -12,6 +13,7 @@ public:
 	int Show();
 private:
 	SDL_Rect screenarea_;
+	StoredCaptionContainer *testcaption_;
 };
 
 #endif //STORED_CAPTION_SCREEN

@@ -2,11 +2,13 @@
 
 #include "SDL.h"
 
-#include "ContextMenu.h"
+#include "UIMenu.h"
 #include "DebugText.h"
 #include "InputHandler.h"
 #include "KeyboardEntry.h"
 #include "MouseHandler.h"
+#include "ShortenedText.h"
+#include "TextInput.h"
 
 void InputHandler::CloseInputs()
 {
@@ -14,6 +16,7 @@ void InputHandler::CloseInputs()
 	Input_Handler_Inputs::keyboardentry_ = NULL;
 
 	Input_Handler_Inputs::currentmenu_ = NULL;
+	Input_Handler_Inputs::hovertext_ = NULL;
 	
 	Input_Handler_Inputs::mousetoevaluate_ = NULL;
 	Input_Handler_Inputs::previousmousevent_ = NULL;
@@ -36,7 +39,7 @@ int InputHandler::HandleEvents(const SDL_Event &e)
 {
 	switch (e.type)
 	{
-	case (SDL_MOUSEBUTTONDOWN) :
+	case SDL_MOUSEBUTTONDOWN:
 		Input_Handler_Inputs::ismousedown_ = true;
 		Input_Handler_Inputs::mouseevent_ = e.button.button;
 
@@ -118,7 +121,7 @@ bool InputHandler::IsKeyboardEntryNull()
 	return false;
 }
 
-void InputHandler::SetMenu(ContextMenu *contextmenu, int *x, int *y)
+void InputHandler::SetMenu(UIMenu *contextmenu, int *x, int *y)
 {
 	if (Input_Handler_Inputs::currentmenu_ != NULL)
 		Input_Handler_Inputs::currentmenu_->ResetMenu();
@@ -145,9 +148,19 @@ void InputHandler::SetMenu(ContextMenu *contextmenu, int *x, int *y)
 	}
 }
 
-ContextMenu *InputHandler::GetContextMenu()
+void InputHandler::SetHoverText(ShortenenedText *text)
+{
+	Input_Handler_Inputs::hovertext_ = text;
+}
+
+UIMenu *InputHandler::GetMenu()
 {
 	return Input_Handler_Inputs::currentmenu_;
+}
+
+ShortenenedText *InputHandler::GetHoverText()
+{
+	return Input_Handler_Inputs::hovertext_;
 }
 
 int InputHandler::GetCurrentMouseState(int mouseevent_, bool isdown)

@@ -94,7 +94,7 @@ void UIElements::Init()
 			standardcolorvector_[RED_WISTERIA],			//CAPTION_CONTAINER_DRAWN_CAPTION_COLOR
 			standardcolorvector_[DARK_RED],				//TEXT_INPUT_BOX
 			standardcolorvector_[RABBIT_EAR_IRIS],		//CONTEXT_MENU_BACKGROUND_COLOR
-			standardcolorvector_[BRUSHWOOD_DYED]		//HOVER_TEXT_BACKGROUND_COLOR
+			standardcolorvector_[PLUM_PURPLE]			//HOVER_TEXT_BACKGROUND_COLOR
 		},
 
 		new std::vector<SDL_Color>{				//YELLOW_RED_LAYOUT
@@ -118,7 +118,7 @@ void UIElements::Init()
 			standardcolorvector_[RICH_GARDENIA],		//CAPTION_CONTAINER_DRAWN_CAPTION_COLOR
 			standardcolorvector_[LEGAL_DYE],			//TEXT_INPUT_BOX
 			standardcolorvector_[SUMAC_DYED],			//CONTEXT_MENU_BACKGROUND_COLOR
-			standardcolorvector_[PLUM_PURPLE]			//HOVER_TEXT_BACKGROUND_COLOR
+			standardcolorvector_[BRUSHWOOD_DYED]		//HOVER_TEXT_BACKGROUND_COLOR
 		}
 	};
 
@@ -170,7 +170,7 @@ void UIElements::ShowUIHoverText(TextInput *text)
 	int textheight = text->GetHeight();
 
 	SDL_Rect textbackground{ x, y, textwidth + 4, textheight + 4 };
-	SDLUtility::CreateBorderedRect(textbackground, GetSDLColor(OUTLINED_BOX_COLOR, SOLID_COLOR), GetSDLColor(HOVER_TEXT_BACKGROUND_COLOR, SOLID_COLOR));
+	SDLUtility::CreateBorderedRect(textbackground, GetUIElementColor(OUTLINED_BOX_COLOR, SOLID_COLOR), GetUIElementColor(HOVER_TEXT_BACKGROUND_COLOR, SOLID_COLOR));
 	SDLUtility::PostText(text, x + 2, y + 2);
 }
 

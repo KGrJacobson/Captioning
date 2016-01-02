@@ -13,9 +13,11 @@ public:
 	ShortenenedText();
 	~ShortenenedText();
 	void SetArea(SDL_Rect textarea);
+	void SetMouseActive();
 	void CreateFittedText(std::string text);
 	void CreateQuickFittedText(std::string text);
 	int GetMouseEvent();
+	void Show();
 	void ShowFullHoverText();
 private:
 	int maxtextwidth_;

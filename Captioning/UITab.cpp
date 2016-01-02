@@ -10,7 +10,7 @@
 #include "UIElements.h"
 #include "UIButton.h"
 
-UITab::UITab(SDL_Rect tabarea, std::string text, int tabnumber, ContextMenu *contextmenu)
+UITab::UITab(SDL_Rect tabarea, std::string text, int tabnumber, UIMenu *contextmenu)
 {
 	tabnumber_ = tabnumber;
 	tabarea_ = tabarea;
@@ -54,7 +54,7 @@ int UITab::ShowTab(bool isselected)
 	if (closebutton_->GetMouseEvent() == LEFT_BUTTON_UP)
 		returncode = CLOSE_TAB;
 
-	if (contextmenu_->GetButtonPress() != ContextMenu::NO_CONTEXT_MENU_BUTTONS_PRESSED)
+	if (contextmenu_->GetButtonPress() != UIMenu::NO_CONTEXT_MENU_BUTTONS_PRESSED)
 		returncode = CHECK_CONTEXT_MENU;
 
 	return returncode;
@@ -67,7 +67,7 @@ void UITab::SetTabArea(SDL_Rect newarea)
 	closebutton_->SetButtonCoordinates(tabarea_.x + tabarea_.w - 20, tabarea_.y);
 }
 
-void UITab::SetContextMenu(ContextMenu *newmenu)
+void UITab::SetContextMenu(UIMenu *newmenu)
 {
 	contextmenu_ = newmenu;
 }
@@ -97,7 +97,7 @@ int UITab::GetContextMenuAction()
 	return contextmenu_->GetButtonPress();
 }
 
-ContextMenu *UITab::GetContextMenu()
+UIMenu *UITab::GetContextMenu()
 {
 	return contextmenu_;
 }

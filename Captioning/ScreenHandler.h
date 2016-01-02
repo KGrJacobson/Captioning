@@ -7,7 +7,6 @@
 
 #include "SDL.h"
 
-#include "ContextMenu.h"
 #include "StoredCaptionScreen.h"
 #include "DebugText.h"
 #include "DemoScreen.h"
@@ -17,8 +16,10 @@
 #include "MouseHandler.h"
 #include "ScreenHandler.h"
 #include "SDLUtility.h"
+#include "ShortenedText.h"
 #include "Subscreen.h"
 #include "TextInput.h"
+#include "UIMenu.h"
 
 class ScreenHandler {
 public:
@@ -43,9 +44,9 @@ private:
 	std::vector<Image*> backgroundimages_;
 	int backgroundimage_;
 	int leftscreen_;
-	ContextMenu cmenu_;
+	UIMenu cmenu_;
 	UIButton* menubuttonscreens_;
-	ContextMenu menuscreens_;
+	UIMenu menuscreens_;
 };
 
 #endif //SCREEN_HANDLER

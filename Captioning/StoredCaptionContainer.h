@@ -11,7 +11,7 @@ class StoredCaptionContainer
 {
 public:
 	static const int STANDARD_STORED_CONTAINER_WIDTH = 300;
-	static const int STANDARD_STORED_CONTAINER_HEIGHT = 60;
+	static const int STANDARD_STORED_CONTAINER_HEIGHT = 50;
 
 	enum returncode
 	{
@@ -22,6 +22,7 @@ public:
 	StoredCaptionContainer(SDL_Rect captionarea, int containernumber);
 	~StoredCaptionContainer();
 	void SetText(int captionid, std::string filein, std::string original, std::string translation);
+	void SetArea(SDL_Rect newarea);
 	int Show();
 	int CheckFormattedTextMouse(ShortenenedText *text);
 private:
@@ -33,6 +34,7 @@ private:
 	SDL_Rect captionarea_;
 	int containernumber_;
 	MouseHandler *mousefunction_;
+	bool isselected_;
 };
 
 #endif //STORED_CAPTION_CONTAINER

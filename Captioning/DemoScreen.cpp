@@ -138,13 +138,13 @@ int DemoScreen::Show()
 		break;
 	}
 
-	int captioncode = DEFAULT;
+	int captioncode = NO_RETURN_CODE;
 	int mousex = -1;
 	int mousey = -1;
 	std::list<CaptionContainer*>::iterator it = captionlist_[currenttab_]->begin();
 	while (it != captionlist_[currenttab_]->end())
 	{
-		captioncode = (*it)->EvaluateCaption(true);
+		captioncode = (*it)->Show(true);
 
 		switch (captioncode)
 		{
@@ -272,7 +272,7 @@ bool DemoScreen::SetCaptionText(std::string text, int captionid)
 {
 	if (selectedcaption_ != NULL)
 	{
-		selectedcaption_->SetText(text, demoarea_.w);
+		selectedcaption_->SetText(text);
 		return true;
 	}
 	else
@@ -281,7 +281,7 @@ bool DemoScreen::SetCaptionText(std::string text, int captionid)
 		{
 			if ((*it)->GetID() == captionid)
 			{
-				(*it)->SetText(text, demoarea_.w);
+				(*it)->SetText(text);
 
 				return true;
 			}
@@ -313,7 +313,7 @@ void DemoScreen::ClearAllCaptionText()
 {
 	for (std::list<CaptionContainer*>::iterator it = captionlist_[currenttab_]->begin(); it != captionlist_[currenttab_]->end(); it++)
 	{
-		(*it)->SetText("", demoarea_.w);
+		(*it)->SetText("");
 	}
 }
 
@@ -322,10 +322,10 @@ void DemoScreen::DeleteAllCaptions()
 	captionlist_[currenttab_]->clear();
 }
 
-ContextMenu *DemoScreen::CreateNewTabContextMenu()
+UIMenu *DemoScreen::CreateNewTabContextMenu()
 {
-	ContextMenu *newcontextmenu = new ContextMenu();
-	newcontextmenu->AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, ContextMenu::STANDARD_CONTEXT_MENU_WIDTH, ContextMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Rename", false));
+	UIMenu *newcontextmenu = new UIMenu();
+	newcontextmenu->AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Rename", false));
 
 	return newcontextmenu;
 }

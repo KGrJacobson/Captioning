@@ -124,7 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CaptionContainer.cpp" />
-    <ClCompile Include="ContextMenu.cpp" />
+    <ClCompile Include="UIMenu.cpp" />
     <ClCompile Include="NetworkUtility.cpp" />
     <ClCompile Include="ShortenedText.cpp" />
     <ClCompile Include="StoredCaptionContainer.cpp" />
@@ -146,7 +146,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CaptionContainer.h" />
-    <ClInclude Include="ContextMenu.h" />
+    <ClInclude Include="UIMenu.h" />
+    <ClInclude Include="FileHandler.h" />
     <ClInclude Include="NetworkUtility.h" />
     <ClInclude Include="ShortenedText.h" />
     <ClInclude Include="StoredCaptionContainer.h" />

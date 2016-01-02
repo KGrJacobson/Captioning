@@ -5,10 +5,10 @@
 #include "SDL.h"
 
 #include "CaptionContainer.h"
-#include "ContextMenu.h"
 #include "MouseHandler.h"
 #include "TextInput.h"
 #include "UIButton.h"
+#include "UIMenu.h"
 
 class UITab {
 public:
@@ -22,23 +22,23 @@ public:
 		CHECK_CONTEXT_MENU
 	};
 
-	UITab(SDL_Rect tabarea, std::string text, int tabnumber, ContextMenu *contextmenu);
+	UITab(SDL_Rect tabarea, std::string text, int tabnumber, UIMenu *contextmenu);
 	~UITab();
 	int ShowTab(bool isselected);
 	void SetTabArea(SDL_Rect newarea);
-	void SetContextMenu(ContextMenu *newmenu);
+	void SetContextMenu(UIMenu *newmenu);
 	void SetTabNumber(int tabnumber);
 	int GetTabNumber();
 	SDL_Rect GetTabArea();
 	TextInput *GetTabText();
 	int GetContextMenuAction();
-	ContextMenu *GetContextMenu();
+	UIMenu *GetContextMenu();
 private:
 	int tabnumber_;
 	SDL_Rect tabarea_;
 	UIButton *tabbutton_;
 	UIButton *closebutton_;
-	ContextMenu *contextmenu_;
+	UIMenu *contextmenu_;
 };
 
 #endif //UI_TAB

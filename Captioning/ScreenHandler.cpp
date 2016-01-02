@@ -3,12 +3,13 @@
 
 #include "SDL.h"
 
-#include "ContextMenu.h"
+#include "UIMenu.h"
 #include "DebugText.h"
 #include "DemoScreen.h"
 #include "InputHandler.h"
 #include "InputScreen.h"
 #include "ScreenHandler.h"
+#include "ShortenedText.h"
 #include "StoredCaptionScreen.h"
 #include "Subscreen.h"
 #include "SDLUtility.h"
@@ -28,7 +29,7 @@ ScreenHandler::ScreenHandler()
 
 	//preentered screen
 	int windowh = SDLUtility::GetScreenHeight();
-	storedcaptionscreen_ = new StoredCaptionScreen(SDL_Rect{ 0, 0, demoscreen_->GetScreenSize().x, windowh });
+	storedcaptionscreen_ = new StoredCaptionScreen(SDL_Rect{ 0, 0 + UIElements::STANDARD_MENU_HEIGHT, demoscreen_->GetScreenSize().x, windowh });
 
 	//manual entry screen
 	inputscreen_ = new InputScreen(SDL_Rect{ 0, 0 + UIElements::STANDARD_MENU_HEIGHT, demoscreen_->GetScreenSize().x, windowh });
@@ -48,13 +49,13 @@ ScreenHandler::ScreenHandler()
 	backgroundimage_ = 0;
 
 	menubuttonscreens_ = new UIButton(SDL_Rect{ 0, 0, UIElements::STANDARD_MENU_WIDTH, UIElements::STANDARD_MENU_HEIGHT }, "Screens", true);
-	menuscreens_.AddListItem(new UIButton(SDL_Rect{ 0, 0, ContextMenu::STANDARD_CONTEXT_MENU_WIDTH, ContextMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Stored Captioning", true));
-	menuscreens_.AddListItem(new UIButton(SDL_Rect{ 0, 0, ContextMenu::STANDARD_CONTEXT_MENU_WIDTH, ContextMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Manual Captioning", true));
-	menuscreens_.SetXY(0 - ContextMenu::STANDARD_CONTEXT_MENU_WIDTH, 0);
+	menuscreens_.AddListItem(new UIButton(SDL_Rect{ 0, 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Stored Captioning", true));
+	menuscreens_.AddListItem(new UIButton(SDL_Rect{ 0, 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Manual Captioning", true));
+	menuscreens_.SetXY(0 - UIMenu::STANDARD_CONTEXT_MENU_WIDTH, 0);
 
-	cmenu_.AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, ContextMenu::STANDARD_CONTEXT_MENU_WIDTH, ContextMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Violet Layout", true));
-	cmenu_.AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, ContextMenu::STANDARD_CONTEXT_MENU_WIDTH, ContextMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Yellow-Red Layout", true));
-	cmenu_.SetXY(0 - ContextMenu::STANDARD_CONTEXT_MENU_WIDTH, 0);
+	cmenu_.AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Violet Layout", true));
+	cmenu_.AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Yellow-Red Layout", true));
+	cmenu_.SetXY(0 - UIMenu::STANDARD_CONTEXT_MENU_WIDTH, 0);
 }
 
 ScreenHandler::~ScreenHandler()
@@ -171,9 +172,19 @@ void ScreenHandler::ShowScreens(int macro)
 		InputHandler::SetMenu(&menuscreens_, &menux, &menuy);
 
 	//show menus on top of everything
-	ContextMenu *currentcontextmenu = InputHandler::GetContextMenu();
-	if (currentcontextmenu != NULL)
+	UIMenu *currentmenu = InputHandler::GetMenu();
+	if (currentmenu != NULL)
 	{
-		currentcontextmenu->ShowMenu();
+		currentmenu->ShowMenu();
+	}
+
+	ShortenenedText *currenthovertext = InputHandler::GetHoverText();
+	if (currenthovertext != NULL && currenthovertext->GetMouseEvent() != NO_MOUSE_STATE)
+	{
+		currenthovertext->ShowFullHoverText();
+	}
+	else
+	{
+		InputHandler::SetHoverText(NULL);
 	}
 }

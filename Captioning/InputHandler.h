@@ -4,14 +4,17 @@
 
 #include "SDL.h"
 
-#include "ContextMenu.h"
+#include "UIMenu.h"
 #include "KeyboardEntry.h"
 #include "MouseHandler.h"
+#include "ShortenedText.h"
+#include "TextInput.h"
 
 namespace Input_Handler_Inputs
 {
 	static KeyboardEntry *keyboardentry_ = new KeyboardEntry();
-	static ContextMenu *currentmenu_ = NULL;
+	static UIMenu *currentmenu_ = NULL;
+	static ShortenenedText *hovertext_ = NULL;
 	static MouseHandler *mousetoevaluate_ = NULL;
 	static MouseHandler *previousmousevent_ = NULL;
 	static MouseHandler *currentmouseevent_ = NULL;
@@ -30,8 +33,10 @@ public:
 	static int HandleEvents(const SDL_Event &e);
 	static void SetKeyboardEntryTexture(TextInput *textinput);
 	static bool IsKeyboardEntryNull();
-	static void SetMenu(ContextMenu *contextmenu, int *x, int *y);
-	static ContextMenu *GetContextMenu();
+	static void SetMenu(UIMenu *contextmenu, int *x, int *y);
+	static void SetHoverText(ShortenenedText *text);
+	static UIMenu *GetMenu();
+	static ShortenenedText *GetHoverText();
 	static int GetCurrentMouseState(int mouseevent_, bool isdown);
 };
 
