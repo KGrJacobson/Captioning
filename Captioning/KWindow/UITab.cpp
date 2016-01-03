@@ -2,7 +2,6 @@
 
 #include "SDL.h"
 
-#include "CaptionContainer.h"
 #include "DebugText.h"
 #include "MouseHandler.h"
 #include "SDLUtility.h"

@@ -5,6 +5,7 @@
 
 #include "TextInput.h"
 #include "SDLUtility.h"
+#include "ShortenedText.h"
 #include "UIButton.h"
 #include "UIElements.h"
 
@@ -158,6 +159,48 @@ SDL_Color UIElements::InvertColor(SDL_Color color) {
 	colortoreturn.b += 127;
 
 	return colortoreturn;
+}
+
+void UIElements::SetMenu(UIMenu *menu, int *x, int *y)
+{
+	if (Global_UI_Element::currentmenu_ != NULL)
+		Global_UI_Element::currentmenu_->ResetMenu();
+
+	if (menu != NULL)
+	{
+
+		Global_UI_Element::currentmenu_ = menu;
+
+		if (x != NULL && y != NULL)
+		{
+			Global_UI_Element::currentmenu_->SetXY((*x), (*y));
+		}
+		else
+		{
+			int mousex, mousey;
+			SDL_GetMouseState(&mousex, &mousey);
+			Global_UI_Element::currentmenu_->SetXY(mousex, mousey);
+		}
+	}
+	else
+	{
+		Global_UI_Element::currentmenu_ = menu;
+	}
+}
+
+void UIElements::SetHoverText(ShortenenedText *text)
+{
+	Global_UI_Element::hovertext_ = text;
+}
+
+UIMenu *UIElements::GetMenu()
+{
+	return Global_UI_Element::currentmenu_;
+}
+
+ShortenenedText *UIElements::GetHoverText()
+{
+	return Global_UI_Element::hovertext_;
 }
 
 void UIElements::ShowUIHoverText(TextInput *text)

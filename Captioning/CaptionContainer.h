@@ -6,15 +6,15 @@
 
 #include "SDL.h"
 
-#include "MouseHandler.h"
-#include "SDLUtility.h"
-#include "TextInput.h"
-#include "UIButton.h"
-#include "UIElements.h"
+#include "KWindow\MouseHandler.h"
+#include "KWindow\SDLUtility.h"
+#include "KWindow\TextInput.h"
+#include "KWindow\UIButton.h"
+#include "KWindow\UIElements.h"
 
 const static int MINIMUM_HEIGHT_OF_CAPTION = 20;
 
-//Caption_Container_Flags provides information to the Demo Screen to process the container when rendering its contents.
+//Caption_Container_Flags provides information to the Demo Screen to process the container when rendering its contents in Show.
 //NO_RETURN_CODE does nothing.
 //DELETE_CAPTION is used when a user clicks on the "X" button on the caption and signals deletion of the container.
 //SELECT_CAPTION is used when a user clicks on the container and signals the caption to be selected.

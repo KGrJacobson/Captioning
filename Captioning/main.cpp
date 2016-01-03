@@ -4,10 +4,10 @@
 #include "SDL.h"
 #include "SDL_image.h"
 
-#include "DebugText.h"
-#include "InputHandler.h"
+#include "KWindow\DebugText.h"
+#include "KWindow\InputHandler.h"
 #include "ScreenHandler.h"
-#include "SDLUtility.h"
+#include "KWindow\SDLUtility.h"
 
 int main(int argc, char *argv[]) {
 	if (SDLUtility::Init() < 0)

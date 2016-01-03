@@ -18,18 +18,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SDLUtility.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Image.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextInput.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DebugText.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CaptionContainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -42,60 +30,57 @@
     <ClCompile Include="ScreenHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MouseHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UIElements.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UIButton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="KeyboardEntry.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UITab.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InputHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="StoredCaptionScreen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NetworkUtility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StoredCaptionContainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ShortenedText.cpp">
+    <ClCompile Include="KWindow\DebugText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UIMenu.cpp">
+    <ClCompile Include="KWindow\Image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KWindow\InputHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KWindow\KeyboardEntry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KWindow\MouseHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KWindow\NetworkUtility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KWindow\SDLUtility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KWindow\ShortenedText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KWindow\TextInput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KWindow\UIButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KWindow\UIElements.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KWindow\UIMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KWindow\UITab.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SDLUtility.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TextInput.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DebugText.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DemoScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CaptionContainer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Subscreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="InputScreen.h">
@@ -104,40 +89,55 @@
     <ClInclude Include="ScreenHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MouseHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UIElements.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UIButton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyboardEntry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UITab.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InputHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="StoredCaptionScreen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkUtility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StoredCaptionContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ShortenedText.h">
+    <ClInclude Include="KWindow\DebugText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FileHandler.h">
+    <ClInclude Include="KWindow\FileHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UIMenu.h">
+    <ClInclude Include="KWindow\Image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KWindow\InputHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KWindow\KeyboardEntry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KWindow\MouseHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KWindow\NetworkUtility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KWindow\SDLUtility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KWindow\ShortenedText.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KWindow\Subscreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KWindow\TextInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KWindow\UIButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KWindow\UIElements.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KWindow\UIMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KWindow\UITab.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

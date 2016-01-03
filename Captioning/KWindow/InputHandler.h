@@ -10,11 +10,11 @@
 #include "ShortenedText.h"
 #include "TextInput.h"
 
+//Input_Handler_Inputs holds global values that are either limited to a single instance at a time
+//(Mouse Handler variables) or a single instance for the entire program (keyboard entry, mouse event, etc.).
 namespace Input_Handler_Inputs
 {
 	static KeyboardEntry *keyboardentry_ = new KeyboardEntry();
-	static UIMenu *currentmenu_ = NULL;
-	static ShortenenedText *hovertext_ = NULL;
 	static MouseHandler *mousetoevaluate_ = NULL;
 	static MouseHandler *previousmousevent_ = NULL;
 	static MouseHandler *currentmouseevent_ = NULL;
@@ -22,6 +22,7 @@ namespace Input_Handler_Inputs
 	static bool ismousedown_ = false;
 	static std::list<MouseHandler*> mouselist_;
 }
+
 
 class InputHandler
 {
@@ -33,10 +34,6 @@ public:
 	static int HandleEvents(const SDL_Event &e);
 	static void SetKeyboardEntryTexture(TextInput *textinput);
 	static bool IsKeyboardEntryNull();
-	static void SetMenu(UIMenu *contextmenu, int *x, int *y);
-	static void SetHoverText(ShortenenedText *text);
-	static UIMenu *GetMenu();
-	static ShortenenedText *GetHoverText();
 	static int GetCurrentMouseState(int mouseevent_, bool isdown);
 };
 

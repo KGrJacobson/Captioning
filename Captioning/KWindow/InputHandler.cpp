@@ -9,14 +9,12 @@
 #include "MouseHandler.h"
 #include "ShortenedText.h"
 #include "TextInput.h"
+#include "UIElements.h"
 
 void InputHandler::CloseInputs()
 {
 	delete Input_Handler_Inputs::keyboardentry_;
 	Input_Handler_Inputs::keyboardentry_ = NULL;
-
-	Input_Handler_Inputs::currentmenu_ = NULL;
-	Input_Handler_Inputs::hovertext_ = NULL;
 	
 	Input_Handler_Inputs::mousetoevaluate_ = NULL;
 	Input_Handler_Inputs::previousmousevent_ = NULL;
@@ -43,10 +41,10 @@ int InputHandler::HandleEvents(const SDL_Event &e)
 		Input_Handler_Inputs::ismousedown_ = true;
 		Input_Handler_Inputs::mouseevent_ = e.button.button;
 
-		if (Input_Handler_Inputs::currentmenu_ != NULL)
+		if (Global_UI_Element::currentmenu_ != NULL)
 		{
-			if (SDLUtility::IsMouseActive(Input_Handler_Inputs::currentmenu_->GetMenuArea()) == false)
-				SetMenu(NULL, NULL, NULL);
+			if (SDLUtility::IsMouseActive(Global_UI_Element::currentmenu_->GetMenuArea()) == false)
+				UIElements::SetMenu(NULL, NULL, NULL);
 		}
 		break;
 	case SDL_MOUSEBUTTONUP:
@@ -119,48 +117,6 @@ bool InputHandler::IsKeyboardEntryNull()
 		return true;
 
 	return false;
-}
-
-void InputHandler::SetMenu(UIMenu *contextmenu, int *x, int *y)
-{
-	if (Input_Handler_Inputs::currentmenu_ != NULL)
-		Input_Handler_Inputs::currentmenu_->ResetMenu();
-
-	if (contextmenu != NULL)
-	{
-		
-		Input_Handler_Inputs::currentmenu_ = contextmenu;
-
-		if (x != NULL && y != NULL)
-		{
-			Input_Handler_Inputs::currentmenu_->SetXY((*x), (*y));
-		}
-		else
-		{	
-			int mousex, mousey;
-			SDL_GetMouseState(&mousex, &mousey);
-			Input_Handler_Inputs::currentmenu_->SetXY(mousex, mousey);
-		}
-	}
-	else
-	{
-		Input_Handler_Inputs::currentmenu_ = contextmenu;
-	}
-}
-
-void InputHandler::SetHoverText(ShortenenedText *text)
-{
-	Input_Handler_Inputs::hovertext_ = text;
-}
-
-UIMenu *InputHandler::GetMenu()
-{
-	return Input_Handler_Inputs::currentmenu_;
-}
-
-ShortenenedText *InputHandler::GetHoverText()
-{
-	return Input_Handler_Inputs::hovertext_;
 }
 
 int InputHandler::GetCurrentMouseState(int mouseevent_, bool isdown)

@@ -8,18 +8,18 @@
 #include "SDL.h"
 
 #include "StoredCaptionScreen.h"
-#include "DebugText.h"
+#include "KWindow\DebugText.h"
 #include "DemoScreen.h"
-#include "Image.h"
+#include "KWindow\Image.h"
 #include "InputScreen.h"
-#include "KeyboardEntry.h"
-#include "MouseHandler.h"
+#include "KWindow\KeyboardEntry.h"
+#include "KWindow\MouseHandler.h"
 #include "ScreenHandler.h"
-#include "SDLUtility.h"
-#include "ShortenedText.h"
-#include "Subscreen.h"
-#include "TextInput.h"
-#include "UIMenu.h"
+#include "KWindow\SDLUtility.h"
+#include "KWindow\ShortenedText.h"
+#include "KWindow\Subscreen.h"
+#include "KWindow\TextInput.h"
+#include "KWindow\UIMenu.h"
 
 class ScreenHandler {
 public:

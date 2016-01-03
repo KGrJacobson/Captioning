@@ -4,10 +4,10 @@
 #include "SDL.h"
 
 #include "CaptionContainer.h"
-#include "DebugText.h"
-#include "InputHandler.h"
-#include "SDLUtility.h"
-#include "UIElements.h"
+#include "KWindow\DebugText.h"
+#include "KWindow\InputHandler.h"
+#include "KWindow\SDLUtility.h"
+#include "KWindow\UIElements.h"
 
 CaptionContainer::~CaptionContainer()
 {

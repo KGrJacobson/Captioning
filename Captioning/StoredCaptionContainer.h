@@ -4,8 +4,8 @@
 
 #include "SDL.h"
 
-#include "MouseHandler.h"
-#include "ShortenedText.h"
+#include "KWindow\MouseHandler.h"
+#include "KWindow\ShortenedText.h"
 
 class StoredCaptionContainer
 {

@@ -4,7 +4,6 @@
 
 #include "SDL.h"
 
-#include "CaptionContainer.h"
 #include "MouseHandler.h"
 #include "TextInput.h"
 #include "UIButton.h"

@@ -3,20 +3,20 @@
 
 #include "SDL.h"
 
-#include "UIMenu.h"
-#include "DebugText.h"
+#include "KWindow\UIMenu.h"
+#include "KWindow\DebugText.h"
 #include "DemoScreen.h"
-#include "InputHandler.h"
+#include "KWindow\InputHandler.h"
 #include "InputScreen.h"
 #include "ScreenHandler.h"
-#include "ShortenedText.h"
+#include "KWindow\ShortenedText.h"
 #include "StoredCaptionScreen.h"
-#include "Subscreen.h"
-#include "SDLUtility.h"
+#include "KWindow\Subscreen.h"
+#include "KWindow\SDLUtility.h"
 
 ScreenHandler::ScreenHandler()
 {
-	InputHandler::SetMenu(NULL, NULL, NULL);
+	UIElements::SetMenu(NULL, NULL, NULL);
 
 	//set up universal background mousefunction
 	mousefunction_.Init(SDL_Rect{ 0, 0, SDLUtility::GetScreenWidth(), SDLUtility::GetScreenHeight() });
@@ -80,18 +80,18 @@ void ScreenHandler::ShowScreens(int macro)
 
 	if (mousefunction_.GetEvent() == RIGHT_BUTTON_UP)
 	{
-		InputHandler::SetMenu(&cmenu_, NULL, NULL);
+		UIElements::SetMenu(&cmenu_, NULL, NULL);
 	}
 
 	switch (menuscreens_.GetButtonPress())
 	{
 	case PREENTRED_CAPTION_SCREEN:
 		leftscreen_ = PREENTRED_CAPTION_SCREEN;
-		InputHandler::SetMenu(NULL, NULL, NULL);
+		UIElements::SetMenu(NULL, NULL, NULL);
 		break;
 	case MANUAL_CAPTION_SCREEN:
 		leftscreen_ = MANUAL_CAPTION_SCREEN;
-		InputHandler::SetMenu(NULL, NULL, NULL);
+		UIElements::SetMenu(NULL, NULL, NULL);
 		break;
 	}
 
@@ -100,12 +100,12 @@ void ScreenHandler::ShowScreens(int macro)
 	case UIElements::VIOLET_LAYOUT:
 		UIElements::SetColorLayout(UIElements::VIOLET_LAYOUT);
 		backgroundimage_ = UIElements::VIOLET_LAYOUT;
-		InputHandler::SetMenu(NULL, NULL, NULL);
+		UIElements::SetMenu(NULL, NULL, NULL);
 		break;
 	case UIElements::YELLOW_RED_LAYOUT:
 		UIElements::SetColorLayout(UIElements::YELLOW_RED_LAYOUT);
 		backgroundimage_ = UIElements::YELLOW_RED_LAYOUT;
-		InputHandler::SetMenu(NULL, NULL, NULL);
+		UIElements::SetMenu(NULL, NULL, NULL);
 		break;
 	}
 
@@ -169,22 +169,22 @@ void ScreenHandler::ShowScreens(int macro)
 	int menux = menurect.x;
 	int menuy = menurect.y + menurect.h;
 	if (menubuttonscreens_->GetMouseEvent() == LEFT_BUTTON_UP)
-		InputHandler::SetMenu(&menuscreens_, &menux, &menuy);
+		UIElements::SetMenu(&menuscreens_, &menux, &menuy);
 
 	//show menus on top of everything
-	UIMenu *currentmenu = InputHandler::GetMenu();
+	UIMenu *currentmenu = UIElements::GetMenu();
 	if (currentmenu != NULL)
 	{
 		currentmenu->ShowMenu();
 	}
 
-	ShortenenedText *currenthovertext = InputHandler::GetHoverText();
+	ShortenenedText *currenthovertext = UIElements::GetHoverText();
 	if (currenthovertext != NULL && currenthovertext->GetMouseEvent() != NO_MOUSE_STATE)
 	{
 		currenthovertext->ShowFullHoverText();
 	}
 	else
 	{
-		InputHandler::SetHoverText(NULL);
+		UIElements::SetHoverText(NULL);
 	}
 }

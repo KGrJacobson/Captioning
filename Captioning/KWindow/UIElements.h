@@ -7,12 +7,21 @@
 #include "SDL.h"
 
 #include "SDLUtility.h"
+#include "ShortenedText.h"
 #include "TextInput.h"
 #include "UIButton.h"
+#include "UIMenu.h"
 
 static std::vector<SDL_Color> standardcolorvector_;
 static std::vector<std::vector<SDL_Color>*> colorlayouts_;
 static std::vector<SDL_Color> *currentcolorlayout_;
+
+//Only one of each of these UI Elements can be shown at a time.
+namespace Global_UI_Element
+{
+	static UIMenu *currentmenu_ = NULL;
+	static ShortenenedText *hovertext_ = NULL;
+}
 
 class UIElements 
 {
@@ -131,6 +140,10 @@ public:
 	static SDL_Color GetSDLColor(int color, int alphavalue);
 	static SDL_Color GetUIElementColor(int uielement, int alphavalue);
 	static SDL_Color InvertColor(SDL_Color color);
+	static void SetMenu(UIMenu *contextmenu, int *x, int *y);
+	static void SetHoverText(ShortenenedText *text);
+	static UIMenu *GetMenu();
+	static ShortenenedText *GetHoverText();
 	static void ShowUIHoverText(TextInput *text);
 	static void ShowUIButton(UIButton *button);
 	static void ShowUITinyButton(UIButton *button);

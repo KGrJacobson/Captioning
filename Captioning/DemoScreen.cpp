@@ -6,15 +6,19 @@
 #include "SDL.h"
 
 #include "CaptionContainer.h"
-#include "DebugText.h"
+#include "KWindow\DebugText.h"
 #include "DemoScreen.h"
-#include "InputHandler.h"
-#include "MouseHandler.h"
-#include "NetworkUtility.h"
-#include "SDLUtility.h"
-#include "UIElements.h"
-#include "UITab.h"
+#include "KWindow\InputHandler.h"
+#include "KWindow\MouseHandler.h"
+#include "KWindow\NetworkUtility.h"
+#include "KWindow\SDLUtility.h"
+#include "KWindow\UIElements.h"
+#include "KWindow\UITab.h"
 
+//Every subscreen is dependent on the size of the Demo Screen, so the contructor only takes one argument and
+//is created based on the constants declared in the header file.  
+//setfontsize is the actual size of the captions to be sent to OBS.  The font used in the captioning system
+//  is scaled down to simulate the actual streaming destination better.
 DemoScreen::DemoScreen(int setfontize)
 {
 	basefontsize_ = setfontize;
@@ -60,6 +64,9 @@ DemoScreen::~DemoScreen()
 	captionlist_.clear();
 }
 
+//DrawNewCaption creates a new Caption Container during run time based on the current position of the mouse on the subscreen.
+//This new caption is not saved and will be lost when the program is closed.  Drawing new captions should be used for "on-the-fly"
+//captioning and not as a substitute for creating stored captions.
 void DemoScreen::DrawNewCaption()
 {
 	if (drawncaptionarea_ == NULL)
@@ -79,11 +86,15 @@ void DemoScreen::DrawNewCaption()
 	}
 }
 
+//The positioning and size of other subscreens is dependent on the Demo Screen, so the ScreenHandler file needs to access
+//the size of the Demo Screen for this purpose.
 SDL_Rect DemoScreen::GetScreenSize()
 {
 	return screenarea_;
 }
 
+//Show renders the Demo Screen, the tabs that exist, and the list of captions for the current tab on screen.  Additionally,
+//if a container is being drawn, it is handled here.
 int DemoScreen::Show()
 {
 	int returncode = NO_RETURN_CODE;
@@ -96,6 +107,7 @@ int DemoScreen::Show()
 
 	switch (mousefunction_.GetEvent())
 	{
+	//Cancel Caption Container drawing if the mouse leaves the Demo Screen
 	case NO_MOUSE_STATE:
 		if (drawncaptionarea_ != NULL)
 		{
@@ -103,6 +115,8 @@ int DemoScreen::Show()
 			drawncaptionarea_ = NULL;
 		}
 		break;
+
+	//Begin creating a new Caption Container
 	case LEFT_BUTTON_DOWN:
 		DrawNewCaption();
 		SDLUtility::CreateSquare(
@@ -110,6 +124,8 @@ int DemoScreen::Show()
 			UIElements::GetUIElementColor(UIElements::CAPTION_CONTAINER_DRAWN_CAPTION_COLOR,
 			UIElements::SEMITRANSPARENT_COLOR));
 		break;
+	
+	//Create a new Caption Container upon releasing the left mouse button
 	case LEFT_BUTTON_UP:
 		if (drawncaptionarea_ != NULL)
 		{
@@ -224,20 +240,21 @@ int DemoScreen::Show()
 		case UITab::MOVE_TAB:
 			break;
 		case UITab::OPEN_CONTEXT_MENU:
-			InputHandler::SetMenu((*tabit)->GetContextMenu(), NULL, NULL);
+			UIElements::SetMenu((*tabit)->GetContextMenu(), NULL, NULL);
 			break;
 		case UITab::CHECK_CONTEXT_MENU:
 			if ((*tabit)->GetContextMenuAction() == RENAME_TAB)
 			{
 				InputHandler::SetKeyboardEntryTexture((*tabit)->GetTabText());
 			}
-			InputHandler::SetMenu(NULL, NULL, NULL);
+			UIElements::SetMenu(NULL, NULL, NULL);
 			break;
 		}
 
 		++tabit;
 	}
 
+	//If a tab requires deletion, free the tab memory, the Caption Container memory and reposition the tabs on top of the screen.
 	if (closetab != 0)
 	{
 		if (tablist_.begin() + closetab == tablist_.end() - 1 && closetab == currenttab_)
@@ -268,6 +285,10 @@ int DemoScreen::Show()
 	return returncode;
 }
 
+//Alters the text of the current selected caption.  If no caption is selected, then it is sent to the caption that matches
+//the ID provided in the argument by iterating through the captions in the current tab.  Returns true upon success, and 
+//false if no caption is selected and no matching ID is found.
+//text is a UTF8 string
 bool DemoScreen::SetCaptionText(std::string text, int captionid)
 {
 	if (selectedcaption_ != NULL)
@@ -301,6 +322,10 @@ std::string DemoScreen::GetSelectedCaptionText()
 	return "";
 }
 
+//Create a new Caption Container and add it to the current tab.
+//text is a UTF8 string
+//x, y, and w are the relative position in percentage to the Demo Screen (see CaptionContainer::Init).
+//containerid is the new ID of the container being created.  This int must be positive and unique, excepting -1 (see Caption Container).
 void DemoScreen::CreateCaption(std::string text, double x, double y, double w, int containerid)
 {
 	CaptionContainer *newcontainer = new CaptionContainer;
@@ -309,6 +334,7 @@ void DemoScreen::CreateCaption(std::string text, double x, double y, double w, i
 	captionlist_[currenttab_]->push_back(newcontainer);
 }
 
+//Delete all text in every Caption Container in the active tab.
 void DemoScreen::ClearAllCaptionText()
 {
 	for (std::list<CaptionContainer*>::iterator it = captionlist_[currenttab_]->begin(); it != captionlist_[currenttab_]->end(); it++)
@@ -317,11 +343,13 @@ void DemoScreen::ClearAllCaptionText()
 	}
 }
 
+//Delete all Caption Containers in the active tab.
 void DemoScreen::DeleteAllCaptions()
 {
 	captionlist_[currenttab_]->clear();
 }
 
+//Allocates memory for a context menu when creating a new tab.
 UIMenu *DemoScreen::CreateNewTabContextMenu()
 {
 	UIMenu *newcontextmenu = new UIMenu();
@@ -330,6 +358,8 @@ UIMenu *DemoScreen::CreateNewTabContextMenu()
 	return newcontextmenu;
 }
 
+//Creates a new tab, and consequently a new "instance" of a Demo Screen.  New tabs are created when a user click on the "+" button next to the tabs
+//on the Demo Screen.
 void DemoScreen::CreateNewTab()
 {
 	tablist_.push_back(new UITab(

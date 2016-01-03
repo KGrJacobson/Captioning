@@ -2,7 +2,6 @@
 
 #include "SDL.h"
 #include "SDL_image.h"
-#include "SDL_ttf.h"
 
 #include "Image.h"
 #include "SDLUtility.h"
@@ -12,6 +11,8 @@ Image::~Image()
 	DestroyTexture();
 }
 
+//Load the file as a surface and then create a texture from it.
+//Return 0 if successful and -1 if an issue with SDL arose.
 int Image::CreateTextureFromImage(std::string filepath)
 {
 	DestroyTexture();

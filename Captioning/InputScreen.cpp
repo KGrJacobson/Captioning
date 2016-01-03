@@ -4,14 +4,14 @@
 #include "SDL.h"
 
 #include "CaptionContainer.h"
-#include "DebugText.h"
-#include "InputHandler.h"
+#include "KWindow\DebugText.h"
+#include "KWindow\InputHandler.h"
 #include "InputScreen.h"
-#include "MouseHandler.h"
+#include "KWindow\MouseHandler.h"
 #include "ScreenHandler.h"
-#include "SDLUtility.h"
-#include "UIButton.h"
-#include "UIElements.h"
+#include "KWindow\SDLUtility.h"
+#include "KWindow\UIButton.h"
+#include "KWindow\UIElements.h"
 
 InputScreen::InputScreen(SDL_Rect setscreenarea)
 {

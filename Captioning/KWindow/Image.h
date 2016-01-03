@@ -5,8 +5,8 @@
 
 #include "SDL.h"
 #include "SDL_image.h"
-#include "SDL_ttf.h"
 
+//Image creates a texture from an existing image (usually png)
 class Image {
 public:
 	~Image();

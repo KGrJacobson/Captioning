@@ -4,7 +4,7 @@
 #include "SDL.h"
 
 #include "StoredCaptionContainer.h"
-#include "Subscreen.h"
+#include "KWindow\Subscreen.h"
 
 class StoredCaptionScreen : public Subscreen
 {

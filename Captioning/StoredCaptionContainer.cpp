@@ -3,11 +3,11 @@
 
 #include "SDL.h"
 
-#include "InputHandler.h"
-#include "MouseHandler.h"
-#include "SDLUtility.h"
-#include "ShortenedText.h"
-#include "UIElements.h"
+#include "KWindow\InputHandler.h"
+#include "KWindow\MouseHandler.h"
+#include "KWindow\SDLUtility.h"
+#include "KWindow\ShortenedText.h"
+#include "KWindow\UIElements.h"
 
 StoredCaptionContainer::StoredCaptionContainer(SDL_Rect captionarea, int containernumber)
 {
@@ -111,7 +111,7 @@ int StoredCaptionContainer::CheckFormattedTextMouse(ShortenenedText *text)
 	int mouseevent = text->GetMouseEvent();
 
 	if (mouseevent == MOUSEOVER)
-		InputHandler::SetHoverText(text);
+		UIElements::SetHoverText(text);
 
 	return mouseevent;
 }
