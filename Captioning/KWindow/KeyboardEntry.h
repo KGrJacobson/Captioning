@@ -1,9 +1,13 @@
- #ifndef KEYBOARD_ENTRY
+#ifndef KEYBOARD_ENTRY
 #define KEYBOARD_ENTRY
 
 #include <string>
+#include <unordered_map>
+#include <vector>
 
+#include "JPIME.h"
 #include "TextInput.h"
+#include "UIMenu.h"
 
 class KeyboardEntry
 {
@@ -29,7 +33,7 @@ public:
 	void InsertCharacter(char character);
 	void InsertString(std::string string);
 	void DeleteCharacter();
-	void SetTexture(TextInput *text);
+	void SetTexture(TextInput *text, int textx, int textlowesty);
 	void SetShift(bool isdown);
 	void SetCTRL(bool isdown);
 	void FinalizeCurrentText();
@@ -37,6 +41,9 @@ public:
 	char KeyDownInputEnglish(const SDL_Event &e);
 	void KeyDownInputJapaneseHiragana(const SDL_Event &e);
 	void KeyDownInputJapaneseKatakana(const SDL_Event &e);
+	void CreateKanjiFindMenu(std::string kana);
+	void ShowMenu();
+	void CloseMenu();
 	void KeyUpInput(const SDL_Event &e);
 	TextInput *GetTexture();
 private:
@@ -47,6 +54,13 @@ private:
 	bool isshift_;
 	bool isctrl_;
 	int currentime_;
+	Japanese_IME jpime_;
+	std::unordered_map<std::string, std::string> hiraganamap_;
+	std::unordered_map<std::string, std::string> katakanamap_;
+	std::vector<UIMenu> kanjimenu_;
+	int menux_;
+	int menuy_;
+	bool ismenuactive_;
 };
 
 #endif //KEYBOARD_ENTRY

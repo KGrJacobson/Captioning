@@ -32,6 +32,7 @@ public:
 	int Show();
 	std::string PostCurrentString();
 	TextInput *GetTexture();
+	SDL_Rect GetTextArea();
 private:
 	SDL_Rect screenarea_;
 	TextInput texttexture_;

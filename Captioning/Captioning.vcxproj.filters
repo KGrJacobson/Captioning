@@ -75,6 +75,9 @@
     <ClCompile Include="KWindow\UITab.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="KWindow\JPIME.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DemoScreen.h">
@@ -138,6 +141,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="KWindow\UITab.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KWindow\JPIME.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

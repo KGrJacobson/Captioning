@@ -14,6 +14,7 @@
 #include "KWindow\Subscreen.h"
 #include "KWindow\SDLUtility.h"
 
+//Create subscreens, background images, menu bar menus, and context menu.
 ScreenHandler::ScreenHandler()
 {
 	UIElements::SetMenu(NULL, NULL, NULL);
@@ -25,7 +26,7 @@ ScreenHandler::ScreenHandler()
 	//demo screen
 	demoscreen_ = new DemoScreen(22);
 	demoscreen_->CreateCaption("In C++ there are conditional assignment situations where use of the if-else statement is impossible, since this language explicitly distinguishes between initialization and assignment. In such case it is always possible to use a function call, but this can be cumbersome and inelegant. For example, to pass conditionally different values as an argument for a constructor of a field or a base class, it is impossible to use a plain if-else statement; in this case we can use a conditional assignment expression, or a function call.",
-		.15, .80, .70, 0);
+		.15, .70, .70, 0);
 
 	//preentered screen
 	int windowh = SDLUtility::GetScreenHeight();
@@ -33,7 +34,6 @@ ScreenHandler::ScreenHandler()
 
 	//manual entry screen
 	inputscreen_ = new InputScreen(SDL_Rect{ 0, 0 + UIElements::STANDARD_MENU_HEIGHT, demoscreen_->GetScreenSize().x, windowh });
-	InputHandler::SetKeyboardEntryTexture(inputscreen_->GetTexture());
 
 	//push back in order of Screens enum
 	screens_.push_back(storedcaptionscreen_);
@@ -48,13 +48,13 @@ ScreenHandler::ScreenHandler()
 	backgroundimages_[1]->CreateTextureFromImage("orange.png");
 	backgroundimage_ = 0;
 
-	menubuttonscreens_ = new UIButton(SDL_Rect{ 0, 0, UIElements::STANDARD_MENU_WIDTH, UIElements::STANDARD_MENU_HEIGHT }, "Screens", true);
-	menuscreens_.AddListItem(new UIButton(SDL_Rect{ 0, 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Stored Captioning", true));
-	menuscreens_.AddListItem(new UIButton(SDL_Rect{ 0, 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Manual Captioning", true));
+	menubuttonscreens_ = new UIButton(SDL_Rect{ 0, 0, UIElements::STANDARD_MENU_WIDTH, UIElements::STANDARD_MENU_HEIGHT }, "Screens", UIElements::STANDARD_UI_FONT_SIZE, true);
+	menuscreens_.AddListItem(new UIButton(SDL_Rect{ 0, 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Stored Captioning", UIElements::STANDARD_UI_FONT_SIZE, true));
+	menuscreens_.AddListItem(new UIButton(SDL_Rect{ 0, 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Manual Captioning", UIElements::STANDARD_UI_FONT_SIZE, true));
 	menuscreens_.SetXY(0 - UIMenu::STANDARD_CONTEXT_MENU_WIDTH, 0);
 
-	cmenu_.AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Violet Layout", true));
-	cmenu_.AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Yellow-Red Layout", true));
+	cmenu_.AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Violet Layout", UIElements::STANDARD_UI_FONT_SIZE, true));
+	cmenu_.AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Yellow-Red Layout", UIElements::STANDARD_UI_FONT_SIZE, true));
 	cmenu_.SetXY(0 - UIMenu::STANDARD_CONTEXT_MENU_WIDTH, 0);
 }
 
@@ -74,8 +74,11 @@ ScreenHandler::~ScreenHandler()
 	screens_.clear();
 }
 
+//Call Show functions for all subscreens, context menu, menu bar, and hover text as well as handle return codes for each subscreen.
+//macro is the key macro or lack thereof returned by KeyboardEntry.
 void ScreenHandler::ShowScreens(int macro)
 {
+	//show background image
 	SDLUtility::PostImage(backgroundimages_[backgroundimage_], 0, 0, SDL_Rect{ 0, 0, backgroundimages_[backgroundimage_]->GetWidth(), backgroundimages_[backgroundimage_]->GetHeight() });
 
 	if (mousefunction_.GetEvent() == RIGHT_BUTTON_UP)
@@ -83,6 +86,7 @@ void ScreenHandler::ShowScreens(int macro)
 		UIElements::SetMenu(&cmenu_, NULL, NULL);
 	}
 
+	//show current screen in leftscreen_
 	switch (menuscreens_.GetButtonPress())
 	{
 	case PREENTRED_CAPTION_SCREEN:
@@ -95,6 +99,7 @@ void ScreenHandler::ShowScreens(int macro)
 		break;
 	}
 
+	//check native context menu
 	switch (cmenu_.GetButtonPress())
 	{
 	case UIElements::VIOLET_LAYOUT:
@@ -109,6 +114,7 @@ void ScreenHandler::ShowScreens(int macro)
 		break;
 	}
 
+	//handle key macros
 	switch(macro)
 	{
 	case KeyboardEntry::DELETE_CAPTIONS:
@@ -121,7 +127,7 @@ void ScreenHandler::ShowScreens(int macro)
 		DebugText::CreateMessage("Japanese Text");
 		break;
 	case KeyboardEntry::TEXT_FINALIZED:
-		InputHandler::SetKeyboardEntryTexture(NULL);
+		InputHandler::SetKeyboardEntryTexture(NULL, SDLUtility::GetScreenWidth(), 0);
 		break;
 	}
 
@@ -135,21 +141,21 @@ void ScreenHandler::ShowScreens(int macro)
 		case MANUAL_CAPTION_SCREEN:
 			std::string currentstring;
 
+			if (InputHandler::IsKeyboardEntryNull() == true)
+			{
+				SDL_Rect textarea = inputscreen_->GetTextArea();
+				InputHandler::SetKeyboardEntryTexture(inputscreen_->GetTexture(), textarea.x, textarea.y + textarea.h);
+			}
+
 			switch (screens_[leftscreen_]->Show())
 			{
 			case InputScreen::APPLY_BUTTON_PRESSED:
 				currentstring = inputscreen_->PostCurrentString();
-				if (InputHandler::IsKeyboardEntryNull() == true)
-					InputHandler::SetKeyboardEntryTexture(inputscreen_->GetTexture());
-
 				if (demoscreen_->GetSelectedCaptionText() != currentstring && currentstring != "")
 					demoscreen_->SetCaptionText(currentstring, -1);
 				break;
 			case InputScreen::RETURN_KEY_PRESSED:
 				currentstring = inputscreen_->PostCurrentString();
-				if (InputHandler::IsKeyboardEntryNull() == true)
-					InputHandler::SetKeyboardEntryTexture(inputscreen_->GetTexture());
-
 				if (demoscreen_->GetSelectedCaptionText() != currentstring && currentstring != "")
 					demoscreen_->SetCaptionText(currentstring, -1);
 				break;
@@ -172,10 +178,12 @@ void ScreenHandler::ShowScreens(int macro)
 		UIElements::SetMenu(&menuscreens_, &menux, &menuy);
 
 	//show menus on top of everything
+	InputHandler::ShowKeyboardInputMenu();
+
 	UIMenu *currentmenu = UIElements::GetMenu();
 	if (currentmenu != NULL)
 	{
-		currentmenu->ShowMenu();
+		currentmenu->ShowMenu(-1);
 	}
 
 	ShortenenedText *currenthovertext = UIElements::GetHoverText();

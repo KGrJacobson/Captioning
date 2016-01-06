@@ -9,7 +9,9 @@
 #include "ScreenHandler.h"
 #include "KWindow\SDLUtility.h"
 
+//Contains initialization functions and the basic program loop.  Returns 1 if initialization fails.
 int main(int argc, char *argv[]) {
+	//Initialize all functions for SDL and KWindow.
 	if (SDLUtility::Init() < 0)
 	{
 		std::cout << "SDL Initialization failure" << '\n';
@@ -48,6 +50,7 @@ int main(int argc, char *argv[]) {
 		SDLUtility::UpdateScreen();
 	}
 
+	//close SDL and KWindow
 	InputHandler::CloseInputs();
 	//SDLUtility::Close();
 	return 0;

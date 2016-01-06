@@ -9,10 +9,10 @@
 #include "UIButton.h"
 #include "UIElements.h"
 
-UIButton::UIButton(SDL_Rect buttonarea, std::string text, bool istextcentered)
+UIButton::UIButton(SDL_Rect buttonarea, std::string text, int fontsize, bool istextcentered)
 {
 	absolutecoordinatesrect_ = buttonarea;
-	buttontext_.Init("meiryo.ttc", UIElements::STANDARD_UI_FONT_SIZE);
+	buttontext_.Init("meiryo.ttc", fontsize);
 	buttontext_.CreateTextureFromText(text);
 	centertext_ = istextcentered;
 	donotresetarea_ = true;
@@ -43,6 +43,11 @@ TextInput *UIButton::GetText()
 bool UIButton::IsTextCentered()
 {
 	return centertext_;
+}
+
+void UIButton::SetButtonText(std::string text)
+{
+	buttontext_.CreateTextureFromText(text);
 }
 
 void UIButton::SetButtonArea(SDL_Rect newarea)

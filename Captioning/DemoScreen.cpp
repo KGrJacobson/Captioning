@@ -53,6 +53,7 @@ DemoScreen::DemoScreen(int setfontize)
 
 	newtabbutton_ = new UIButton(SDL_Rect{ tablist_.back()->GetTabArea().x + tablist_.back()->GetTabArea().w , screenarea_.y, 20, 20 },
 		"+",
+		UIElements::STANDARD_UI_FONT_SIZE,
 		true);
 }
 
@@ -245,7 +246,8 @@ int DemoScreen::Show()
 		case UITab::CHECK_CONTEXT_MENU:
 			if ((*tabit)->GetContextMenuAction() == RENAME_TAB)
 			{
-				InputHandler::SetKeyboardEntryTexture((*tabit)->GetTabText());
+				SDL_Rect tabarea = (*tabit)->GetTabArea();
+				InputHandler::SetKeyboardEntryTexture((*tabit)->GetTabText(), tabarea.x, tabarea.y + tabarea.h);
 			}
 			UIElements::SetMenu(NULL, NULL, NULL);
 			break;
@@ -353,7 +355,7 @@ void DemoScreen::DeleteAllCaptions()
 UIMenu *DemoScreen::CreateNewTabContextMenu()
 {
 	UIMenu *newcontextmenu = new UIMenu();
-	newcontextmenu->AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Rename", false));
+	newcontextmenu->AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Rename", UIElements::STANDARD_UI_FONT_SIZE, false));
 
 	return newcontextmenu;
 }

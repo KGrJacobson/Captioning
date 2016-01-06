@@ -127,6 +127,7 @@
     <ClCompile Include="KWindow\DebugText.cpp" />
     <ClCompile Include="KWindow\Image.cpp" />
     <ClCompile Include="KWindow\InputHandler.cpp" />
+    <ClCompile Include="KWindow\JPIME.cpp" />
     <ClCompile Include="KWindow\KeyboardEntry.cpp" />
     <ClCompile Include="KWindow\MouseHandler.cpp" />
     <ClCompile Include="KWindow\NetworkUtility.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="KWindow\FileHandler.h" />
     <ClInclude Include="KWindow\Image.h" />
     <ClInclude Include="KWindow\InputHandler.h" />
+    <ClInclude Include="KWindow\JPIME.h" />
     <ClInclude Include="KWindow\KeyboardEntry.h" />
     <ClInclude Include="KWindow\MouseHandler.h" />
     <ClInclude Include="KWindow\NetworkUtility.h" />

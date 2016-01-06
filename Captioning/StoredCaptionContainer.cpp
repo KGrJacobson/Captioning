@@ -7,6 +7,7 @@
 #include "KWindow\MouseHandler.h"
 #include "KWindow\SDLUtility.h"
 #include "KWindow\ShortenedText.h"
+#include "KWindow\UIButton.h"
 #include "KWindow\UIElements.h"
 
 StoredCaptionContainer::StoredCaptionContainer(SDL_Rect captionarea, int containernumber)
@@ -27,6 +28,9 @@ StoredCaptionContainer::StoredCaptionContainer(SDL_Rect captionarea, int contain
 	translatedtext_.SetMouseActive();
 
 	SetArea(captionarea);
+
+	contextmenu_.AddListItem(new UIButton(SDL_Rect{ 0, 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Edit Caption", UIElements::STANDARD_UI_FONT_SIZE, false));
+	contextmenu_.RemoveMouseHandler();
 }
 
 StoredCaptionContainer::~StoredCaptionContainer()
@@ -81,7 +85,7 @@ int StoredCaptionContainer::Show()
 			if (mousefunction_->GetEvent() == RIGHT_BUTTON_UP || captioninfo_.GetMouseEvent() == RIGHT_BUTTON_UP ||
 				originaltext_.GetMouseEvent() == RIGHT_BUTTON_UP || translatedtext_.GetMouseEvent() == RIGHT_BUTTON_UP)
 			{
-				//open context menu
+				UIElements::SetMenu(&contextmenu_, NULL, NULL);
 			}
 		}
 
@@ -97,6 +101,14 @@ int StoredCaptionContainer::Show()
 				UIElements::GetUIElementColor(UIElements::OUTLINED_BOX_COLOR, UIElements::SOLID_COLOR),
 				UIElements::GetUIElementColor(UIElements::CAPTION_CONTAINER_COLOR, UIElements::SEMITRANSPARENT_COLOR));
 		}
+	}
+
+	switch (contextmenu_.GetButtonPress())
+	{
+	case EDIT_CAPTION:
+		returncode = EDIT_CAPTION;
+		UIElements::SetMenu(NULL, NULL, NULL);
+		break;
 	}
 
 	captioninfo_.Show();

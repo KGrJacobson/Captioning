@@ -4,19 +4,26 @@
 
 #include "SDL.h"
 
+#include "KWindow\UIMenu.h"
 #include "KWindow\MouseHandler.h"
 #include "KWindow\ShortenedText.h"
 
 class StoredCaptionContainer
 {
 public:
-	static const int STANDARD_STORED_CONTAINER_WIDTH = 300;
+	static const int STANDARD_STORED_CONTAINER_WIDTH = 200;
 	static const int STANDARD_STORED_CONTAINER_HEIGHT = 50;
 
 	enum returncode
 	{
 		NO_RETURN_CODE,
-		CAPTION_SELECTED
+		CAPTION_SELECTED,
+		OPEN_EDIT_SCREEN
+	};
+
+	enum contextmenucode
+	{
+		EDIT_CAPTION
 	};
 
 	StoredCaptionContainer(SDL_Rect captionarea, int containernumber);
@@ -35,6 +42,7 @@ private:
 	int containernumber_;
 	MouseHandler *mousefunction_;
 	bool isselected_;
+	UIMenu contextmenu_;
 };
 
 #endif //STORED_CAPTION_CONTAINER

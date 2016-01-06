@@ -13,6 +13,8 @@
 #include "KWindow\UIButton.h"
 #include "KWindow\UIElements.h"
 
+//Initialize input handlers and create the area for each element of the screen.
+//setscreenarea is the area of the subscreen.
 InputScreen::InputScreen(SDL_Rect setscreenarea)
 {
 	screenarea_ = setscreenarea;
@@ -33,6 +35,7 @@ InputScreen::InputScreen(SDL_Rect setscreenarea)
 		static_cast<int>(textinputboxrect.w * .15),
 		static_cast<int>(textinputboxrect.h * .25) },
 		"Apply",
+		UIElements::STANDARD_UI_FONT_SIZE,
 		false);
 
 	cancelbutton_ = new UIButton(SDL_Rect{
@@ -41,6 +44,7 @@ InputScreen::InputScreen(SDL_Rect setscreenarea)
 		static_cast<int>(textinputboxrect.w * .15),
 		static_cast<int>(textinputboxrect.h * .25) },
 		"Cancel",
+		UIElements::STANDARD_UI_FONT_SIZE,
 		false);
 }
 
@@ -54,6 +58,7 @@ InputScreen::~InputScreen()
 	cancelbutton_ = NULL;
 }
 
+//Render subscreen elements and return an enum flag if necessary.
 int InputScreen::Show()
 {
 	int returnflag = NO_RETURN_EVENT;
@@ -95,6 +100,8 @@ int InputScreen::Show()
 	return returnflag;
 }
 
+//Clear the text texture and return its text.  The major use of this function is to create a caption
+//on the Demo Screen with the text returned.
 std::string InputScreen::PostCurrentString()
 {
 	std::string currenttext = texttexture_.GetCurrentText();
@@ -106,4 +113,10 @@ std::string InputScreen::PostCurrentString()
 TextInput *InputScreen::GetTexture()
 {
 	return &texttexture_;
+}
+
+//Return the destination rectangle of the text texture.
+SDL_Rect InputScreen::GetTextArea()
+{
+	return SDL_Rect{ textinputbox_.GetMouseArea().x + 3, textinputbox_.GetMouseArea().y + 3, texttexture_.GetWidth(), texttexture_.GetHeight() };
 }

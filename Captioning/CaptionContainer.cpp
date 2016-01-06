@@ -46,8 +46,8 @@ void CaptionContainer::Init(std::string initialtext, double relativex, double re
 	
 	containermouseevent_.Init(absolutecoordinatesrect_);
 	InputHandler::AddMouseHandler(&containermouseevent_);
-	deletebutton_ = new UIButton(SDL_Rect{ absolutecoordinatesrect_.x, absolutecoordinatesrect_.y, 20, MINIMUM_HEIGHT_OF_CAPTION }, "X", true);
-	movebutton_ = new UIButton(SDL_Rect{ absolutecoordinatesrect_.x + 20, absolutecoordinatesrect_.y, 20, MINIMUM_HEIGHT_OF_CAPTION }, "O", true);
+	deletebutton_ = new UIButton(SDL_Rect{ absolutecoordinatesrect_.x, absolutecoordinatesrect_.y, 20, MINIMUM_HEIGHT_OF_CAPTION }, "X", UIElements::STANDARD_UI_FONT_SIZE, true);
+	movebutton_ = new UIButton(SDL_Rect{ absolutecoordinatesrect_.x + 20, absolutecoordinatesrect_.y, 20, MINIMUM_HEIGHT_OF_CAPTION }, "O", UIElements::STANDARD_UI_FONT_SIZE, true);
 }
 
 //SetText alters the text inside the container and resizes the container to the appropriate height.
@@ -135,7 +135,7 @@ int CaptionContainer::Show(bool showcontainer)
 		int totalheight = 0;
 		containerrect.h = totalheight;
 
-		for (std::list<TextInput*>::reverse_iterator it = texttextures_.rbegin(); it != texttextures_.rend(); it++)
+		for (std::list<TextInput*>::reverse_iterator it = texttextures_.rbegin(); it != texttextures_.rend(); ++it)
 		{
 			SDLUtility::PostText((*it), containerrect.x, containerrect.y + totalheight);
 			totalheight = totalheight + (*it)->GetHeight();
