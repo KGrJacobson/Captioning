@@ -8,6 +8,10 @@
 #include "KWindow\MouseHandler.h"
 #include "KWindow\ShortenedText.h"
 
+//A Stored Caption Container is very similar to the Demo Screens Caption Containers, but are associated
+//with the Stored Caption Container screen and merely hold the text to be sent to the caption and the
+//Caption Container ID it is associated with.  It is essentially one "half" of a Caption Container, with
+//the other half being the position on the demo screen defined by the container ID.
 class StoredCaptionContainer
 {
 public:

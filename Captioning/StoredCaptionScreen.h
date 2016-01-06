@@ -6,6 +6,7 @@
 #include "StoredCaptionContainer.h"
 #include "KWindow\Subscreen.h"
 
+//Contains captions loaded from a given file to be sent to the Demo Screen when selected.
 class StoredCaptionScreen : public Subscreen
 {
 public:

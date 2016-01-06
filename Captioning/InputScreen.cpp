@@ -18,7 +18,7 @@
 InputScreen::InputScreen(SDL_Rect setscreenarea)
 {
 	screenarea_ = setscreenarea;
-	texttexture_.Init("meiryo.ttc", 32);
+	texttexture_.Init(32);
 
 	SDL_Rect textinputboxrect = SDL_Rect{
 		static_cast<int>((screenarea_.w * .5) - ((screenarea_.w * .95) * .5)),

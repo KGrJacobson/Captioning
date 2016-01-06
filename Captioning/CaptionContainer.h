@@ -14,12 +14,12 @@
 
 const static int MINIMUM_HEIGHT_OF_CAPTION = 20;
 
-//Caption_Container_Flags provides information to the Demo Screen to process the container when rendering its contents in Show.
+//Caption_Container_Return_Flags provides information to the Demo Screen to process the container when rendering its contents in Show.
 //NO_RETURN_CODE does nothing.
 //DELETE_CAPTION is used when a user clicks on the "X" button on the caption and signals deletion of the container.
 //SELECT_CAPTION is used when a user clicks on the container and signals the caption to be selected.
 //MOVE_CAPTION is used when a user holds the "O" button and signals the captions position to be altered.
-enum Caption_Container_Flags
+enum Caption_Container_Return_Flags
 {
 	NO_RETURN_CODE,
 	DELETE_CAPTION,

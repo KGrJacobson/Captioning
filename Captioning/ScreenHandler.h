@@ -21,8 +21,13 @@
 #include "KWindow\TextInput.h"
 #include "KWindow\UIMenu.h"
 
+//The "core" of the program, the ScreenHandler is the go-between for subscreens interacting with each other.
+//The ScreenHandler is responsible for calling the Show functions for each subscreen and processing the 
+//return codes the screens return.  The class also handles universal program UI elements like the menu bar,
+//non-specific context menu, and the programs background image.
 class ScreenHandler {
 public:
+	//The possible subscreens the program can contain.
 	enum Screens
 	{
 		NO_SCREEN = -1,
