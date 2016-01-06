@@ -10,6 +10,10 @@
 #include "KWindow\UIButton.h"
 #include "KWindow\UIElements.h"
 
+//Initialize caption area, create context menu, and set MouseHandler as active.
+//captionarea is the area the caption is rendered to.
+//containernumber is the ID the caption is associated with.  When seleted the translatedtext_
+//  will be added to the container with the matching ID in the Demo Screen.
 StoredCaptionContainer::StoredCaptionContainer(SDL_Rect captionarea, int containernumber)
 {
 	isselected_ = false;
@@ -19,9 +23,9 @@ StoredCaptionContainer::StoredCaptionContainer(SDL_Rect captionarea, int contain
 	mousefunction_->Init(captionarea_);
 	InputHandler::AddMouseHandler(mousefunction_);
 
-	captioninfo_.Init("meiryo.ttc", UIElements::STANDARD_UI_FONT_SIZE);
-	originaltext_.Init("meiryo.ttc", UIElements::STANDARD_UI_FONT_SIZE);
-	translatedtext_.Init("meiryo.ttc", UIElements::STANDARD_UI_FONT_SIZE);
+	captioninfo_.Init(UIElements::STANDARD_UI_FONT_SIZE);
+	originaltext_.Init(UIElements::STANDARD_UI_FONT_SIZE);
+	translatedtext_.Init(UIElements::STANDARD_UI_FONT_SIZE);
 
 	captioninfo_.SetMouseActive();
 	originaltext_.SetMouseActive();
@@ -40,6 +44,12 @@ StoredCaptionContainer::~StoredCaptionContainer()
 	mousefunction_ = NULL;
 }
 
+//Change the containers text.
+//captionid is the Demo Screen container ID the caption is associated with.  See Demo Screen
+//  for more details.
+//filein is the file that the caption information is stored in.
+//original is the original, untranslated text of the caption.
+//translation is the translation of original.
 void StoredCaptionContainer::SetText(int captionid, std::string filein, std::string original, std::string translation)
 {
 	captionid_ = captionid;
@@ -49,6 +59,7 @@ void StoredCaptionContainer::SetText(int captionid, std::string filein, std::str
 	translatedtext_.CreateFittedText(translation);
 }
 
+//Set the area the container will be rendered to.
 void StoredCaptionContainer::SetArea(SDL_Rect newarea)
 {
 	captionarea_ = newarea;
@@ -59,6 +70,9 @@ void StoredCaptionContainer::SetArea(SDL_Rect newarea)
 	mousefunction_->SetMouseArea(newarea);
 }
 
+//Show renders the container on screen and returns a return code providing information
+//on potentially altering the container.  See the StoredCaptionContainer header for
+//more information on the return codes.
 int StoredCaptionContainer::Show()
 {
 	int returncode = NO_RETURN_CODE;
@@ -118,6 +132,7 @@ int StoredCaptionContainer::Show()
 	return returncode;
 }
 
+//Show hovertext for the container if necessary.  Used internally in Show.
 int StoredCaptionContainer::CheckFormattedTextMouse(ShortenenedText *text)
 {
 	int mouseevent = text->GetMouseEvent();

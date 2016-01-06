@@ -190,7 +190,7 @@ void CaptionContainer::FitText(std::string texttofit)
 	std::string fittingtext;
 
 	TextInput *newtext = new TextInput;
-	newtext->Init("meiryo.ttc", fontsize_);
+	newtext->Init(fontsize_);
 	if (newtext->TextWidth(texttofit) > absolutecoordinatesrect_.w)
 	{
 		fittingtext = texttofit.substr(0, static_cast<int>((texttofit.length() * (absolutecoordinatesrect_.w / static_cast<double>(newtext->TextWidth(texttofit))))));
