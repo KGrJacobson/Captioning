@@ -49,9 +49,9 @@ private:
 	std::vector<Image*> backgroundimages_;
 	int backgroundimage_;
 	int leftscreen_;
-	UIMenu cmenu_;
-	UIButton* menubuttonscreens_;
-	UIMenu menuscreens_;
+	UIMenu *cmenu_;
+	UIButton *menubuttonscreens_;
+	UIMenu *menuscreens_;
 };
 
 #endif //SCREEN_HANDLER

@@ -354,8 +354,9 @@ void DemoScreen::DeleteAllCaptions()
 //Allocates memory for a context menu when creating a new tab.
 UIMenu *DemoScreen::CreateNewTabContextMenu()
 {
-	UIMenu *newcontextmenu = new UIMenu();
-	newcontextmenu->AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Rename", UIElements::STANDARD_UI_FONT_SIZE, false));
+	UIMenu *newcontextmenu = new UIMenu(UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT, UIElements::STANDARD_UI_FONT_SIZE);
+	newcontextmenu->SetSizeOfMenu(1);
+	newcontextmenu->RenameMenuIndex(0, "Rename");
 
 	return newcontextmenu;
 }

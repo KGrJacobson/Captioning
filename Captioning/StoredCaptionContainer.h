@@ -46,7 +46,6 @@ private:
 	int containernumber_;
 	MouseHandler *mousefunction_;
 	bool isselected_;
-	UIMenu contextmenu_;
 };
 
 #endif //STORED_CAPTION_CONTAINER

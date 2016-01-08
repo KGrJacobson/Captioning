@@ -49,13 +49,18 @@ ScreenHandler::ScreenHandler()
 	backgroundimage_ = 0;
 
 	menubuttonscreens_ = new UIButton(SDL_Rect{ 0, 0, UIElements::STANDARD_MENU_WIDTH, UIElements::STANDARD_MENU_HEIGHT }, "Screens", UIElements::STANDARD_UI_FONT_SIZE, true);
-	menuscreens_.AddListItem(new UIButton(SDL_Rect{ 0, 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Stored Captioning", UIElements::STANDARD_UI_FONT_SIZE, true));
-	menuscreens_.AddListItem(new UIButton(SDL_Rect{ 0, 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Manual Captioning", UIElements::STANDARD_UI_FONT_SIZE, true));
-	menuscreens_.SetXY(0 - UIMenu::STANDARD_CONTEXT_MENU_WIDTH, 0);
+	menuscreens_ = new UIMenu(UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT, UIElements::STANDARD_UI_FONT_SIZE);
+	menuscreens_->SetSizeOfMenu(5);
+	menuscreens_->RenameMenuIndex(0, "Stored Captions");
+	menuscreens_->RenameMenuIndex(1, "Manual Entry");	
+	menuscreens_->RenameMenuIndex(2, "menu 3");
+	menuscreens_->RenameMenuIndex(3, "menu 4");	
+	menuscreens_->RenameMenuIndex(4, "menu 5");
 
-	cmenu_.AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Violet Layout", UIElements::STANDARD_UI_FONT_SIZE, true));
-	cmenu_.AddListItem(new UIButton(SDL_Rect{ SDLUtility::GetScreenWidth(), 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Yellow-Red Layout", UIElements::STANDARD_UI_FONT_SIZE, true));
-	cmenu_.SetXY(0 - UIMenu::STANDARD_CONTEXT_MENU_WIDTH, 0);
+	cmenu_ = new UIMenu(UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT, UIElements::STANDARD_UI_FONT_SIZE);
+	cmenu_->SetSizeOfMenu(2);
+	cmenu_->RenameMenuIndex(0, "Violet Layout");
+	cmenu_->RenameMenuIndex(1, "Yellow-Red Layout");
 }
 
 ScreenHandler::~ScreenHandler()
@@ -83,11 +88,11 @@ void ScreenHandler::ShowScreens(int macro)
 
 	if (mousefunction_.GetEvent() == RIGHT_BUTTON_UP)
 	{
-		UIElements::SetMenu(&cmenu_, NULL, NULL);
+		UIElements::SetMenu(cmenu_, NULL, NULL);
 	}
 
 	//show current screen in leftscreen_
-	switch (menuscreens_.GetButtonPress())
+	switch (menuscreens_->GetButtonPress())
 	{
 	case PREENTRED_CAPTION_SCREEN:
 		leftscreen_ = PREENTRED_CAPTION_SCREEN;
@@ -100,7 +105,7 @@ void ScreenHandler::ShowScreens(int macro)
 	}
 
 	//check native context menu
-	switch (cmenu_.GetButtonPress())
+	switch (cmenu_->GetButtonPress())
 	{
 	case UIElements::VIOLET_LAYOUT:
 		UIElements::SetColorLayout(UIElements::VIOLET_LAYOUT);
@@ -175,7 +180,7 @@ void ScreenHandler::ShowScreens(int macro)
 	int menux = menurect.x;
 	int menuy = menurect.y + menurect.h;
 	if (menubuttonscreens_->GetMouseEvent() == LEFT_BUTTON_UP)
-		UIElements::SetMenu(&menuscreens_, &menux, &menuy);
+		UIElements::SetMenu(menuscreens_, &menux, &menuy);
 
 	//show menus on top of everything
 	InputHandler::ShowKeyboardInputMenu();
@@ -186,13 +191,13 @@ void ScreenHandler::ShowScreens(int macro)
 		currentmenu->ShowMenu(-1);
 	}
 
-	ShortenenedText *currenthovertext = UIElements::GetHoverText();
-	if (currenthovertext != NULL && currenthovertext->GetMouseEvent() != NO_MOUSE_STATE)
-	{
-		currenthovertext->ShowFullHoverText();
-	}
-	else
-	{
-		UIElements::SetHoverText(NULL);
-	}
+	//ShortenenedText *currenthovertext = UIElements::GetHoverText();
+	//if (currenthovertext != NULL && currenthovertext->GetMouseEvent() != NO_MOUSE_STATE)
+	//{
+	//	currenthovertext->ShowFullHoverText();
+	//}
+	//else
+	//{
+	//	UIElements::SetHoverText(NULL);
+	//}
 }

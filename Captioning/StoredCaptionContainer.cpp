@@ -32,9 +32,6 @@ StoredCaptionContainer::StoredCaptionContainer(SDL_Rect captionarea, int contain
 	translatedtext_.SetMouseActive();
 
 	SetArea(captionarea);
-
-	contextmenu_.AddListItem(new UIButton(SDL_Rect{ 0, 0, UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT }, "Edit Caption", UIElements::STANDARD_UI_FONT_SIZE, false));
-	contextmenu_.RemoveMouseHandler();
 }
 
 StoredCaptionContainer::~StoredCaptionContainer()
@@ -99,7 +96,7 @@ int StoredCaptionContainer::Show()
 			if (mousefunction_->GetEvent() == RIGHT_BUTTON_UP || captioninfo_.GetMouseEvent() == RIGHT_BUTTON_UP ||
 				originaltext_.GetMouseEvent() == RIGHT_BUTTON_UP || translatedtext_.GetMouseEvent() == RIGHT_BUTTON_UP)
 			{
-				UIElements::SetMenu(&contextmenu_, NULL, NULL);
+				//context menu
 			}
 		}
 
@@ -117,13 +114,13 @@ int StoredCaptionContainer::Show()
 		}
 	}
 
-	switch (contextmenu_.GetButtonPress())
-	{
-	case EDIT_CAPTION:
-		returncode = EDIT_CAPTION;
-		UIElements::SetMenu(NULL, NULL, NULL);
-		break;
-	}
+	//switch (contextmenu_->GetButtonPress())
+	//{
+	//case EDIT_CAPTION:
+	//	returncode = EDIT_CAPTION;
+	//	UIElements::SetMenu(NULL, NULL, NULL);
+	//	break;
+	//}
 
 	captioninfo_.Show();
 	originaltext_.Show();
