@@ -1,7 +1,0 @@
-skip if first character isn't a tab
-find "freq" and start new line to write
-skip to next line and get the first character after first '>'
-add unit separator
-next line containing "top" 
-get string between '>' and '<' or '.' and not containing an ASCII char and not if '>' is the last character in string
-Repeat with unit separators between each entry until you hit next "freq"
