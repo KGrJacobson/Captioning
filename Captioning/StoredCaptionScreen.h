@@ -19,11 +19,17 @@ public:
 		ADD_NEW_CAPTION_LIST
 	};
 
+	enum File_In_Flags
+	{
+
+	};
+
 	StoredCaptionScreen(SDL_Rect setscreenarea);
 	~StoredCaptionScreen();
 	int Show();
 	StoredCaptionContainer *GetNewContainer(int captionid);
 	void SaveFile();
+	void OpenFile(std::string filename);
 private:
 	SDL_Rect screenarea_;
 	std::vector<StoredCaptionContainer*> captionpreview_;

@@ -162,5 +162,5 @@ int StoredCaptionContainer::CheckFormattedTextMouse(ShortenenedText *text)
 
 std::string StoredCaptionContainer::GetWriteData()
 {
-	return std::to_string(captionid_) + ' ' + std::to_string(containernumber_) + '\n' + originaltext_.GetFullText() + '\n' + translatedtext_.GetFullText();
+	return std::to_string(containernumber_) + '\n' + originaltext_.GetFullText() + '\n' + translatedtext_.GetFullText();
 }

@@ -1,4 +1,6 @@
+#include <iostream>
 #include <fstream>
+#include <stdlib.h>
 #include <string>
 
 #include "SDL.h"
@@ -13,8 +15,6 @@
 StoredCaptionScreen::StoredCaptionScreen(SDL_Rect setscreenarea)
 {
 	screenarea_ = setscreenarea;
-	captions_.resize(1);
-	captions_[0].resize(1);
 
 	mousefunction_ = new MouseHandler;
 	mousefunction_->SetMouseArea(setscreenarea);
@@ -25,16 +25,8 @@ StoredCaptionScreen::StoredCaptionScreen(SDL_Rect setscreenarea)
 	contextmenu_->RenameMenuIndex(0, "Save File");
 	contextmenu_->RenameMenuIndex(1, "Add New Caption List");
 
-	captions_[0][0].push_back(GetNewContainer(0));
-	captions_[0][0][0]->SetText(0, "nofile.txt", u8"同じ化", "A compound can be converted to a");
-	
-	captionpreview_.push_back(GetNewContainer(0));
-	captionpreview_[0]->SetText(0, "nofile.txt", u8"同じ化", "A compound can be converted to a");
-
-	captions_[0][0].push_back(GetNewContainer(1));
-	captions_[0][0][1]->SetText(0, "nofile.txt", u8"成された、様々な違いから従来作とは全体的な雰囲気を異な", "was tens of thousands times more sensitive to");
-
 	currentfile_ = "testtext.txt";
+	OpenFile(currentfile_);
 }
 
 StoredCaptionScreen::~StoredCaptionScreen()
@@ -115,6 +107,8 @@ void StoredCaptionScreen::SaveFile()
 	std::ofstream file;
 	file.open(currentfile_, std::ios::out | std::ios::trunc);
 
+	file << "##startoffile##\n";
+
 	for (unsigned int captionlists = 0; captionlists < captions_.size(); ++captionlists)
 	{
 		file << "##newcaptionlist##\n";
@@ -126,14 +120,96 @@ void StoredCaptionScreen::SaveFile()
 				file << (*appendedcaptions)->GetWriteData();
 
 				if ((*appendedcaptions) != captions_[captionlists][heldcaptions].back())
-					file << "\n+\n";
+					file << "\n##append##\n";
 			}
 
-			file << '\n';
+			if (heldcaptions != captions_[captionlists].size())
+				file << "\n##addcaptiontolist##\n";
 		}
 	}
 
 	file << "##endoffile##";
+
+	file.close();
+}
+
+void StoredCaptionScreen::OpenFile(std::string filename)
+{
+	std::ifstream file;
+	file.open(filename, std::ios::in);
+
+	std::string newline;
+	unsigned int currentid = 0;
+
+	int containerid = -1;
+	std::string originaltext;
+	std::string translatedtext;
+
+	while (newline != "##endoffile##")
+	{
+		std::getline(file, newline);
+
+		if (newline == "##newcaptionlist##")
+		{
+			captions_.resize(captions_.size() + 1);
+			captions_.back().resize(1);
+			captions_.back()[0].push_back(GetNewContainer(currentid));
+
+			captionpreview_.push_back(GetNewContainer(currentid));
+
+			std::getline(file, newline);
+			containerid = atoi(newline.c_str());
+
+			std::getline(file, newline);
+			originaltext = newline;
+
+			std::getline(file, newline);
+			translatedtext = newline;
+
+			captions_.back()[0][0]->SetText(containerid, filename, originaltext, translatedtext);
+			captionpreview_.back()->SetText(containerid, filename, originaltext, translatedtext);
+			
+			++currentid;
+		}
+
+		if (newline == "##addcaptiontolist##")
+		{
+			captions_.back().resize(captions_.size() + 1);
+			captions_.back().back().push_back(GetNewContainer(currentid));
+
+			std::getline(file, newline);
+			containerid = atoi(newline.c_str());
+
+			std::getline(file, newline);
+			originaltext = newline;
+
+			std::getline(file, newline);
+			translatedtext = newline;
+
+			captions_.back().back()[0]->SetText(containerid, filename, originaltext, translatedtext);
+
+			++currentid;
+		}
+
+		if (newline == "##append##")
+		{
+
+			captions_.back().back().push_back(GetNewContainer(currentid));
+
+			std::getline(file, newline);
+			containerid = atoi(newline.c_str());
+
+			std::getline(file, newline);
+			originaltext = newline;
+
+			std::getline(file, newline);
+			translatedtext = newline;
+
+			captions_.back().back().back()->SetText(containerid, filename, originaltext, translatedtext);
+
+			++currentid;
+		}
+	}
 
 	file.close();
 }
