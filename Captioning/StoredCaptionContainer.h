@@ -15,14 +15,14 @@
 class StoredCaptionContainer
 {
 public:
-	static const int STANDARD_STORED_CONTAINER_WIDTH = 200;
+	static const int STANDARD_STORED_CONTAINER_WIDTH = 150;
 	static const int STANDARD_STORED_CONTAINER_HEIGHT = 50;
 
 	enum returncode
 	{
 		NO_RETURN_CODE,
 		CAPTION_SELECTED,
-		OPEN_EDIT_SCREEN
+		OPEN_FOR_EDIT
 	};
 
 	enum contextmenucode
@@ -34,8 +34,10 @@ public:
 	~StoredCaptionContainer();
 	void SetText(int captionid, std::string filein, std::string original, std::string translation);
 	void SetArea(SDL_Rect newarea);
+	void SetXY(int x, int y);
 	int Show();
 	int CheckFormattedTextMouse(ShortenenedText *text);
+	std::string GetWriteData();
 private:
 	int captionid_;
 	std::string containedinfile;
@@ -46,6 +48,7 @@ private:
 	int containernumber_;
 	MouseHandler *mousefunction_;
 	bool isselected_;
+	UIMenu *contextmenu_;
 };
 
 #endif //STORED_CAPTION_CONTAINER

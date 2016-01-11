@@ -32,10 +32,17 @@ StoredCaptionContainer::StoredCaptionContainer(SDL_Rect captionarea, int contain
 	translatedtext_.SetMouseActive();
 
 	SetArea(captionarea);
+
+	contextmenu_ = new UIMenu(UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT, UIElements::STANDARD_UI_FONT_SIZE);
+	contextmenu_->SetSizeOfMenu(1);
+	contextmenu_->RenameMenuIndex(0, "Edit Caption");
 }
 
 StoredCaptionContainer::~StoredCaptionContainer()
 {
+	delete contextmenu_;
+	contextmenu_ = NULL;
+
 	InputHandler::RemoveMouseHandler(mousefunction_);
 	delete mousefunction_;
 	mousefunction_ = NULL;
@@ -64,7 +71,20 @@ void StoredCaptionContainer::SetArea(SDL_Rect newarea)
 	originaltext_.SetArea(SDL_Rect{ captionarea_.x, captionarea_.y + captioninfo_.TextHeight(), captionarea_.w, originaltext_.TextHeight() });
 	translatedtext_.SetArea(SDL_Rect{ captionarea_.x, captionarea_.y + captioninfo_.TextHeight() + originaltext_.TextHeight(), captionarea_.w, translatedtext_.TextHeight() });
 
-	mousefunction_->SetMouseArea(newarea);
+	mousefunction_->SetMouseArea(captionarea_);
+}
+
+void StoredCaptionContainer::SetXY(int x, int y)
+{
+	if (x != captionarea_.x || y != captionarea_.y)
+	{
+		captionarea_ = SDL_Rect{ x, y, captionarea_.w, captionarea_.h };
+		captioninfo_.SetArea(SDL_Rect{ captionarea_.x, captionarea_.y, captionarea_.w, captioninfo_.TextHeight() });
+		originaltext_.SetArea(SDL_Rect{ captionarea_.x, captionarea_.y + captioninfo_.TextHeight(), captionarea_.w, originaltext_.TextHeight() });
+		translatedtext_.SetArea(SDL_Rect{ captionarea_.x, captionarea_.y + captioninfo_.TextHeight() + originaltext_.TextHeight(), captionarea_.w, translatedtext_.TextHeight() });
+
+		mousefunction_->SetMouseArea(captionarea_);
+	}
 }
 
 //Show renders the container on screen and returns a return code providing information
@@ -96,7 +116,7 @@ int StoredCaptionContainer::Show()
 			if (mousefunction_->GetEvent() == RIGHT_BUTTON_UP || captioninfo_.GetMouseEvent() == RIGHT_BUTTON_UP ||
 				originaltext_.GetMouseEvent() == RIGHT_BUTTON_UP || translatedtext_.GetMouseEvent() == RIGHT_BUTTON_UP)
 			{
-				//context menu
+				UIElements::SetMenu(contextmenu_, NULL, NULL);
 			}
 		}
 
@@ -114,13 +134,13 @@ int StoredCaptionContainer::Show()
 		}
 	}
 
-	//switch (contextmenu_->GetButtonPress())
-	//{
-	//case EDIT_CAPTION:
-	//	returncode = EDIT_CAPTION;
-	//	UIElements::SetMenu(NULL, NULL, NULL);
-	//	break;
-	//}
+	switch (contextmenu_->GetButtonPress())
+	{
+	case EDIT_CAPTION:
+		returncode = EDIT_CAPTION;
+		UIElements::SetMenu(NULL, NULL, NULL);
+		break;
+	}
 
 	captioninfo_.Show();
 	originaltext_.Show();
@@ -138,4 +158,9 @@ int StoredCaptionContainer::CheckFormattedTextMouse(ShortenenedText *text)
 		UIElements::SetHoverText(text);
 
 	return mouseevent;
+}
+
+std::string StoredCaptionContainer::GetWriteData()
+{
+	return std::to_string(captionid_) + ' ' + std::to_string(containernumber_) + '\n' + originaltext_.GetFullText() + '\n' + translatedtext_.GetFullText();
 }

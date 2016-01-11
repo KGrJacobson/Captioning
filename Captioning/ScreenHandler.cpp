@@ -191,13 +191,13 @@ void ScreenHandler::ShowScreens(int macro)
 		currentmenu->ShowMenu(-1);
 	}
 
-	//ShortenenedText *currenthovertext = UIElements::GetHoverText();
-	//if (currenthovertext != NULL && currenthovertext->GetMouseEvent() != NO_MOUSE_STATE)
-	//{
-	//	currenthovertext->ShowFullHoverText();
-	//}
-	//else
-	//{
-	//	UIElements::SetHoverText(NULL);
-	//}
+	ShortenenedText *currenthovertext = UIElements::GetHoverText();
+	if (currenthovertext != NULL && currenthovertext->GetMouseEvent() != NO_MOUSE_STATE)
+	{
+		currenthovertext->ShowFullHoverText();
+	}
+	else
+	{
+		UIElements::SetHoverText(NULL);
+	}
 }
