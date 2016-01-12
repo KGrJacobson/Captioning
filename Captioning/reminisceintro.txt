@@ -1,4 +1,4 @@
-﻿##startoffile##
+﻿##startoffile## Introduction of the visual novel Reminisce (レミニセンス)
 0
 0
 平穏な毎日で構わなかった
@@ -6,11 +6,11 @@ It doesn't matter if every day is peaceful.
 2
 1
 秀隆
-Hideshige
+Hidetaka
 1
 0
 オレは、ただ日々を無難にやり過ごせば良いと思っていたんだ
-Just letting every day go by without incident is good enough for me.
+Just letting each day go by without incident is good enough for me.
 1
 0
 けどそれは嘘。偽りの感情
@@ -26,7 +26,7 @@ I don't care about this hypocrisy.  I just want to be useful.
 1
 0
 それだけの自信も、才能もあると信じて疑わなかった
-...
+But I've never believed that I've had talent for anything.
 1
 0
 やがてオレはーーークズになった
@@ -50,15 +50,15 @@ I once had an image of myself as the ideal man.  But it's just too late for that
 1
 0
 これから始まるのは、クズで救いようもないオレの物語
-...
+From here, my story as hopeless trash begins.
 1
 0
 全てを犠牲にして、１つだけを守り通してきた小さな物語
-...
+I've sacrificed everything and have just one small story to pass on.
 1
 0
 後悔はない。最後まで前を向いて、運命と向き合って行こうと思う
-...
+I have no regrets.  I'll look forward until the end and try to see the opposite side of fate.
 1
 0
 それが、恐らくオレに課せられた便命、だからな
@@ -71,5 +71,89 @@ I once had an image of myself as the ideal man.  But it's just too late for that
 1
 
 
+1
+0
+世界には「海」と呼ぶものがあったらしい。
+...
+1
+0
+世界には「大地」と呼ぶものあったらしい。
+...
+1
+0
+けど、オレたちの世界には、それがない。
+...
+1
+0
+オレたちにとっては、目の前に広がるものが、世界の全てだった。
+...
+1
+0
+「日常だ」
+...
+2
+1
+秀隆
+Hidetaka
+1
+0
+「ほんと、目の前にあるのは、ありきたりな日常だ」
+...
+1
+0
+「日常ですねー」
+...
+2
+1
+
+
+1
+0
+「オレは今の日常に、不満なんてありゃしない」
+...
+2
+1
+秀隆
+Hidetaka
+1
+0
+「このまま年老いて死んで行くことに抵抗は無い」
+...
+1
+0
+「それは、素晴らしいことだと思います」
+...
+2
+1
+
+
+1
+0
+「普通のことが、素晴らしいことなのか？」
+...
+2
+1
+秀隆
+Hidetaka
+1
+0
+「平穏を望むことはひとつ理想だと、私は思います」
+...
+2
+1
+
+
+1
+0
+「そう言うもんかな」
+...
+2
+1
+秀隆
+Hidetaka
+1
+0
+「でもさ。。。。。。最近、ちょっとだけ変わってきたんだ」
+...
 3
 ##endoffile##

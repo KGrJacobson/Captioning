@@ -27,7 +27,6 @@ InputScreen::InputScreen(SDL_Rect setscreenarea)
 		TEXT_INPUT_BOX_HEIGHT };
 
 	textinputbox_.Init(textinputboxrect);
-	InputHandler::AddMouseHandler(&textinputbox_);
 
 	confirmbutton_ = new UIButton(SDL_Rect{
 		static_cast<int>(textinputboxrect.x + (textinputboxrect.w * .01)),

@@ -25,7 +25,7 @@ StoredCaptionScreen::StoredCaptionScreen(SDL_Rect setscreenarea)
 	contextmenu_->RenameMenuIndex(0, "Save File");
 	contextmenu_->RenameMenuIndex(1, "Add New Caption List");
 
-	currentfile_ = "testtext.txt";
+	currentfile_ = "reminisceintro.txt";
 	OpenFile(currentfile_);
 }
 
@@ -86,10 +86,10 @@ int StoredCaptionScreen::Show()
 		captions_.resize(captions_.size() + 1);
 		captions_.back().resize(1);
 		captions_.back()[0].push_back(GetNewContainer(captions_.size()));
-		captions_.back()[0][0]->SetText(captionpreview_.size(), "nofile.txt", "new caption", "new caption");
+		captions_.back()[0][0]->SetText(captionpreview_.size(), currentfile_, "new caption", "new caption");
 
 		captionpreview_.push_back(GetNewContainer(captionpreview_.size()));
-		captionpreview_.back()->SetText(captionpreview_.size(), "nofile.txt", "new caption", "new caption");
+		captionpreview_.back()->SetText(captionpreview_.size(), currentfile_, "new caption", "new caption");
 		UIElements::SetMenu(NULL, NULL, NULL);
 		break;
 	}
@@ -107,7 +107,7 @@ void StoredCaptionScreen::SaveFile()
 	std::ofstream file;
 	file.open(currentfile_, std::ios::out | std::ios::trunc);
 
-	file << "##startoffile##\n";
+	file << "##startoffile## Introduction of the visual novel Reminisce (レミニセンス)\n";
 
 	for (unsigned int captionlists = 0; captionlists < captions_.size(); ++captionlists)
 	{
