@@ -65,7 +65,7 @@ int StoredCaptionScreen::Show()
 				xoffset += StoredCaptionContainer::STANDARD_STORED_CONTAINER_WIDTH;
 			}
 
-			inneryoffset += StoredCaptionContainer::STANDARD_STORED_CONTAINER_HEIGHT;
+			inneryoffset = inneryoffset + StoredCaptionContainer::STANDARD_STORED_CONTAINER_HEIGHT;
 		}
 
 		yoffset += StoredCaptionContainer::STANDARD_STORED_CONTAINER_HEIGHT;
@@ -111,7 +111,7 @@ void StoredCaptionScreen::SaveFile()
 
 	for (unsigned int captionlists = 0; captionlists < captions_.size(); ++captionlists)
 	{
-		file << "##newcaptionlist##\n";
+		file << "0\n";
 
 		for (unsigned int heldcaptions = 0; heldcaptions < captions_[captionlists].size(); ++heldcaptions)
 		{
@@ -120,14 +120,15 @@ void StoredCaptionScreen::SaveFile()
 				file << (*appendedcaptions)->GetWriteData();
 
 				if ((*appendedcaptions) != captions_[captionlists][heldcaptions].back())
-					file << "\n##append##\n";
+					file << "\n2\n";
 			}
 
 			if (heldcaptions != captions_[captionlists].size())
-				file << "\n##addcaptiontolist##\n";
+				file << "\n1\n";
 		}
 	}
 
+	file << "3\n";
 	file << "##endoffile##";
 
 	file.close();
@@ -144,13 +145,15 @@ void StoredCaptionScreen::OpenFile(std::string filename)
 	int containerid = -1;
 	std::string originaltext;
 	std::string translatedtext;
+	std::getline(file, newline);	//##startoffile##
 
-	while (newline != "##endoffile##")
+	while (atoi(newline.c_str()) != END_FILE)
 	{
 		std::getline(file, newline);
 
-		if (newline == "##newcaptionlist##")
+		switch (atoi(newline.c_str()))
 		{
+		case NEW_CAPTION_LIST:
 			captions_.resize(captions_.size() + 1);
 			captions_.back().resize(1);
 			captions_.back()[0].push_back(GetNewContainer(currentid));
@@ -168,13 +171,11 @@ void StoredCaptionScreen::OpenFile(std::string filename)
 
 			captions_.back()[0][0]->SetText(containerid, filename, originaltext, translatedtext);
 			captionpreview_.back()->SetText(containerid, filename, originaltext, translatedtext);
-			
-			++currentid;
-		}
 
-		if (newline == "##addcaptiontolist##")
-		{
-			captions_.back().resize(captions_.size() + 1);
+			++currentid;
+			break;
+		case (NEW_CAPTION_LIST_ELEMENT):
+			captions_.back().resize(captions_.back().size() + 1);
 			captions_.back().back().push_back(GetNewContainer(currentid));
 
 			std::getline(file, newline);
@@ -189,11 +190,9 @@ void StoredCaptionScreen::OpenFile(std::string filename)
 			captions_.back().back()[0]->SetText(containerid, filename, originaltext, translatedtext);
 
 			++currentid;
-		}
+			break;
 
-		if (newline == "##append##")
-		{
-
+		case (APPEND_CAPTION):
 			captions_.back().back().push_back(GetNewContainer(currentid));
 
 			std::getline(file, newline);
@@ -208,6 +207,7 @@ void StoredCaptionScreen::OpenFile(std::string filename)
 			captions_.back().back().back()->SetText(containerid, filename, originaltext, translatedtext);
 
 			++currentid;
+			break;
 		}
 	}
 

@@ -21,7 +21,10 @@ public:
 
 	enum File_In_Flags
 	{
-
+		NEW_CAPTION_LIST,
+		NEW_CAPTION_LIST_ELEMENT,
+		APPEND_CAPTION,
+		END_FILE
 	};
 
 	StoredCaptionScreen(SDL_Rect setscreenarea);
