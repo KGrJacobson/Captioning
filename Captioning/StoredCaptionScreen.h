@@ -13,6 +13,13 @@
 class StoredCaptionScreen : public Subscreen
 {
 public:
+	enum Stored_Caption_Screen_Return_Codes
+	{
+		NO_RETURN_CODE,
+		GET_NEW_CAPTION_LIST,
+		GET_NEW_SINGLE_CAPTION
+	};
+
 	enum Stored_Caption_Screen_Context_Menu
 	{
 		SAVE_FILE,
@@ -31,6 +38,8 @@ public:
 	~StoredCaptionScreen();
 	int Show();
 	StoredCaptionContainer *GetNewContainer(int captionid);
+	std::vector<StoredCaptionContainer*> *GetCaptionList();
+	RelativeRect GetCaptionContainer(int containerindex);
 	void SaveFile();
 	void OpenFile(std::string filename);
 private:
@@ -40,6 +49,12 @@ private:
 	UIMenu *contextmenu_;
 	MouseHandler *mousefunction_;
 	std::string currentfile_;
+	int currentcaptionlistindex_;
+	int currentcaptionindex_;
+	StoredCaptionContainer *currentcaptionlist_;
+	StoredCaptionContainer *currentcaption_;
+	std::vector<StoredCaptionContainer*> *returnlist_;
+	std::vector<RelativeRect> captioncontainers_;
 };
 
 #endif //STORED_CAPTION_SCREEN

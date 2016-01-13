@@ -10,6 +10,7 @@
 #include "InputScreen.h"
 #include "ScreenHandler.h"
 #include "KWindow\ShortenedText.h"
+#include "StoredCaptionContainer.h"
 #include "StoredCaptionScreen.h"
 #include "KWindow\Subscreen.h"
 #include "KWindow\SDLUtility.h"
@@ -25,8 +26,6 @@ ScreenHandler::ScreenHandler()
 
 	//demo screen
 	demoscreen_ = new DemoScreen(22);
-	demoscreen_->CreateCaption("In C++ there are conditional assignment situations where use of the if-else statement is impossible, since this language explicitly distinguishes between initialization and assignment. In such case it is always possible to use a function call, but this can be cumbersome and inelegant. For example, to pass conditionally different values as an argument for a constructor of a field or a base class, it is impossible to use a plain if-else statement; in this case we can use a conditional assignment expression, or a function call.",
-		.15, .70, .70, 0);
 
 	//preentered screen
 	int windowh = SDLUtility::GetScreenHeight();
@@ -50,12 +49,9 @@ ScreenHandler::ScreenHandler()
 
 	menubuttonscreens_ = new UIButton(SDL_Rect{ 0, 0, UIElements::STANDARD_MENU_WIDTH, UIElements::STANDARD_MENU_HEIGHT }, "Screens", UIElements::STANDARD_UI_FONT_SIZE, true);
 	menuscreens_ = new UIMenu(UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT, UIElements::STANDARD_UI_FONT_SIZE);
-	menuscreens_->SetSizeOfMenu(5);
+	menuscreens_->SetSizeOfMenu(2);
 	menuscreens_->RenameMenuIndex(0, "Stored Captions");
 	menuscreens_->RenameMenuIndex(1, "Manual Entry");	
-	menuscreens_->RenameMenuIndex(2, "menu 3");
-	menuscreens_->RenameMenuIndex(3, "menu 4");	
-	menuscreens_->RenameMenuIndex(4, "menu 5");
 
 	cmenu_ = new UIMenu(UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT, UIElements::STANDARD_UI_FONT_SIZE);
 	cmenu_->SetSizeOfMenu(2);
@@ -141,7 +137,22 @@ void ScreenHandler::ShowScreens(int macro)
 		switch (leftscreen_)
 		{
 		case PREENTRED_CAPTION_SCREEN:
-			screens_[leftscreen_]->Show();
+			switch (screens_[leftscreen_]->Show())
+			{
+			case StoredCaptionScreen::ADD_NEW_CAPTION_LIST:
+				std::vector<StoredCaptionContainer*> *listtoadd = storedcaptionscreen_->GetCaptionList();
+
+				for (std::vector<StoredCaptionContainer*>::iterator it = (*listtoadd).begin(); it != (*listtoadd).end(); ++it)
+				{
+					if (demoscreen_->SetCaptionText((*it)->GetCaptionContents(), (*it)->GetContainerNumber()) == false)
+					{
+						RelativeRect newcontainer = storedcaptionscreen_->GetCaptionContainer((*it)->GetContainerNumber());
+
+						demoscreen_->CreateCaption((*it)->GetCaptionContents(), newcontainer.x, newcontainer.y, newcontainer.w, (*it)->GetContainerNumber());
+					}
+				}
+				break;
+			}
 			break;
 		case MANUAL_CAPTION_SCREEN:
 			std::string currentstring;

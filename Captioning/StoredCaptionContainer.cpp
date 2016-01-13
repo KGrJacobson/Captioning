@@ -14,22 +14,17 @@
 //captionarea is the area the caption is rendered to.
 //containernumber is the ID the caption is associated with.  When seleted the translatedtext_
 //  will be added to the container with the matching ID in the Demo Screen.
-StoredCaptionContainer::StoredCaptionContainer(SDL_Rect captionarea, int containernumber)
+StoredCaptionContainer::StoredCaptionContainer(SDL_Rect captionarea, int captionid)
 {
 	isselected_ = false;
-	containernumber_ = containernumber;
+	captionid_ = captionid;
 	
 	mousefunction_ = new MouseHandler();
 	mousefunction_->Init(captionarea_);
-	InputHandler::AddMouseHandler(mousefunction_);
 
 	captioninfo_.Init(UIElements::STANDARD_UI_FONT_SIZE);
 	originaltext_.Init(UIElements::STANDARD_UI_FONT_SIZE);
 	translatedtext_.Init(UIElements::STANDARD_UI_FONT_SIZE);
-
-	captioninfo_.SetMouseActive();
-	originaltext_.SetMouseActive();
-	translatedtext_.SetMouseActive();
 
 	SetArea(captionarea);
 
@@ -40,10 +35,10 @@ StoredCaptionContainer::StoredCaptionContainer(SDL_Rect captionarea, int contain
 
 StoredCaptionContainer::~StoredCaptionContainer()
 {
+	RemoveMouse();
 	delete contextmenu_;
 	contextmenu_ = NULL;
 
-	InputHandler::RemoveMouseHandler(mousefunction_);
 	delete mousefunction_;
 	mousefunction_ = NULL;
 }
@@ -54,11 +49,11 @@ StoredCaptionContainer::~StoredCaptionContainer()
 //filein is the file that the caption information is stored in.
 //original is the original, untranslated text of the caption.
 //translation is the translation of original.
-void StoredCaptionContainer::SetText(int captionid, std::string filein, std::string original, std::string translation)
+void StoredCaptionContainer::SetText(int containernumber, std::string filein, std::string original, std::string translation)
 {
-	captionid_ = captionid;
+	containernumber_ = containernumber;
 
-	captioninfo_.CreateFittedText(std::to_string(captionid) + " Box: " + std::to_string(containernumber_) + " " + filein);
+	captioninfo_.CreateFittedText(std::to_string(captionid_) + " Box: " + std::to_string(containernumber_) + " " + filein);
 	originaltext_.CreateFittedText(original);
 	translatedtext_.CreateFittedText(translation);
 }
@@ -87,6 +82,17 @@ void StoredCaptionContainer::SetXY(int x, int y)
 	}
 }
 
+bool StoredCaptionContainer::SetSelected()
+{
+	(isselected_ == false) ? isselected_ = true : isselected_ = false;
+	return isselected_;
+}
+
+bool StoredCaptionContainer::IsSelected()
+{
+	return isselected_;
+}
+
 //Show renders the container on screen and returns a return code providing information
 //on potentially altering the container.  See the StoredCaptionContainer header for
 //more information on the return codes.
@@ -107,7 +113,6 @@ int StoredCaptionContainer::Show()
 		if (mousefunction_->GetEvent() == LEFT_BUTTON_UP || captioninfo_.GetMouseEvent() == LEFT_BUTTON_UP ||
 			originaltext_.GetMouseEvent() == LEFT_BUTTON_UP || translatedtext_.GetMouseEvent() == LEFT_BUTTON_UP)
 		{
-			(isselected_ == false) ? isselected_ = true : isselected_ = false;
 			returncode = CAPTION_SELECTED;
 		}
 		else
@@ -163,4 +168,32 @@ int StoredCaptionContainer::CheckFormattedTextMouse(ShortenenedText *text)
 std::string StoredCaptionContainer::GetWriteData()
 {
 	return std::to_string(containernumber_) + '\n' + originaltext_.GetFullText() + '\n' + translatedtext_.GetFullText();
+}
+
+void StoredCaptionContainer::SetMouse()
+{
+	InputHandler::AddMouseHandler(mousefunction_);
+	
+	captioninfo_.SetMouseActive();
+	originaltext_.SetMouseActive();
+	translatedtext_.SetMouseActive();
+}
+
+void StoredCaptionContainer::RemoveMouse()
+{
+	InputHandler::RemoveMouseHandler(mousefunction_);
+
+	captioninfo_.RemoveMouse();
+	originaltext_.RemoveMouse();
+	translatedtext_.RemoveMouse();
+}
+
+std::string StoredCaptionContainer::GetCaptionContents()
+{
+	return translatedtext_.GetFullText();
+}
+
+int StoredCaptionContainer::GetContainerNumber()
+{
+	return containernumber_;
 }

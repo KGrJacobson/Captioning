@@ -43,6 +43,11 @@ void ShortenenedText::SetMouseActive()
 	InputHandler::AddMouseHandler(mousefunction_);
 }
 
+void ShortenenedText::RemoveMouse()
+{
+	InputHandler::RemoveMouseHandler(mousefunction_);
+}
+
 //Create a string of text that will fit in the width provided by SetArea.  SetArea
 //must be called before this, or an error will occur.
 void ShortenenedText::CreateFittedText(std::string text)

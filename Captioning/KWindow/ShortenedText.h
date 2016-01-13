@@ -17,6 +17,7 @@ public:
 	~ShortenenedText();
 	void SetArea(SDL_Rect textarea);
 	void SetMouseActive();
+	void RemoveMouse();
 	void CreateFittedText(std::string text);
 	void CreateQuickFittedText(std::string text);
 	int GetMouseEvent();
