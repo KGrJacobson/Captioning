@@ -288,7 +288,7 @@ void StoredCaptionScreen::OpenFile(std::string filename)
 	std::string translatedtext;
 	std::getline(file, newline);	//##startoffile##
 
-	while (atoi(newline.c_str()) != END_FILE)
+	while (atoi(newline.substr(0, 1).c_str()) != END_FILE)
 	{
 		std::getline(file, newline);
 
@@ -301,8 +301,7 @@ void StoredCaptionScreen::OpenFile(std::string filename)
 
 			captionpreview_.push_back(GetNewContainer(currentid));
 
-			std::getline(file, newline);
-			containerid = atoi(newline.c_str());
+			containerid = atoi(newline.substr(2, std::string::npos).c_str());
 
 			std::getline(file, newline);
 			originaltext = newline;
@@ -322,8 +321,7 @@ void StoredCaptionScreen::OpenFile(std::string filename)
 			captions_.back().resize(captions_.back().size() + 1);
 			captions_.back().back().push_back(GetNewContainer(currentid));
 
-			std::getline(file, newline);
-			containerid = atoi(newline.c_str());
+			containerid = atoi(newline.substr(2, std::string::npos).c_str());
 
 			std::getline(file, newline);
 			originaltext = newline;
@@ -338,8 +336,9 @@ void StoredCaptionScreen::OpenFile(std::string filename)
 		case APPEND_CAPTION:
 			captions_.back().back().push_back(GetNewContainer(currentid));
 
-			std::getline(file, newline);
-			containerid = atoi(newline.c_str());
+			//std::getline(file, newline);
+			//containerid = atoi(newline.c_str());
+			containerid = atoi(newline.substr(2, std::string::npos).c_str());
 
 			std::getline(file, newline);
 			originaltext = newline;
