@@ -2,6 +2,8 @@
 #include <list>
 #include <stdlib.h>
 #include <string>
+#include <iostream>
+#include <fstream>
 
 #include "SDL.h"
 
@@ -55,6 +57,9 @@ DemoScreen::DemoScreen(int setfontize)
 		"+",
 		UIElements::STANDARD_UI_FONT_SIZE,
 		true);
+
+	CreateCaption(" ", 0, 0, 1, 0);
+	CreateCaption(" ", 0, .1, 1, 1);
 }
 
 DemoScreen::~DemoScreen()
@@ -296,6 +301,24 @@ bool DemoScreen::SetCaptionText(std::string text, int captionid)
 	if (selectedcaption_ != NULL)
 	{
 		selectedcaption_->SetText(text);
+
+		std::ofstream namebox;
+		std::ofstream dialoguebox;
+
+		switch (captionid)
+		{
+		case 0:
+			namebox.open("name.txt");
+			namebox << text << "\nA second Line";
+			namebox.close();
+			break;
+		case 1:
+			dialoguebox.open("dialogue.txt");
+			dialoguebox << text << "\nA second Line";
+			dialoguebox.close();
+			break;
+		}
+
 		return true;
 	}
 	else
@@ -305,6 +328,23 @@ bool DemoScreen::SetCaptionText(std::string text, int captionid)
 			if ((*it)->GetID() == captionid)
 			{
 				(*it)->SetText(text);
+
+				std::ofstream namebox;
+				std::ofstream dialoguebox;
+
+				switch (captionid)
+				{
+				case 0:
+					namebox.open("name.txt");
+					namebox << text;
+					namebox.close();
+					break;
+				case 1:
+					dialoguebox.open("dialogue.txt");
+					dialoguebox << text;
+					dialoguebox.close();
+					break;
+				}
 
 				return true;
 			}

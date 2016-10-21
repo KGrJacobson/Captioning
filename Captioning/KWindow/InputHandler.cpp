@@ -76,18 +76,31 @@ int InputHandler::HandleEvents(const SDL_Event &e)
 		Input_Handler_Inputs::keyboardentry_->KeyUpInput(e);
 		break;
 	case SDL_KEYDOWN:
-		switch (Input_Handler_Inputs::keyboardentry_->KeyDownInput(e))
-		{
-		case KeyboardEntry::DELETE_CAPTIONS:
-			return KeyboardEntry::DELETE_CAPTIONS;
-		case KeyboardEntry::SET_TEXT_ENGLISH:
-			return KeyboardEntry::SET_TEXT_ENGLISH;
-		case KeyboardEntry::SET_TEXT_JAPANESE:
-			return KeyboardEntry::SET_TEXT_JAPANESE;
-		case KeyboardEntry::TEXT_FINALIZED:
-			return KeyboardEntry::TEXT_FINALIZED;
-		}
-		break;
+		return Input_Handler_Inputs::keyboardentry_->KeyDownInput(e);
+
+		//What the hell was I thinking here
+
+		//switch (Input_Handler_Inputs::keyboardentry_->KeyDownInput(e))
+		//{
+		//case KeyboardEntry::DELETE_CAPTIONS:
+		//	return KeyboardEntry::DELETE_CAPTIONS;
+		//case KeyboardEntry::SET_TEXT_ENGLISH:
+		//	return KeyboardEntry::SET_TEXT_ENGLISH;
+		//case KeyboardEntry::SET_TEXT_JAPANESE:
+		//	return KeyboardEntry::SET_TEXT_JAPANESE;
+		//case KeyboardEntry::TEXT_FINALIZED:
+		//	return KeyboardEntry::TEXT_FINALIZED;
+
+		//case KeyboardEntry::NEXT_CAPTION:
+		//	return KeyboardEntry::NEXT_CAPTION;
+		//case KeyboardEntry::EMPTY_CAPTION:
+		//	return KeyboardEntry::EMPTY_CAPTION;
+		//case KeyboardEntry::PAGE_DOWN:
+		//	return KeyboardEntry::PAGE_DOWN;
+		//case KeyboardEntry::PAGE_UP:
+		//	return KeyboardEntry::PAGE_UP;
+		//}
+		//break;
 	}
 
 	return KeyboardEntry::NO_MACRO;

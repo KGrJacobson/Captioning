@@ -364,6 +364,29 @@ int KeyboardEntry::KeyDownInput(const SDL_Event &e)
 		case SDLK_9:
 			InsertCharacter('9');
 			break;
+
+		case SDLK_SPACE:
+			return NEXT_CAPTION;
+			break;
+		case SDLK_TAB:
+			return PREVIOUS_CAPTION;
+			break;
+		case SDLK_KP_ENTER:
+			return RELOAD_CAPTION;
+			break;
+		case SDLK_ESCAPE:
+			return NEXT_CAPTION_AND_EMPTY;
+			break;
+		case SDLK_RCTRL:
+			return EMPTY_CAPTION;
+			break;
+		case SDLK_DOWN:
+			return PAGE_DOWN;
+			break;
+		case SDLK_UP:
+			return PAGE_UP;
+			break;
+
 		case SDLK_LSHIFT:
 			SetShift(true);
 			break;
@@ -373,9 +396,9 @@ int KeyboardEntry::KeyDownInput(const SDL_Event &e)
 		case SDLK_LCTRL:
 			SetCTRL(true);
 			break;
-		case SDLK_RCTRL:
-			SetCTRL(true);
-			break;
+		//case SDLK_RCTRL:
+		//	SetCTRL(true);
+		//	break;
 		}
 	}
 	else
@@ -404,6 +427,19 @@ int KeyboardEntry::KeyDownInput(const SDL_Event &e)
 			break;
 		case SDLK_KP_ENTER:
 			return TEXT_FINALIZED;
+			break;
+
+		case SDLK_SPACE:
+			return NEXT_CAPTION;
+			break;
+		case SDLK_TAB:
+			return EMPTY_CAPTION;
+			break;
+		case SDLK_DOWN:
+			return PAGE_DOWN;
+			break;
+		case SDLK_UP:
+			return PAGE_UP;
 			break;
 		}
 	}

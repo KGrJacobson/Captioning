@@ -1,5 +1,8 @@
 #include <list>
 #include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
 
 #include "SDL.h"
 
@@ -18,6 +21,8 @@
 //Create subscreens, background images, menu bar menus, and context menu.
 ScreenHandler::ScreenHandler()
 {
+	dialogueindex_ = -1;
+
 	UIElements::SetMenu(NULL, NULL, NULL);
 
 	//set up universal background mousefunction
@@ -51,7 +56,26 @@ ScreenHandler::ScreenHandler()
 	menuscreens_ = new UIMenu(UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT, UIElements::STANDARD_UI_FONT_SIZE);
 	menuscreens_->SetSizeOfMenu(2);
 	menuscreens_->RenameMenuIndex(0, "Stored Captions");
-	menuscreens_->RenameMenuIndex(1, "Manual Entry");	
+	menuscreens_->RenameMenuIndex(1, "Manual Entry");
+
+	std::ifstream captionfilelist;
+	captionfilelist.open("P5/Documents.txt", std::ios::in);
+	std::string newfile;
+
+	while (std::getline(captionfilelist, newfile))
+	{
+		captionfiles_.push_back(newfile);
+	}
+
+	captionfilelist.close();
+
+	menubuttonfiles_ = new UIButton(SDL_Rect{ UIElements::STANDARD_MENU_WIDTH, 0, UIElements::STANDARD_MENU_WIDTH, UIElements::STANDARD_MENU_HEIGHT }, "Files", UIElements::STANDARD_UI_FONT_SIZE, true);
+	menufiles_ = new UIMenu(UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT, UIElements::STANDARD_UI_FONT_SIZE);
+	menufiles_->SetSizeOfMenu(captionfiles_.size());
+	for (int files = 0; files < captionfiles_.size(); ++files)
+	{
+		menufiles_->RenameMenuIndex(files, captionfiles_[files]);
+	}
 
 	cmenu_ = new UIMenu(UIMenu::STANDARD_CONTEXT_MENU_WIDTH, UIMenu::STANDARD_CONTEXT_MENU_HEIGHT, UIElements::STANDARD_UI_FONT_SIZE);
 	cmenu_->SetSizeOfMenu(2);
@@ -61,6 +85,8 @@ ScreenHandler::ScreenHandler()
 
 ScreenHandler::~ScreenHandler()
 {
+	demoscreen_->SetCaptionText(" ", 1);
+
 	InputHandler::RemoveMouseHandler(&mousefunction_);
 
 	delete menubuttonscreens_;
@@ -100,6 +126,12 @@ void ScreenHandler::ShowScreens(int macro)
 		break;
 	}
 
+	if (menufiles_->GetButtonPress() != UIMenu::NO_CONTEXT_MENU_BUTTONS_PRESSED)
+	{
+		storedcaptionscreen_->OpenFile("P5/" + captionfiles_[menufiles_->GetButtonPress()] + ".txt");
+		UIElements::SetMenu(NULL, NULL, NULL);
+	}
+
 	//check native context menu
 	switch (cmenu_->GetButtonPress())
 	{
@@ -113,6 +145,22 @@ void ScreenHandler::ShowScreens(int macro)
 		backgroundimage_ = UIElements::YELLOW_RED_LAYOUT;
 		UIElements::SetMenu(NULL, NULL, NULL);
 		break;
+	}
+
+	dialoguestruct* newdialogue;
+	if (storedcaptionscreen_->getcurrentindex() != dialogueindex_)
+	{
+		dialogueindex_ = storedcaptionscreen_->getcurrentindex();
+
+		if (dialogueindex_ >= 0)
+		{
+			newdialogue = storedcaptionscreen_->GetCurrentDialogue(dialogueindex_);
+			demoscreen_->SetCaptionText(newdialogue->name + '\n' + newdialogue->container->GetCaptionContents(), 1);
+		}
+		else
+		{
+			demoscreen_->SetCaptionText(" ", 1);
+		}
 	}
 
 	//handle key macros
@@ -129,6 +177,35 @@ void ScreenHandler::ShowScreens(int macro)
 		break;
 	case KeyboardEntry::TEXT_FINALIZED:
 		InputHandler::SetKeyboardEntryTexture(NULL, SDLUtility::GetScreenWidth(), 0);
+		break;
+	case KeyboardEntry::NEXT_CAPTION:
+		storedcaptionscreen_->setcaptionindex(++dialogueindex_);
+
+		newdialogue = storedcaptionscreen_->GetCurrentDialogue(dialogueindex_);
+		demoscreen_->SetCaptionText(newdialogue->name + '\n' + newdialogue->container->GetCaptionContents(), 1);
+		break;
+	case KeyboardEntry::PREVIOUS_CAPTION:
+		storedcaptionscreen_->setcaptionindex(--dialogueindex_);
+
+		newdialogue = storedcaptionscreen_->GetCurrentDialogue(dialogueindex_);
+		demoscreen_->SetCaptionText(newdialogue->name + '\n' + newdialogue->container->GetCaptionContents(), 1);
+		break;
+	case KeyboardEntry::RELOAD_CAPTION:
+		newdialogue = storedcaptionscreen_->GetCurrentDialogue(dialogueindex_);
+		demoscreen_->SetCaptionText(newdialogue->name + '\n' + newdialogue->container->GetCaptionContents(), 1);
+		break;
+	case KeyboardEntry::NEXT_CAPTION_AND_EMPTY:
+		storedcaptionscreen_->setcaptionindex(++dialogueindex_);
+		demoscreen_->SetCaptionText(" ", 1);
+		break;
+	case KeyboardEntry::EMPTY_CAPTION:
+		demoscreen_->SetCaptionText(" ", 1);
+		break;
+	case KeyboardEntry::PAGE_DOWN:
+		storedcaptionscreen_->increaseindex();
+		break;
+	case KeyboardEntry::PAGE_UP:
+		storedcaptionscreen_->decreaseindex();
 		break;
 	}
 
@@ -192,6 +269,13 @@ void ScreenHandler::ShowScreens(int macro)
 	int menuy = menurect.y + menurect.h;
 	if (menubuttonscreens_->GetMouseEvent() == LEFT_BUTTON_UP)
 		UIElements::SetMenu(menuscreens_, &menux, &menuy);
+
+	UIElements::ShowUIContextMenu(menubuttonfiles_);
+	menurect = menubuttonfiles_->GetButtonArea();
+	menux = menurect.x;
+	menuy = menurect.y + menurect.h;
+	if (menubuttonfiles_->GetMouseEvent() == LEFT_BUTTON_UP)
+		UIElements::SetMenu(menufiles_, &menux, &menuy);
 
 	//show menus on top of everything
 	InputHandler::ShowKeyboardInputMenu();

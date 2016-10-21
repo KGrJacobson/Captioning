@@ -52,6 +52,11 @@ private:
 	UIMenu *cmenu_;
 	UIButton *menubuttonscreens_;
 	UIMenu *menuscreens_;
+
+	int dialogueindex_;
+	UIButton *menubuttonfiles_;
+	UIMenu *menufiles_;
+	std::vector<std::string> captionfiles_;
 };
 
 #endif //SCREEN_HANDLER

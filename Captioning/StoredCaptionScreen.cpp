@@ -17,7 +17,6 @@ StoredCaptionScreen::StoredCaptionScreen(SDL_Rect setscreenarea)
 	screenarea_ = setscreenarea;
 
 	currentcaptionlistindex_ = -1;
-	currentcaptionindex_ = -1;
 	currentcaptionlist_ = NULL;
 	currentcaption_ = NULL;
 	returnlist_ = NULL;
@@ -33,7 +32,7 @@ StoredCaptionScreen::StoredCaptionScreen(SDL_Rect setscreenarea)
 	contextmenu_->RenameMenuIndex(0, "Save File");
 	contextmenu_->RenameMenuIndex(1, "Add New Caption List");
 
-	currentfile_ = "reminisceintro.txt";
+	currentfile_ = "P5/P5Intro.txt";
 	OpenFile(currentfile_);
 }
 
@@ -41,31 +40,6 @@ StoredCaptionScreen::~StoredCaptionScreen()
 {
 	delete contextmenu_;
 	contextmenu_ = NULL;
-
-	//for (unsigned int captionlists = 0; captionlists < captions_.size(); ++captionlists)
-	//{
-	//	xoffset = 0;
-	//	inneryoffset = yoffset;
-	//	captionpreview_[captionlists]->SetXY(screenarea_.x + xoffset, screenarea_.y + yoffset);
-	//	captionpreview_[captionlists]->Show();
-
-	//	for (unsigned int heldcaptions = 0; heldcaptions < captions_[captionlists].size(); ++heldcaptions)
-	//	{
-	//		xoffset = StoredCaptionContainer::STANDARD_STORED_CONTAINER_WIDTH;
-
-	//		for (std::vector<StoredCaptionContainer*>::iterator appendedcaptions = captions_[captionlists][heldcaptions].begin(); appendedcaptions != captions_[captionlists][heldcaptions].end(); ++appendedcaptions)
-	//		{
-	//			(*appendedcaptions)->SetXY(screenarea_.x + xoffset, screenarea_.y + inneryoffset);
-	//			(*appendedcaptions)->Show();
-
-	//			xoffset += StoredCaptionContainer::STANDARD_STORED_CONTAINER_WIDTH;
-	//		}
-
-	//		inneryoffset = inneryoffset + StoredCaptionContainer::STANDARD_STORED_CONTAINER_HEIGHT;
-	//	}
-
-	//	yoffset += StoredCaptionContainer::STANDARD_STORED_CONTAINER_HEIGHT;
-	//}
 }
 
 int StoredCaptionScreen::Show()
@@ -76,152 +50,29 @@ int StoredCaptionScreen::Show()
 	int yoffset = 0;
 	int inneryoffset = 0;
 
-	for (unsigned int captionlists = 0; captionlists < captions_.size(); ++captionlists)
+	if (currentcaptionindex_ >= 0 && dialoguelist_[currentcaptionindex_]->container->IsSelected() == false)
+		dialoguelist_[currentcaptionindex_]->container->SetSelected();
+
+	for (unsigned int dialoguelistindex = startonthisindex_; dialoguelistindex < dialoguelist_.size(); ++dialoguelistindex) 
 	{
-		xoffset = 0;
-		inneryoffset = yoffset;
-		captionpreview_[captionlists]->SetXY(screenarea_.x + xoffset, screenarea_.y + yoffset);
-		switch (captionpreview_[captionlists]->Show())
+		dialoguelist_[dialoguelistindex]->container->SetXY(screenarea_.x + xoffset, screenarea_.y + yoffset);
+
+		if (dialoguelist_[dialoguelistindex]->container->IsSelected() == true && dialoguelistindex != currentcaptionindex_)
+			dialoguelist_[dialoguelistindex]->container->SetSelected();
+
+		if (dialoguelist_[dialoguelistindex]->container->Show() == StoredCaptionContainer::CAPTION_SELECTED)
 		{
-		case StoredCaptionContainer::CAPTION_SELECTED:
-			if (currentcaptionlist_ != captionpreview_[captionlists])
+			if (dialoguelistindex != currentcaptionindex_)
 			{
-				if (currentcaptionlist_ != NULL)
-				{
-					currentcaptionlist_->SetSelected();
-					for (unsigned int heldcaptions = 0; heldcaptions < captions_[currentcaptionlistindex_].size(); ++heldcaptions)
-					{
-						for (std::vector<StoredCaptionContainer*>::iterator appendedcaptions = captions_[captionlists][heldcaptions].begin(); appendedcaptions != captions_[captionlists][heldcaptions].end(); ++appendedcaptions)
-						{
-							(*appendedcaptions)->RemoveMouse();
-						}
-					}
-				}
+				if (currentcaptionindex_ >= 0)
+					dialoguelist_[dialoguelistindex]->container->SetSelected();
 
-				if (currentcaption_ != NULL)
-				{
-					currentcaption_->SetSelected();
-					currentcaption_ = NULL;
-				}
-
-				if (captionpreview_[captionlists]->SetSelected() == true)
-				{
-					currentcaptionlist_ = captionpreview_[captionlists];
-					currentcaptionlistindex_ = captionlists;
-				}
-				else
-				{
-					currentcaptionlist_ = NULL;
-				}
-
-				for (unsigned int heldcaptions = 0; heldcaptions < captions_[captionlists].size(); ++heldcaptions)
-				{
-					xoffset = StoredCaptionContainer::STANDARD_STORED_CONTAINER_WIDTH;
-
-					for (std::vector<StoredCaptionContainer*>::iterator appendedcaptions = captions_[captionlists][heldcaptions].begin(); appendedcaptions != captions_[captionlists][heldcaptions].end(); ++appendedcaptions)
-					{
-						(*appendedcaptions)->SetXY(screenarea_.x + xoffset, screenarea_.y + inneryoffset);
-						(*appendedcaptions)->SetMouse();
-
-						xoffset += StoredCaptionContainer::STANDARD_STORED_CONTAINER_WIDTH;
-					}
-
-					inneryoffset = inneryoffset + StoredCaptionContainer::STANDARD_STORED_CONTAINER_HEIGHT;
-				}
-
-				xoffset = 0;
-				inneryoffset = 0;
-			}
-			else
-			{
-				currentcaptionlist_->SetSelected();
-
-				for (unsigned int heldcaptions = 0; heldcaptions < captions_[captionlists].size(); ++heldcaptions)
-				{
-					for (std::vector<StoredCaptionContainer*>::iterator appendedcaptions = captions_[captionlists][heldcaptions].begin(); appendedcaptions != captions_[captionlists][heldcaptions].end(); ++appendedcaptions)
-					{
-						(*appendedcaptions)->RemoveMouse();
-					}
-				}
-
-				currentcaptionlist_ = NULL;
-				if (currentcaption_ != NULL)
-				{
-					currentcaption_->SetSelected();
-					currentcaption_ = NULL;
-				}
-			}
-			break;
-		}
-
-		if (currentcaptionlist_ == captionpreview_[captionlists])
-		{
-			for (unsigned int heldcaptions = 0; heldcaptions < captions_[captionlists].size(); ++heldcaptions)
-			{
-				xoffset = StoredCaptionContainer::STANDARD_STORED_CONTAINER_WIDTH;
-
-				for (std::vector<StoredCaptionContainer*>::iterator appendedcaptions = captions_[captionlists][heldcaptions].begin(); appendedcaptions != captions_[captionlists][heldcaptions].end(); ++appendedcaptions)
-				{
-					switch ((*appendedcaptions)->Show())
-					{
-					case StoredCaptionContainer::CAPTION_SELECTED:
-						if ((*appendedcaptions) != currentcaption_)
-						{
-							std::vector<StoredCaptionContainer*>::iterator captionsandappended;
-
-							if (currentcaption_ != NULL)
-							{
-								for (captionsandappended = captions_[captionlists][currentcaptionindex_].begin(); captionsandappended != captions_[captionlists][currentcaptionindex_].end(); ++captionsandappended)
-								{
-									(*captionsandappended)->SetSelected();
-								}
-							}
-
-							currentcaption_ = (*appendedcaptions);
-							
-							for (captionsandappended = captions_[captionlists][heldcaptions].begin(); captionsandappended != captions_[captionlists][heldcaptions].end(); ++captionsandappended)
-							{
-								(*captionsandappended)->SetSelected();
-							}
-							currentcaptionindex_ = heldcaptions;
-							returnlist_ = &captions_[captionlists][heldcaptions];
-							returncode = ADD_NEW_CAPTION_LIST;
-						}
-						break;
-					}
-
-					xoffset += StoredCaptionContainer::STANDARD_STORED_CONTAINER_WIDTH;
-				}
-
-				inneryoffset = inneryoffset + StoredCaptionContainer::STANDARD_STORED_CONTAINER_HEIGHT;
+				currentcaptionindex_ = dialoguelistindex;
+				dialoguelist_[dialoguelistindex]->container->SetSelected();
 			}
 		}
 
 		yoffset += StoredCaptionContainer::STANDARD_STORED_CONTAINER_HEIGHT;
-	}
-
-	if (mousefunction_->GetEvent() == RIGHT_BUTTON_UP)
-	{
-		UIElements::SetMenu(contextmenu_, NULL, NULL);
-	}
-
-	switch (contextmenu_->GetButtonPress())
-	{
-	case SAVE_FILE:
-		SaveFile();
-		UIElements::SetMenu(NULL, NULL, NULL);
-		break;
-	case ADD_NEW_CAPTION_LIST:
-		captions_.resize(captions_.size() + 1);
-		captions_.back().resize(1);
-		captions_.back()[0].push_back(GetNewContainer(captions_.size()));
-		captions_.back()[0][0]->SetText(captionpreview_.size(), currentfile_, "new caption", "new caption");
-
-		captionpreview_.push_back(GetNewContainer(captionpreview_.size()));
-		captionpreview_.back()->SetText(captionpreview_.size(), currentfile_, "new caption", "new caption");
-		captionpreview_.back()->SetMouse();
-		UIElements::SetMenu(NULL, NULL, NULL);
-		break;
 	}
 
 	return returncode;
@@ -242,116 +93,166 @@ RelativeRect StoredCaptionScreen::GetCaptionContainer(int containerindex)
 	return captioncontainers_[containerindex];
 }
 
-void StoredCaptionScreen::SaveFile()
-{
-	std::ofstream file;
-	file.open(currentfile_, std::ios::out | std::ios::trunc);
-
-	file << "##startoffile## Introduction of the visual novel Reminisce (レミニセンス)\n";
-
-	for (unsigned int captionlists = 0; captionlists < captions_.size(); ++captionlists)
-	{
-		file << "0\n";
-
-		for (unsigned int heldcaptions = 0; heldcaptions < captions_[captionlists].size(); ++heldcaptions)
-		{
-			for (std::vector<StoredCaptionContainer*>::iterator appendedcaptions = captions_[captionlists][heldcaptions].begin(); appendedcaptions != captions_[captionlists][heldcaptions].end(); ++appendedcaptions)
-			{
-				file << (*appendedcaptions)->GetWriteData();
-
-				if ((*appendedcaptions) != captions_[captionlists][heldcaptions].back())
-					file << "\n2\n";
-			}
-
-			if (heldcaptions != captions_[captionlists].size())
-				file << "\n1\n";
-		}
-	}
-
-	file << "3\n";
-	file << "##endoffile##";
-
-	file.close();
-}
-
 void StoredCaptionScreen::OpenFile(std::string filename)
 {
+	startonthisindex_ = 0;
+	currentcaptionindex_ = -1;
+	dialoguelist_.clear();
+
 	std::ifstream file;
 	file.open(filename, std::ios::in);
 
 	std::string newline;
-	unsigned int currentid = 0;
 	int yoffset = 0;
 
 	int containerid = -1;
-	std::string originaltext;
-	std::string translatedtext;
-	std::getline(file, newline);	//##startoffile##
 
-	while (atoi(newline.substr(0, 1).c_str()) != END_FILE)
+	//NAMES
+	std::getline(file, newline);
+
+	while (newline.compare("STORY DIALOGUE") != 0)
 	{
-		std::getline(file, newline);
-
-		switch (atoi(newline.c_str()))
+		if (!newline.empty())
 		{
-		case NEW_CAPTION_LIST:
-			captions_.resize(captions_.size() + 1);
-			captions_.back().resize(1);
-			captions_.back()[0].push_back(GetNewContainer(currentid));
-
-			captionpreview_.push_back(GetNewContainer(currentid));
-
-			containerid = atoi(newline.substr(2, std::string::npos).c_str());
-
+			std::string japanese = newline;
 			std::getline(file, newline);
-			originaltext = newline;
+			std::string english = newline;
 
-			std::getline(file, newline);
-			translatedtext = newline;
+			std::pair<std::string, std::string> name(japanese, english);
 
-			captions_.back()[0][0]->SetText(containerid, filename, originaltext, translatedtext);
-			captionpreview_.back()->SetText(containerid, filename, originaltext, translatedtext);
-			captionpreview_.back()->SetXY(screenarea_.x, yoffset);
-			captionpreview_.back()->SetMouse();
+			tempname_.insert(name);
+		}
 
-			yoffset += StoredCaptionContainer::STANDARD_STORED_CONTAINER_HEIGHT;
-			++currentid;
-			break;
-		case NEW_CAPTION_LIST_ELEMENT:
-			captions_.back().resize(captions_.back().size() + 1);
-			captions_.back().back().push_back(GetNewContainer(currentid));
+		std::getline(file, newline);
+	}
 
-			containerid = atoi(newline.substr(2, std::string::npos).c_str());
+	std::string name = " ";
+	std::string japanesedialogue = " ";
+	std::string englishdialogue = " ";
 
-			std::getline(file, newline);
-			originaltext = newline;
+	while (std::getline(file, newline))
+	{
+		if (newline.compare("________________") == 0)
+		{
+			name = " ";
+			englishdialogue = " ";
+			japanesedialogue = " ";
 
-			std::getline(file, newline);
-			translatedtext = newline;
+			StoredCaptionContainer *newcaption = GetNewContainer(1);
+			newcaption->SetText(1, "nofile.txt", japanesedialogue, englishdialogue);
 
-			captions_.back().back()[0]->SetText(containerid, filename, originaltext, translatedtext);
+			dialoguestruct *newdialogue;
+			newdialogue = new dialoguestruct{ name, newcaption };
 
-			++currentid;
-			break;
-		case APPEND_CAPTION:
-			captions_.back().back().push_back(GetNewContainer(currentid));
+			dialoguelist_.push_back(newdialogue);
 
-			//std::getline(file, newline);
-			//containerid = atoi(newline.c_str());
-			containerid = atoi(newline.substr(2, std::string::npos).c_str());
+			dialoguelist_.back()->container->SetXY(screenarea_.x, yoffset);
+			dialoguelist_.back()->container->SetMouse();
+		}
+		else
+		{
+			if (!newline.empty())
+			{
+				if (tempname_.count(newline) != 0)
+				{
+					name = tempname_[newline];
 
-			std::getline(file, newline);
-			originaltext = newline;
+					std::getline(file, newline);
+					japanesedialogue = newline;
 
-			std::getline(file, newline);
-			translatedtext = newline;
+					std::getline(file, newline);
+					englishdialogue = newline;
+				}
+				else
+				{
+					std::vector<std::string> strings;
 
-			captions_.back().back().back()->SetText(containerid, filename, originaltext, translatedtext);
+					while (!newline.empty() && newline.compare("________________") != 0)
+					{
+						strings.push_back(newline);
+						std::getline(file, newline);
+					}
 
-			++currentid;
-			break;
+					if (newline.compare("________________") == 0)
+					{
+						name = " ";
+						englishdialogue = " ";
+						japanesedialogue = " ";
+
+						StoredCaptionContainer *newcaption = GetNewContainer(1);
+						newcaption->SetText(1, "nofile.txt", japanesedialogue, englishdialogue);
+
+						dialoguestruct *newdialogue;
+						newdialogue = new dialoguestruct{ name, newcaption };
+
+						dialoguelist_.push_back(newdialogue);
+
+						dialoguelist_.back()->container->SetXY(screenarea_.x, yoffset);
+						dialoguelist_.back()->container->SetMouse();
+					}
+
+					japanesedialogue = "";
+					englishdialogue = "";
+
+					for (int n = 0; n < strings.size() / 2; ++n)
+					{
+						japanesedialogue = japanesedialogue + "\n" + strings[n];
+					}
+
+					for (int m = strings.size() / 2; m < strings.size(); ++m)
+					{
+						if (m == strings.size() / 2)
+							englishdialogue = englishdialogue + strings[m];
+						else
+							englishdialogue = englishdialogue + "\n" + strings[m];
+					}
+				}
+
+				StoredCaptionContainer *newcaption = GetNewContainer(1);
+				newcaption->SetText(1, "nofile.txt", japanesedialogue, englishdialogue);
+
+				dialoguestruct *newdialogue;
+				newdialogue = new dialoguestruct{ name, newcaption };
+
+				dialoguelist_.push_back(newdialogue);
+
+				dialoguelist_.back()->container->SetXY(screenarea_.x, yoffset);
+				dialoguelist_.back()->container->SetMouse();
+
+				name = " ";
+				englishdialogue = " ";
+				japanesedialogue = " ";
+			}
 		}
 	}
 
 	file.close();
+}
+
+dialoguestruct * StoredCaptionScreen::GetCurrentDialogue(int index)
+{
+	startonthisindex_ = index - (index % 14);
+
+	return dialoguelist_[index];
+}
+
+void StoredCaptionScreen::increaseindex()
+{
+	startonthisindex_ = startonthisindex_ + 14;
+}
+
+void StoredCaptionScreen::decreaseindex()
+{
+	startonthisindex_ = startonthisindex_ - 14;
+}
+
+void StoredCaptionScreen::setcaptionindex(int index)
+{
+	if (currentcaptionindex_ != index)
+		currentcaptionindex_ = index;
+}
+
+int StoredCaptionScreen::getcurrentindex()
+{
+	return currentcaptionindex_;
 }

@@ -1,6 +1,7 @@
 #ifndef STORED_CAPTION_SCREEN
 #define STORED_CAPTION_SCREEN
 #include <vector>
+#include <unordered_map>
 
 #include "SDL.h"
 
@@ -8,6 +9,12 @@
 #include "StoredCaptionContainer.h"
 #include "KWindow\Subscreen.h"
 #include "KWindow\UIMenu.h"
+
+struct dialoguestruct
+{
+	std::string name;
+	StoredCaptionContainer *container;
+};
 
 //Contains captions loaded from a given file to be sent to the Demo Screen when selected.
 class StoredCaptionScreen : public Subscreen
@@ -28,10 +35,7 @@ public:
 
 	enum File_In_Flags
 	{
-		NEW_CAPTION_LIST,
-		NEW_CAPTION_LIST_ELEMENT,
-		APPEND_CAPTION,
-		END_FILE
+
 	};
 
 	StoredCaptionScreen(SDL_Rect setscreenarea);
@@ -40,12 +44,17 @@ public:
 	StoredCaptionContainer *GetNewContainer(int captionid);
 	std::vector<StoredCaptionContainer*> *GetCaptionList();
 	RelativeRect GetCaptionContainer(int containerindex);
-	void SaveFile();
 	void OpenFile(std::string filename);
+
+	dialoguestruct* GetCurrentDialogue(int index);
+	void increaseindex();
+	void decreaseindex();
+	void setcaptionindex(int index);
+	int getcurrentindex();
 private:
 	SDL_Rect screenarea_;
 	std::vector<StoredCaptionContainer*> captionpreview_;
-	std::vector<std::vector<std::vector<StoredCaptionContainer*>>> captions_;
+	std::vector<std::vector<StoredCaptionContainer*>> captions_;
 	UIMenu *contextmenu_;
 	MouseHandler *mousefunction_;
 	std::string currentfile_;
@@ -55,6 +64,10 @@ private:
 	StoredCaptionContainer *currentcaption_;
 	std::vector<StoredCaptionContainer*> *returnlist_;
 	std::vector<RelativeRect> captioncontainers_;
+
+	int startonthisindex_;
+	std::unordered_map<std::string, std::string> tempname_;
+	std::vector<dialoguestruct*> dialoguelist_;
 };
 
 #endif //STORED_CAPTION_SCREEN

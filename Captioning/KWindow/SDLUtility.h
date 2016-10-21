@@ -19,7 +19,7 @@ static TTF_Font *twelveptfont;
 static TTF_Font *sixteenptfont;
 static TTF_Font *thirtytwoptfont;;
 
-const static int SCREENW = 1500;
+const static int SCREENW = 1000;
 const static int SCREENH = 750;
 
 //An area that is dependent on another areas coordinates.  Each variable in the struct

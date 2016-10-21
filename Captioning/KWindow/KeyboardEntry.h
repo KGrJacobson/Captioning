@@ -23,7 +23,15 @@ public:
 		SET_TEXT_ENGLISH,
 		SET_TEXT_JAPANESE,
 		TEXT_FINALIZED,
-		CREATE_KANJI_TABLE
+		CREATE_KANJI_TABLE,
+
+		NEXT_CAPTION,
+		PREVIOUS_CAPTION,
+		RELOAD_CAPTION,
+		EMPTY_CAPTION,
+		NEXT_CAPTION_AND_EMPTY,
+		PAGE_DOWN,
+		PAGE_UP
 	};
 
 	//The existing Input Method Editors.  The variable currentime_ is defined with a value

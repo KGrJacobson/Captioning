@@ -15,7 +15,7 @@
 class StoredCaptionContainer
 {
 public:
-	static const int STANDARD_STORED_CONTAINER_WIDTH = 150;
+	static const int STANDARD_STORED_CONTAINER_WIDTH = 350;
 	static const int STANDARD_STORED_CONTAINER_HEIGHT = 50;
 
 	enum Stored_Container_Return_Code

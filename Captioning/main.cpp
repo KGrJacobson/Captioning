@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
 			{
 				macroreturnvalue = InputHandler::HandleEvents(e);
 				
-				if(macroreturnvalue != KeyboardEntry::NO_MACRO)
+				if (macroreturnvalue != KeyboardEntry::NO_MACRO)
 					macro = macroreturnvalue;
 			}
 		}
