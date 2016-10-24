@@ -53,7 +53,7 @@ private:
 	UIButton *menubuttonscreens_;
 	UIMenu *menuscreens_;
 
-	int dialogueindex_;
+	int captionindex_;
 	UIButton *menubuttonfiles_;
 	UIMenu *menufiles_;
 	std::vector<std::string> captionfiles_;

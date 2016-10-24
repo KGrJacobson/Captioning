@@ -21,7 +21,7 @@
 //Create subscreens, background images, menu bar menus, and context menu.
 ScreenHandler::ScreenHandler()
 {
-	dialogueindex_ = -1;
+	captionindex_ = -1;
 
 	UIElements::SetMenu(NULL, NULL, NULL);
 
@@ -147,15 +147,15 @@ void ScreenHandler::ShowScreens(int macro)
 		break;
 	}
 
-	dialoguestruct* newdialogue;
-	if (storedcaptionscreen_->getcurrentindex() != dialogueindex_)
+	StoredCaptionContainer* newcaption;
+	if (storedcaptionscreen_->getcurrentindex() != captionindex_)
 	{
-		dialogueindex_ = storedcaptionscreen_->getcurrentindex();
+		captionindex_ = storedcaptionscreen_->getcurrentindex();
 
-		if (dialogueindex_ >= 0)
+		if (captionindex_ >= 0)
 		{
-			newdialogue = storedcaptionscreen_->GetCurrentDialogue(dialogueindex_);
-			demoscreen_->SetCaptionText(newdialogue->name + '\n' + newdialogue->container->GetCaptionContents(), 1);
+			newcaption = storedcaptionscreen_->GetCurrentDialogue(captionindex_);
+			demoscreen_->SetCaptionText(newcaption->GetCaptionContents(), 1);
 		}
 		else
 		{
@@ -179,23 +179,23 @@ void ScreenHandler::ShowScreens(int macro)
 		InputHandler::SetKeyboardEntryTexture(NULL, SDLUtility::GetScreenWidth(), 0);
 		break;
 	case KeyboardEntry::NEXT_CAPTION:
-		storedcaptionscreen_->setcaptionindex(++dialogueindex_);
+		storedcaptionscreen_->setcaptionindex(++captionindex_);
 
-		newdialogue = storedcaptionscreen_->GetCurrentDialogue(dialogueindex_);
-		demoscreen_->SetCaptionText(newdialogue->name + '\n' + newdialogue->container->GetCaptionContents(), 1);
+		newcaption = storedcaptionscreen_->GetCurrentDialogue(captionindex_);
+		demoscreen_->SetCaptionText(newcaption->GetCaptionContents(), 1);
 		break;
 	case KeyboardEntry::PREVIOUS_CAPTION:
-		storedcaptionscreen_->setcaptionindex(--dialogueindex_);
+		storedcaptionscreen_->setcaptionindex(--captionindex_);
 
-		newdialogue = storedcaptionscreen_->GetCurrentDialogue(dialogueindex_);
-		demoscreen_->SetCaptionText(newdialogue->name + '\n' + newdialogue->container->GetCaptionContents(), 1);
+		newcaption = storedcaptionscreen_->GetCurrentDialogue(captionindex_);
+		demoscreen_->SetCaptionText(newcaption->GetCaptionContents(), 1);
 		break;
 	case KeyboardEntry::RELOAD_CAPTION:
-		newdialogue = storedcaptionscreen_->GetCurrentDialogue(dialogueindex_);
-		demoscreen_->SetCaptionText(newdialogue->name + '\n' + newdialogue->container->GetCaptionContents(), 1);
+		newcaption = storedcaptionscreen_->GetCurrentDialogue(captionindex_);
+		demoscreen_->SetCaptionText(newcaption->GetCaptionContents(), 1);
 		break;
 	case KeyboardEntry::NEXT_CAPTION_AND_EMPTY:
-		storedcaptionscreen_->setcaptionindex(++dialogueindex_);
+		storedcaptionscreen_->setcaptionindex(++captionindex_);
 		demoscreen_->SetCaptionText(" ", 1);
 		break;
 	case KeyboardEntry::EMPTY_CAPTION:

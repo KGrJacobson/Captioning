@@ -33,11 +33,6 @@ public:
 		ADD_NEW_CAPTION_LIST
 	};
 
-	enum File_In_Flags
-	{
-
-	};
-
 	StoredCaptionScreen(SDL_Rect setscreenarea);
 	~StoredCaptionScreen();
 	int Show();
@@ -46,11 +41,13 @@ public:
 	RelativeRect GetCaptionContainer(int containerindex);
 	void OpenFile(std::string filename);
 
-	dialoguestruct* GetCurrentDialogue(int index);
+	StoredCaptionContainer* GetCurrentDialogue(int index);
 	void increaseindex();
 	void decreaseindex();
 	void setcaptionindex(int index);
 	int getcurrentindex();
+	StoredCaptionContainer *GetNameDialogueContainer(std::vector<std::string> &unprocesseddialogue, int captionnumber);
+	StoredCaptionContainer *GetDialogueContainer(std::vector<std::string> &unprocesseddialogue, int captionnumber);
 private:
 	SDL_Rect screenarea_;
 	std::vector<StoredCaptionContainer*> captionpreview_;
@@ -58,9 +55,7 @@ private:
 	UIMenu *contextmenu_;
 	MouseHandler *mousefunction_;
 	std::string currentfile_;
-	int currentcaptionlistindex_;
-	int currentcaptionindex_;
-	StoredCaptionContainer *currentcaptionlist_;
+	std::vector<int> currentcaptionindex_;
 	StoredCaptionContainer *currentcaption_;
 	std::vector<StoredCaptionContainer*> *returnlist_;
 	std::vector<RelativeRect> captioncontainers_;
@@ -68,6 +63,9 @@ private:
 	int startonthisindex_;
 	std::unordered_map<std::string, std::string> tempname_;
 	std::vector<dialoguestruct*> dialoguelist_;
+	std::vector<UIButton*> captionlisttabs_;
+	std::vector<std::vector<StoredCaptionContainer*>*> allcaptionlists_;
+	int currentcaptionlist_;
 };
 
 #endif //STORED_CAPTION_SCREEN
